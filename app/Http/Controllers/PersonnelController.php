@@ -4,8 +4,8 @@ use Carbon\Carbon;
 use App\Helpers\PasswordUtils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MonEmail;
+//use Illuminate\Support\Facades\Mail;
+//use App\Mail\MonEmail;
 use App\Models\TypeTournoi;
 use App\Models\Tournoi;
 use App\Models\Compte;
@@ -73,7 +73,7 @@ class PersonnelController extends Controller
         if(isset($perso)){
             $mdp=PasswordUtils::generateTemporaryPassword();
             $compte = new Compte;
-            $compte->trigramme= $perso->trigramme;
+            $compte->trigramme= $trigramme;
             $compte->nom= $perso->nom;
             $compte->datenaissance= $perso->datenaissance;
             $compte->idgenre= $perso->idgenre;
@@ -83,7 +83,7 @@ class PersonnelController extends Controller
             $compte->idtypepersonnel= $perso->idtypepersonnel;
             $compte->iddepartement= $perso->iddepartement;
             $compte->save();
-            $this->envoyerEmail($mdp,$perso->email);
+
             $url = url('reinitialisationMdp',['trigramme' => $trigramme]);
             return redirect($url);
         }
