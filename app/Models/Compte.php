@@ -11,9 +11,10 @@ class Compte extends Model
     use HasFactory;
 
     public $timestamps=false;
+    public $incrementing = false;
     protected $table = 'compte';
     protected $primaryKey='trigramme';
-    protected $fillable = ['nom','datenaissance','idgenre','email','mdp','telephone','idtypepersonnel','iddepartement'];
+    protected $fillable = ['trigramme','nom','datenaissance','idgenre','email','mdp','telephone','idtypepersonnel','iddepartement'];
 
     public function Genre()
     {

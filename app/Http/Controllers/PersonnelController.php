@@ -5,11 +5,13 @@ use App\Helpers\PasswordUtils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\MonEmail;
 use App\Models\TypeTournoi;
 use App\Models\Tournoi;
 use App\Models\Compte;
 use App\Models\Matchs;
 use App\Models\Pronostic;
+use App\Models\Personnel;
 
 class PersonnelController extends Controller
 {
@@ -41,8 +43,7 @@ class PersonnelController extends Controller
         Mail::to($email)->send(new MonEmail($name,$email,$subject,$message));
     }
     public function TraitementInscription(Request $req){
-        $trigramme=$req['trigramme'];
-        // Paramètres de connexion à Active Directory
+        /*// Paramètres de connexion à Active Directory
         $serveurAD = "ldap.forumsys.com";
         $PortAD = 389; // Port par défaut pour LDAP non sécurisé
         $UtilisateurAD = "cn=read-only-admin,dc=example,dc=com";
@@ -66,14 +67,71 @@ class PersonnelController extends Controller
         }
 
         // Fermeture de la connexion LDAP
-        ldap_close($ldapConnection);
+        ldap_close($ldapConnection);*/
+        $trigramme=$req['trigramme'];
+        $perso=Personnel::where('trigramme','=',$req['trigramme'])->first();
+        if(isset($perso)){
+            $mdp=PasswordUtils::generateTemporaryPassword();
+            $compte = new Compte;
+            $compte->trigramme= $perso->trigramme;
+            $compte->nom= $perso->nom;
+            $compte->datenaissance= $perso->datenaissance;
+            $compte->idgenre= $perso->idgenre;
+            $compte->email= $perso->email;
+            $compte->mdp= $mdp;
+            $compte->telephone= $perso->telephone;
+            $compte->idtypepersonnel= $perso->idtypepersonnel;
+            $compte->iddepartement= $perso->iddepartement;
+            $compte->save();
+            $this->envoyerEmail($mdp,$perso->email);
+            $url = url('reinitialisationMdp',['trigramme' => $trigramme]);
+            return redirect($url);
+        }
+        else{
+            $erreur="Utilisateur non trouvé!";
+            return view(
+                'Personnel.CreerCompte',
+                [
+                    'erreur'  => $erreur,
+                    'trigramme' => $req['trigramme']
+                ]
+            );            
+        }
+
     }
-    public function Reinitialisation(){
-        return view('Personnel.Reinitialisation');
+    public function Reinitialisation($trigramme){
+        return view('Personnel.Reinitialisation',compact('trigramme'));
     }
-    public function Reinitialiser(){
-        $url = url('login');
-        return redirect($url);
+    public function Reinitialiser(Request $req){
+        $compte = Compte::find($req['trigramme']);
+        if($req['ancien']==$compte->mdp){
+            if($req['nouveau']==$req['confirmation']){
+                $compte->mdp=$req['nouveau'];
+                $compte->update();
+                $url = url('login');
+                return redirect($url);
+            }
+            else{
+                $erreur="Vérifiez le mot de passe";
+                return view(
+                    'Personnel.Reinitialisation',
+                    [
+                        'erreur'  => $erreur,
+                        'trigramme' => $req['trigramme']
+                    ]
+                );
+            }
+        }
+        else{
+            $erreur="Vérifiez le mot de passe";
+            return view(
+                'Personnel.Reinitialisation',
+                [
+                    'erreur'  => $erreur,
+                    'trigramme' => $req['trigramme']
+                ]
+            );
+        }
     }
     public function Login(){
         return view('Personnel.Login');

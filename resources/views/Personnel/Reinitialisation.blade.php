@@ -47,7 +47,7 @@
         <h5 class="card-title">Réinitialisation mot de passe</h5>
         <form action="reinitialiser" method="POST">
             @csrf
-            <input type="hidden" name="idcompte" value="">
+            <input type="hidden" name="trigramme" value="{{$trigramme}}">
             <div class="row mb-3">
               <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Ancien mot de passe</label>
               <div class="col-md-8 col-lg-9">
@@ -68,7 +68,15 @@
                 <input type="password" class="form-control" name="confirmation">
               </div>
             </div>
-
+            <?php 
+            $error="";
+            if(isset($erreur)){
+              $error=$erreur;
+            }
+          ?>
+          <div class="col-12">
+            <label for="yourPassword" class="form-label" style="color: red;">{{ $error;}}</label>
+          </div>
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Valider</button>
             </div>

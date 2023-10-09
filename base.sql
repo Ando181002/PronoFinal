@@ -51,6 +51,9 @@ create table Personnel(
     idDepartement char(5) not null references Departement(idDepartement)
 );
 
+insert into Personnel(trigramme,nom,datenaissance,idgenre,email,mdp,telephone,idTypePersonnel,idDepartement) values ('ANY','Ando','18-10-2002','2','andofalimanantsoa.stg@orange.com','0324567890','STG','DTI');
+insert into Personnel(trigramme,nom,datenaissance,idgenre,email,mdp,telephone,idTypePersonnel,idDepartement) values ('MIA','Miantsa','08-07-2004','1','afalimanantsoa@gmail.com','0321234543','CDI','DF');
+
 create table Compte(
     trigramme char(3) primary key,
     nom varchar not null,

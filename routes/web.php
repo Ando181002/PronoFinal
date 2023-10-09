@@ -20,7 +20,7 @@ Route::GET('/', [PersonnelController::class, 'Accueil']);
 Route::GET('detailTournoi', [PersonnelController::class, 'DetailTournoi']);
 Route::GET('creerCompte', [PersonnelController::class, 'CreerCompte']);
 Route::POST('traitementInscription', [PersonnelController::class, 'TraitementInscription']);
-Route::POST('reinitialisationMdp', [PersonnelController::class, 'Reinitialisation']);
+Route::POST('reinitialisationMdp/{trigramme}', [PersonnelController::class, 'Reinitialisation']);
 Route::POST('reinitialiser', [PersonnelController::class, 'Reinitialiser']);
 Route::GET('login', [PersonnelController::class, 'Login']);
 Route::POST('traitementLogin', [PersonnelController::class, 'TraitementLogin']);
