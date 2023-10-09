@@ -115,7 +115,8 @@ create table Tournoi(
     rang2 int check(rang2<=100),
     rang3 int check(rang3<=100),
     rang4 int check(rang4<=100),
-    rang5 int check(rang5<=100)
+    rang5 int check(rang5<=100),
+    datepublication date not null
 );
 
 create table Matchs(
@@ -128,7 +129,8 @@ create table Matchs(
     idEquipe2 int not null references Equipe(idEquipe),
     stade varchar not null,
     ptResultat int not null,
-    ptScore int not null
+    ptScore int not null,
+    avecResultat int not null
 );
 
 create table ResultatMatch(
@@ -150,8 +152,8 @@ create table Inscription(
     idTournoi int not null references Tournoi(idTournoi),
     dateInscription timestamp not null,
     trigramme char(3) not null references Compte(trigramme),
-    idEquipeG1 int not null references Equipe(idEquipe),
-    idEquipeG2 int not null references Equipe(idEquipe),
+    idEquipe1g int not null references Equipe(idEquipe),
+    idEquipe2g int not null references Equipe(idEquipe),
     reponseQuestion text not null
 );
 
@@ -203,3 +205,79 @@ select p.idmatch,idinscription,
         ELSE 0
     END AS pointscore 
     from v_resultat r join v_pronostic p on r.idmatch=p.idmatch;
+
+create or replace view v_match as
+select 
+	m.idmatch,m.idtournoi,m.datematch,m.finmatch,m.stade,m.avecresultat,m.ptscore,m.ptresultat,
+	CASE 
+        WHEN EXTRACT(DOW FROM datematch) IN (0, 6) THEN datematch - INTERVAL '48 hours'
+        ELSE datematch - INTERVAL '24 hours'
+    END AS datelimite,
+	e1.nomequipe AS nomequipe1, m.idequipe2,e2.nomequipe AS nomequipe2,
+	p.idinscription,
+	pr.idpronostic,pr.prono1,pr.prono2,
+	CASE
+		WHEN idpronostic is not null THEN 1
+		else 0
+    END AS etat,
+    rm.score1,rm.score2,
+	CASE 
+        WHEN pointresultat is null THEN coalesce(0,pointresultat)
+        ELSE pointresultat
+    END AS pointresultat,
+	CASE 
+        WHEN pointscore is null THEN coalesce(0,pointscore)
+        ELSE pointscore
+    END AS pointscore,
+	e1.imageequipe AS imageequipe1,e2.imageequipe AS imageequipe2
+    from matchs m
+    JOIN equipe e1 ON m.idequipe1 = e1.idequipe
+    JOIN equipe e2 ON m.idequipe2 = e2.idequipe
+    left join inscription p on m.idtournoi=p.idtournoi
+    LEFT JOIN pronostic pr ON m.idmatch=pr.idmatch and pr.idinscription=p.idinscription
+    LEFT JOIN resultatmatch rm ON m.idmatch=rm.idmatch
+    LEFT JOIN v_point_parMatch vp ON m.idmatch=vp.idmatch and p.idinscription=vp.idinscription;
+
+create or replace view classement as
+select vp.idmatch,vp.idinscription,(pointresultat+pointscore) as total,
+	p.prono1,p.prono2
+from v_point_parMatch vp
+join pronostic p on vp.idmatch=p.idmatch and vp.idinscription=p.idinscription;
+
+create or replace view v_matchFinal as
+    select idmatch,idtournoi,idequipe1,idequipe2 from matchs m join typematch tm on m.idtypematch=tm.idtypematch where nomtypematch='finale';
+
+create or replace view v_pointSupp as
+select idinscription,p.idtournoi,
+    CASE
+        WHEN idequipe1=idequipe1G and idequipe2=idequipe2G THEN 50
+        ELSE 0
+    END AS pointSupp
+from inscription p join v_matchFinal mf on p.idtournoi=mf.idtournoi;
+
+create or replace view v_point_parTournoi as
+    select idtournoi,idinscription,sum(pointresultat) as pointresultat,sum(pointscore) as pointscore,(sum(pointresultat)+sum(pointscore)) as total 
+    from v_point_parMatch v join matchs m on v.idmatch=m.idmatch 
+    group by idtournoi,idinscription;
+
+create or replace view v_pointFinal as 
+    select pt.*,pointsupp,
+        CASE
+            WHEN pointSupp is not null THEN total+pointsupp
+            ELSE total
+        END AS finale
+    from v_point_parTournoi pt 
+    left join v_pointSupp ps on pt.idtournoi=ps.idtournoi and pt.idinscription=ps.idinscription;
+
+create or replace view v_frais_pardate_partournoi as
+    select DATE(dateinscription) as dateinscription,i.idtournoi,sum(frais) as frais 
+    from inscription i join tournoi t on i.idtournoi=t.idtournoi 
+    group by DATE(dateinscription),i.idtournoi;
+
+create or replace view v_datetournoi as
+    SELECT TO_DATE(TO_CHAR(generate_series(debuttournoi::date, fintournoi::date, '1 day'::interval), 'YYYY-MM-DD'), 'YYYY-MM-DD') AS date,idtournoi
+    FROM tournoi;
+
+create or replace view v_frais as
+    select date,v.idtournoi,coalesce(frais,0) from v_datetournoi v 
+    left join v_frais_pardate_partournoi vf on v.date=vf.dateinscription and v.idtournoi=vf.idtournoi;

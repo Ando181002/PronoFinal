@@ -67,6 +67,10 @@
                       <input type="text" class="form-control" name="reponsequestion">
                     </div>
                     <div class="col-12">
+                      <label for="inputAddress" class="form-label">Numero</label>
+                      <input type="text" class="form-control" placeholder="Entrez votre numero" name="numero">
+                    </div>
+                    <div class="col-12">
                       <label for="inputAddress" class="form-label">Code secret</label>
                       <input type="password" class="form-control" placeholder="Entrez votre code secret" name="codesecret">
                     </div>

@@ -28,8 +28,8 @@ Route::GET('deconnexion', [PersonnelController::class, 'Deconnexion']);
 Route::GET('liste', [PersonnelController::class, 'Liste']);
 Route::GET('participerPronostic/{idtournoi}/{erreur}', [PersonnelController::class, 'formulaireParticipation']);
 Route::POST('participer', [PersonnelController::class, 'Participer']);
-Route::GET('Pronostiquer/{idtournoi}', [UtilisateurController::class, 'Pronostiquer']);
-Route::POST('/{idparticipant}/{idtournoi}/addUPronostic', [UtilisateurController::class, 'ajoutPronostic']);
+Route::GET('Pronostiquer/{idtournoi}', [PersonnelController::class, 'Pronostiquer']);
+Route::POST('/{idinscription}/{idtournoi}/addUPronostic', [PersonnelController::class, 'ajoutPronostic']);
 Route::GET('statistique', [PersonnelController::class, 'Statistique']);
 
 //Admin

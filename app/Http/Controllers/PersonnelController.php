@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use App\Helpers\PasswordUtils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
 //use Illuminate\Support\Facades\Mail;
 //use App\Mail\MonEmail;
 use App\Models\TypeTournoi;
@@ -12,6 +13,7 @@ use App\Models\Compte;
 use App\Models\Matchs;
 use App\Models\Pronostic;
 use App\Models\Personnel;
+use App\Models\Inscription;
 
 class PersonnelController extends Controller
 {
@@ -27,7 +29,12 @@ class PersonnelController extends Controller
         return view('Personnel.Accueil',compact('status','typetournoi','Tournois','tournoisParType'));
     }
     public function DetailTournoi(Request $req){
-        $status="personnel";
+        if(isset($req['status'])){
+            $status=$req['status'];
+        }
+        else{
+            $status="personnel";
+        }
         $tournoi = Tournoi::findOrFail($req['id']);
         $matchs=Matchs::with('typeMatch')->with('Equipe1')->with('Equipe2')->where('idtournoi','=',$req['id'])->get();
         return view('Personnel.DetailTournoi', compact('tournoi','matchs','status'));
@@ -164,12 +171,19 @@ class PersonnelController extends Controller
         $perso=session()->get('perso');
         $Tournois=Tournoi::with('TypeTournoi')->get();
         $nonParticipe=DB::select('select t.*,nomtypetournoi from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where idtournoi not in (select idtournoi from inscription where trigramme=?)', [$perso->trigramme]);
+        $encours=DB::select('select t.*,nomtypetournoi from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where now()<fintournoi and idtournoi in (select idtournoi from inscription where trigramme=?)', [$perso->trigramme]);
         $status="participant";
-        return view('Personnel.Liste',compact('status','Tournois','nonParticipe'));       
+        return view('Personnel.Liste',compact('status','Tournois','nonParticipe','encours'));       
     }    
     public function Statistique(){
+        $perso=session()->get('perso');
+        $mise = DB::table('inscription')
+            ->join('tournoi', 'inscription.idtournoi', '=', 'tournoi.idtournoi')
+            ->where('trigramme', $perso->trigramme)
+            ->groupBy('trigramme')
+            ->sum('frais');       
         $status="participant";
-        return view('Personnel.Statistique',compact('status'));       
+        return view('Personnel.Statistique',compact('status','mise'));       
     }
     public function formulaireParticipation($idtournoi,$erreur){
         $perso=session()->get('perso');
@@ -191,7 +205,7 @@ class PersonnelController extends Controller
   
           // Données à envoyer à l'API pour la méthode "transfert"
         $data = [
-            'numenvoyeur' => $perso->telephone,
+            'numenvoyeur' => $req['numero'],
             'numrecepteur' => '0321453421',
             'montant' => $tournoi->frais,
             'objet' => $descri,
@@ -208,6 +222,7 @@ class PersonnelController extends Controller
             if($apiData['status']=="success"){
                 $participant = Inscription::create([
                     'trigramme' => $perso->trigramme,
+                    'dateinscription' => now(),
                     'idtournoi' => $req['idtournoi'],
                     'idequipe1g' => $req['idequipe1g'],
                     'idequipe2g' => $req['idequipe2g'],
@@ -227,28 +242,28 @@ class PersonnelController extends Controller
             return redirect($url);
         }
     }
+
     public function Pronostiquer($idtournoi){
-        $statut="participant";
+        $status="participant";
         $perso=session()->get('perso');
-        $participant=Inscription::where('idtournoi','=',$idtournoi)->where('trigramme','=',$perso->trigramme)->first();
-        $idparticipant=$participant->idinscription;
+        $inscription=Inscription::where('idtournoi','=',$idtournoi)->where('trigramme','=',$perso->trigramme)->first();
+        $idinscription=$inscription->idinscription;
         $tournoi =Tournoi::findOrFail($idtournoi);
-        $matchs= DB::select('Select * from v_match where idtournoi=? and idparticipant=? order by datematch asc',[$idtournoi,$idparticipant]);
-        $montantCagnote=Participant::where('idtournoi','=',$idtournoi)->get();
+        $matchs= DB::select('Select * from v_match where idtournoi=? and idinscription=? order by datematch asc',[$idtournoi,$idinscription]);
+        $montantCagnote=Inscription::where('idtournoi','=',$idtournoi)->get();
         $classements=[];
         foreach($matchs as $match){
-            $classement=DB::select('select ROW_NUMBER() OVER (ORDER BY total DESC) AS numligne,c.*,trigramme from classement c join participant p on c.idparticipant=p.idparticipant where idmatch=? order by total desc limit 5',[$match->idmatch]);
+            $classement=DB::select('select ROW_NUMBER() OVER (ORDER BY total DESC) AS numligne,c.*,trigramme from classement c join inscription p on c.idinscription=p.idinscription where idmatch=? order by total desc limit 5',[$match->idmatch]);
             $classements[$match->idmatch] = $classement;
         }
-        $Point=DB::table('v_point_partournoi')->where('idtournoi','=',$idtournoi)->where('idparticipant','=',$idparticipant)->first();
-        $classementGlobal=DB::select('select ROW_NUMBER() OVER (ORDER BY finale DESC) AS numligne,trigramme,v.* from v_pointFinal v join participant p on v.idparticipant=p.idparticipant where v.idtournoi=? order by finale desc limit 5',[$idtournoi]);
-        return view('Utilisateur.Pronostic', compact('Point','montantCagnote','idparticipant','tournoi','matchs','classements','classementGlobal','statut'));       
+        $Point=DB::table('v_point_partournoi')->where('idtournoi','=',$idtournoi)->where('idinscription','=',$idinscription)->first();
+        $classementGlobal=DB::select('select ROW_NUMBER() OVER (ORDER BY finale DESC) AS numligne,trigramme,v.* from v_pointFinal v join inscription p on v.idinscription=p.idinscription where v.idtournoi=? order by finale desc limit 5',[$idtournoi]);
+        return view('Personnel.Pronostic', compact('Point','montantCagnote','idinscription','tournoi','matchs','classements','classementGlobal','status'));       
     }
-    public function ajoutPronostic(Request $req,$idparticipant,$idtournoi){
-        $statut="participant";
+    public function ajoutPronostic(Request $req,$idinscription,$idtournoi){
         $pronostic = Pronostic::create([
             'idmatch' => $req['idmatch'],
-            'idparticipant' => $idparticipant,
+            'idinscription' => $idinscription,
             'prono1' => $req['prono1'],
             'prono2' => $req['prono2'],
             'datepronostic' => "now()",

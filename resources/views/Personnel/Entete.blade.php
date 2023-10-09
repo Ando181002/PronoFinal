@@ -63,17 +63,17 @@
         </li><!-- End Messages Nav -->
         @else
         <li class="nav-item dropdown">
-          <a class="nav-link nav-icon" href="liste" >
+          <a class="nav-link nav-icon" href="{{ url('liste') }}" >
            Tournoi
           </a><!-- End Notification Icon -->
         </li><!-- End Notification Nav -->
         <li class="nav-item dropdown">
-          <a class="nav-link nav-icon" href="statistique" >
+          <a class="nav-link nav-icon" href="{{ url('statistique') }}" >
            Statistique
           </a><!-- End Notification Icon -->
         </li><!-- End Notification Nav -->
         <li class="nav-item dropdown">
-          <a class="nav-link nav-icon" href="deconnexion" >
+          <a class="nav-link nav-icon" href="{{ url('deconnexion') }}" >
             <i class="bi bi-box-arrow-right"></i>
             <span>Deconnexion</span>
           </a><!-- End Notification Icon -->

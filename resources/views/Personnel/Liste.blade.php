@@ -81,7 +81,7 @@
                                         <div class="soccer-item set-bg" data-setbg="data:image/JPEG;base64,{{ $tournoi->imagetournoi }}">
                                             <div class="si-tag">{{$tournoi->TypeTournoi->nomtypetournoi}}</div>
                                             <div class="si-text">
-                                                <h5><a href="detailTournoi?id={{$tournoi->idtournoi}}" style="color: black; font:bold">{{$tournoi->nomtournoi}}</a></h5>
+                                                <h5><a href="Pronostiquer/{{$tournoi->idtournoi}}" style="color: black; font:bold">{{$tournoi->nomtournoi}}</a></h5>
                                                 <ul>
                                                     <li><i class="fa fa-calendar"></i> May 19, 2019</li>
                                                     <li><i class="fa fa-edit"></i> 3 Comment</li>
@@ -99,7 +99,7 @@
                                         <div class="soccer-item set-bg" data-setbg="data:image/JPEG;base64,{{ $nonPart->imagetournoi }}">
                                             <div class="si-tag">{{$nonPart->nomtypetournoi}}</div>
                                             <div class="si-text">
-                                                <h5><a href="detailTournoi?id={{$nonPart->idtournoi}}" style="color: black; font:bold">{{$nonPart->nomtournoi}}</a></h5>
+                                                <h5><a href="detailTournoi?id={{$nonPart->idtournoi}}&status=participant" style="color: black; font:bold">{{$nonPart->nomtournoi}}</a></h5>
                                                 <ul>
                                                     <?php $erreur=" "; ?>
                                                     <a href="participerPronostic/{{$nonPart->idtournoi}}/{{$erreur}}/" type="button" class="btn btn-primary" style="background-color: orange">
@@ -114,18 +114,16 @@
                             </div>
                             <div class="tab-pane" id="tabs-3" role="tabpanel">
                                 <div class="row">
+                                    @foreach($encours as $encour)
                                     <div class="col-lg-3 col-sm-6 p-0">
-                                        <div class="soccer-item set-bg" data-setbg="assets/img/product-1.jpg">
-                                            <div class="si-tag">FootBall</div>
+                                        <div class="soccer-item set-bg" data-setbg="data:image/JPEG;base64,{{ $encour->imagetournoi }}">
+                                            <div class="si-tag">{{$encour->nomtypetournoi}}</div>
                                             <div class="si-text">
-                                                <h5><a href="#">Counting Your Chicken Before They Hatch</a></h5>
-                                                <ul>
-                                                    <li><i class="fa fa-calendar"></i> May 19, 2019</li>
-                                                    <li><i class="fa fa-edit"></i> 3 Comment</li>
-                                                </ul>
+                                                <h5><a href="Pronostiquer/{{$encour->idtournoi}}" style="color: black; font:bold">{{$encour->nomtournoi}}</a></h5>
                                             </div>
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div> 
                             </div>
                             <div class="tab-pane" id="tabs-4" role="tabpanel">

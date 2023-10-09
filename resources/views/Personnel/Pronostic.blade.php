@@ -27,8 +27,10 @@
 </head>
 <body>
 @extends('Personnel.Entete')
+@section('content')
+
  <!-- Hero Section Begin -->
- <section class="hero-section set-bg" data-setbg="assets/img/hero-1.jpg">
+ <section class="hero-section set-bg" data-setbg="{{ url('assets/img/hero-1.jpg') }}">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -54,6 +56,8 @@
     <div class="container">
         <div class="schedule-text">
             <h4 class="st-title">{{$tournoi->nomtournoi}}</h4>
+            <div class="card">
+            <div class="card-body">
             <div class="st-table">
                 <table>
                     <tbody>
@@ -65,7 +69,7 @@
                             </td>
                             <td class="st-option">
                                 <div class="so-text">{{ $match->stade }}</div>
-                                <?php if($match->statut==0) { 
+                                <?php if($match->avecresultat==0) { 
                                 if(now()>$match->datelimite) { ?>
                                     <a href="#" disabled></a><h4 style="color: black">VS</h4>
                                 <?php } else { 
@@ -80,7 +84,7 @@
                                         </div>
                                         <div class="modal-body">
                                             <p class="breadcrumb-item">Points à gagner: <span class="card-title">{{$match->ptresultat}} + {{$match->ptscore}}</span></p>
-                                            <form class="row g-3" method="POST" action="/{{$match->idparticipant}}/{{$match->idtournoi}}/addUPronostic">
+                                            <form class="row g-3" method="POST" action="/{{$match->idinscription}}/{{$match->idtournoi}}/addUPronostic">
                                                 @csrf
                                                 <input type="hidden" name="idmatch" value="{{$match->idmatch}}">
                                                 <div class="col-md-6">
@@ -110,7 +114,7 @@
                                         </div>
                                         <div class="modal-body">
                                         <p class="breadcrumb-item">Points à gagner: <span class="card-title">{{$match->ptresultat}} + {{$match->ptscore}}</span></p>
-                                            <form class="row g-3" method="POST" action="/{{$match->idparticipant}}/{{$match->idtournoi}}/addPronostic">
+                                            <form class="row g-3" method="POST" action="/{{$match->idinscription}}/{{$match->idtournoi}}/addPronostic">
                                             @csrf
                                                 <div class="col-md-6">
                                                 <label for="inputEmail5" class="form-label">{{ $match->nomequipe1 }}</label>
@@ -183,68 +187,80 @@
                         @endforeach
                     </tbody>
                 </table>
+                </div>
+                </div>
             </div>
         </div>
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Recompense</h5>
+                            <?php 
+                            $montantCagnote=count($montantCagnote)*$tournoi->frais;
+                            ?>
+                            <nav>
+                                <p class="breadcrumb-item">Montant de la cagnote <span class="card-title">{{$montantCagnote}}Ar</span></p>
+                            </nav>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Rang</th>
+                                        <th scope="col">Taux</th>
+                                        <th scope="col">Montant(Ar)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php for ($i=1; $i <=5 ; $i++) { 
+                                        $rang="rang".$i;
+                                        $pourcentage=$tournoi->$rang*100;
+                                        $montant=$montantCagnote*$tournoi->$rang;
+                                        ?>
+                                    <tr>
+                                        <th scope="row">{{$i}}</th>
+                                        <td>{{$pourcentage}}%</td>
+                                        <td>{{$montant}}Ar</td>
+                                    </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Classement</h5>
+                            <nav>
+                                <p class="breadcrumb-item"> <span class="card-title"> </span></p>
+                            </nav>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Rang</th>
+                                        <th scope="col">Trigramme</th>
+                                        <th scope="col">Points</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($classementGlobal as $classement) 
+                                    <tr>
+                                        <th scope="row">{{ $classement->numligne }}</th>
+                                        <td>{{$classement->trigramme}}</td>
+                                        <td>{{$classement->finale}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                         </div> 
+                    </div>
+                </div>                      
+            </div>
+        </section>
     </div>
 </section>
 <!-- Schedule Section End -->
-              <h5 class="card-title">Recompense</h5>
-              <?php 
-                $montantCagnote=count($montantCagnote)*$tournoi->frais;
-              ?>
-              <nav>
-                  <p class="breadcrumb-item">Montant de la cagnote <span class="card-title">{{$montantCagnote}}Ar</span></p>
-              </nav>
-              <table class="table">
-                  <thead>
-                      <tr>
-                          <th scope="col">Rang</th>
-                          <th scope="col">Taux</th>
-                          <th scope="col">Montant(Ar)</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <?php for ($i=1; $i <=5 ; $i++) { 
-                          $rang="rang".$i;
-                          $pourcentage=$tournoi->$rang*100;
-                          $montant=$montantCagnote*$tournoi->$rang;
-                          ?>
-                      <tr>
-                          <th scope="row">{{$i}}</th>
-                          <td>{{$pourcentage}}%</td>
-                          <td>{{$montant}}Ar</td>
-                      </tr>
-                      <?php } ?>
-                  </tbody>
-              </table>
-              <h5 class="card-title">Classement</h5>
-              <table class="table">
-                  <thead>
-                      <tr>
-                          <th scope="col">Rang</th>
-                          <th scope="col">Trigramme</th>
-                          <th scope="col">Points</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      @foreach($classementGlobal as $classement) 
-                      <tr>
-                          <th scope="row">{{ $classement->numligne }}</th>
-                          <td>{{$classement->trigramme}}</td>
-                          <td>{{$classement->finale}}</td>
-                      </tr>
-                      @endforeach
-                  </tbody>
-              </table>
-            </div>
-        </div>
-    </div><!-- End Recent Sales -->
-  </div>
-</section>
-
-
-@section('content')
-
 @endsection
  <!-- Vendor JS Files -->
  <script src="{{ url('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>

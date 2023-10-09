@@ -13,7 +13,7 @@ class Inscription extends Model
     public $timestamps=false;
     protected $table = 'inscription';
     protected $primaryKey='idinscription';
-    protected $fillable = ['idtournoi','dateinscription','trigramme','idequipe1g','idequipe2g','reponseQuestion'];
+    protected $fillable = ['idtournoi','dateinscription','trigramme','idequipe1g','idequipe2g','reponsequestion'];
 
     public function Tournoi()
     {

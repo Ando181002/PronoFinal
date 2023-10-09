@@ -28,7 +28,7 @@
 <body>
 @extends('Personnel.Entete')
 @section('content')
-<main id="main" class="main">
+
 
 <div class="pagetitle">
     <h1>ApexCharts</h1>
@@ -44,10 +44,12 @@
             <div id="barChart"></div>
 
             <script>
+                
             document.addEventListener("DOMContentLoaded", () => {
+                var mise = <?php echo $mise; ?>;
                 new ApexCharts(document.querySelector("#barChart"), {
                 series: [{
-                    data: [20000, 100000, 80000]
+                    data: [mise, 100000, 80000]
                 }],
                 chart: {
                     type: 'bar',
@@ -65,7 +67,8 @@
                 xaxis: {
                     categories: ['Misé', 'Gagné', 'Bénéfice'
                     ],
-                }
+                },
+                colors: ['#ff5733', '#007bff', '#28a745'],
                 }).render();
             });
             </script>
@@ -94,7 +97,8 @@
                     show: true
                     }
                 },
-                labels: ['Perdu', 'Gagné']
+                labels: ['Perdu', 'Gagné'],
+                colors: ['#ff5733', '#007bff', '#28a745'],
                 }).render();
             });
             </script>
@@ -105,7 +109,7 @@
     </div>
     </div>
 </section>
-</main>
+
 @endsection
  <!-- Vendor JS Files -->
  <script src="{{ url('assets/vendor/apexcharts/apexcharts.min.js') }}"></script>

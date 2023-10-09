@@ -98,10 +98,10 @@
                         </div><!-- End Basic Modal--> 
                     <td>                
                                   <!-- Vertically centered Modal -->
-              <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#verticalycentered{{$type->idtypematch}}">
+              <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#verticalycentered{{$type->idtypematch}}a">
               <i class="ri-delete-bin-5-fill"></i>
                   </a>
-              <div class="modal fade" id="verticalycentered{{$type->idtypematch}}" tabindex="-1">
+              <div class="modal fade" id="verticalycentered{{$type->idtypematch}}a" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
                     <form methodd="POST" action="deleteTypeMatch">

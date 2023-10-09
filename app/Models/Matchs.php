@@ -13,7 +13,7 @@ class Matchs extends Model
     public $timestamps=false;
     protected $table = 'matchs';
     protected $primaryKey='idmatch';
-    protected $fillable = ['idtypematch','idtournoi','datematch','finmatch','stade','idequipe1','idequipe2','ptresultat','ptscore'];
+    protected $fillable = ['idtypematch','idtournoi','datematch','finmatch','stade','idequipe1','idequipe2','ptresultat','ptscore','avecresultat'];
 
     public function TypeMatch()
     {

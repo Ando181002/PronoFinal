@@ -254,15 +254,13 @@ class AdminController extends Controller
         $tournoi->fintournoi = $req['fintournoi'];
         $tournoi->frais = $req['frais'];
         $tournoi->question = $req['question'];
-        $tournoi->description = $req['description'];
+        $tournoi->descri = $req['description'];
+        $tournoi->rang1 = $req['rang1'];
+        $tournoi->rang2 = $req['rang2'];
+        $tournoi->rang3 = $req['rang3'];
+        $tournoi->rang4 = $req['rang4'];
+        $tournoi->rang5 = $req['rang5'];
         $tournoi->update();
-        $repartition=RepartitionCagnote::where('idtournoi','=',$req['idtournoi'])->first();
-        $repartition->rang1 = $req['rang1'];
-        $repartition->rang2 = $req['rang2'];
-        $repartition->rang3 = $req['rang3'];
-        $repartition->rang4 = $req['rang4'];
-        $repartition->rang5 = $req['rang5'];
-        $repartition->update();
         $url = url('FicheTournoi', ['idtournoi' => $req['idtournoi']]);
         return redirect($url); 
     }
@@ -288,7 +286,7 @@ class AdminController extends Controller
             'ptresultat' => $req['ptresultat'],
             'ptscore' => $req['ptscore'],
             'stade' => $req['stade'],
-            'statut' => "0"
+            'avecresultat' => "0"
         ]);
         $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
         return redirect($url);
@@ -319,7 +317,7 @@ class AdminController extends Controller
                     'idequipe2'=>$equipe2->idequipe,
                     'ptresultat'=>$values[5],
                     'ptscore'=>$values[6],
-                    'statut'=>1
+                    'avecresultat'=>"0"
                 ];
             }
             fclose($handle);
