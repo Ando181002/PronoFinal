@@ -214,8 +214,8 @@
                                 <tbody>
                                     <?php for ($i=1; $i <=5 ; $i++) { 
                                         $rang="rang".$i;
-                                        $pourcentage=$tournoi->$rang*100;
-                                        $montant=$montantCagnote*$tournoi->$rang;
+                                        $pourcentage=$tournoi->$rang;
+                                        $montant=$montantCagnote*($tournoi->$rang/100);
                                         ?>
                                     <tr>
                                         <th scope="row">{{$i}}</th>

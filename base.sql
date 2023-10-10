@@ -290,4 +290,16 @@ create or replace view v_participation as
     join compte c on i.trigramme=c.trigramme;
 
 create or replace view v_nbInscription_parTypeTournoi as
-    select idtypetournoi,nomtypetournoi,count(idinscription) as nbInscription from v_participation group by idtypetournoi,nomtypetournoi;
+    select nomtypetournoi,count(idinscription) as nbinscription from v_participation group by nomtypetournoi;
+
+create or replace view v_nbInscription_typetournoi as
+select tt.nomtypetournoi,coalesce(nbinscription,0) as nbinscription from typetournoi tt left join v_nbInscription_parTypeTournoi v on v.nomtypetournoi=tt.nomtypetournoi;
+
+create or replace view v_nbInscription_parDepartement as
+    select iddepartement,idtypetournoi,count(idinscription) as nbinscription from v_participation group by iddepartement,idtypetournoi;
+
+create or replace view v_nbInscription_departement as
+    select d.iddepartement,tt.idtypetournoi ,coalesce(nbinscription,0) as nbinscription from departement d
+	left join typetournoi tt on 1=1
+	left join v_nbInscription_pardepartement v on v.iddepartement=d.iddepartement and v.idtypetournoi=tt.idtypetournoi;
+

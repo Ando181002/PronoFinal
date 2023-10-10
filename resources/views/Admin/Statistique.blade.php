@@ -13,8 +13,15 @@
 
         <script>
           document.addEventListener("DOMContentLoaded", () => {
+            var donnees=<?php echo $nbInscri_typetournoi ?>;
+            var typetournoi=[];
+            var nombre=[];
+            for (i = 0; i < donnees.length; i++) {
+                typetournoi.push(donnees[i].nomtypetournoi);
+                nombre.push(parseFloat(donnees[i].nbinscription));
+            }
             new ApexCharts(document.querySelector("#pieChart1"), {
-              series: [44, 55, 13, 43],
+              series: nombre,
               chart: {
                 height: 350,
                 type: 'pie',
@@ -22,7 +29,7 @@
                   show: true
                 }
               },
-              labels: ['BasketBall', 'FootBall', 'Rugby', 'Tennis']
+              labels: typetournoi
             }).render();
           });
         </script>
@@ -36,18 +43,13 @@
       <div class="card-body">
         <h5 class="card-title">Statistique département</h5>
         <div class="card-body">
-        <form class="row g-3" method="get" action="#">
+        <form class="row g-3" method="get" action="AdminStatistique">
             @csrf
-            <div class="col-md-3">
-                <select name="type" class="form-control" >
-                    <option value="1">BasketBall</option>
-                    <option value="2">FootBall</option>
-                </select>
-              </div>
-              <div class="col-md-3">
-                <select name="type" class="form-control" >
-                    <option value="1">Tournoi1</option>
-                    <option value="2">Tournoi2</option>
+            <div class="col-md-4">
+                <select name="idtypetournoi" class="form-control" >
+                  @foreach($typetournoi as $type)
+                    <option value="{{$type->idtypetournoi}}">{{$type->nomtypetournoi}}</option>
+                  @endforeach
                 </select>
               </div>
             <div class="col-md-2">
@@ -60,16 +62,23 @@
 
         <script>
           document.addEventListener("DOMContentLoaded", () => {
+            var data=<?php echo $nbInscri_departement ?>;
+            var departement=[];
+            var nombre=[];
+            for (i = 0; i < data.length; i++) {
+                departement.push(data[i].iddepartement);
+                nombre.push(parseFloat(data[i].nbinscription));
+            }
             new ApexCharts(document.querySelector("#pieChart"), {
-              series: [44, 55, 13, 43,40],
+              series: nombre,
               chart: {
-                height: 350,
+                height: 250,
                 type: 'pie',
                 toolbar: {
                   show: true
                 }
               },
-              labels: ['DRH', 'DTI', 'DF', 'SG','DMCC']
+              labels: departement
             }).render();
           });
         </script>

@@ -46,9 +46,17 @@ class AdminController extends Controller
         session()->flush();
         return redirect('/LoginAdmin');
     }
-    public function Statistique(){
-        $nbInscri_typetournoi=DB::table('v_nbinscription_partypetournoi')->get();
-        return view('Admin.Statistique',compact('nbInscri_typetournoi'));
+    public function Statistique(Request $req){
+        $nbInscri_typetournoi=DB::table('v_nbinscription_typetournoi')->get();
+        $typetournoi=TypeTournoi::all();
+        $query = DB::table('v_nbinscription_departement')
+            ->select('iddepartement', DB::raw('SUM(nbinscription) as nbinscription'))
+            ->groupBy('iddepartement');
+        if (isset($req['idtypetournoi'])) {
+            $query->where('idtypetournoi', $req['idtypetournoi']);
+        }   
+        $nbInscri_departement = $query->get();
+        return view('Admin.Statistique',compact('nbInscri_typetournoi','nbInscri_departement','typetournoi'));
     }
 
     //Type tournoi

@@ -529,6 +529,7 @@
                                       <tr>
                                         <th scope="col">Trigramme</th>
                                         <th scope="col">Nom</th>
+                                        <th scope="col">Paiement</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -536,6 +537,7 @@
                                       <tr>
                                         <th scope="row">{{$part->trigramme}}</th>
                                         <td>Ando</td>
+                                        <td>OK</td>
                                       </tr>
                                       @endforeach
                                     </tbody>
