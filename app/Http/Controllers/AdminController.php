@@ -368,7 +368,7 @@ class AdminController extends Controller
     } 
 
     public function genererPdf() {
-        $pdf = PDF::loadView('Pdf'); // 'pdf' est le nom de la vue créée
+        $pdf = PDF::loadView('Admin.Pdf'); // 'pdf' est le nom de la vue créée
         return $pdf->stream('exemple.pdf'); // Stream le PDF ou utilisez ->download() pour le télécharger
     }
 }
