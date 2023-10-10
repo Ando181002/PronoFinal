@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use PDF;
 use Carbon\Carbon;
 
 use GuzzleHttp\Client;
@@ -365,4 +366,9 @@ class AdminController extends Controller
         $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
         return redirect($url); 
     } 
+
+    public function genererPdf() {
+        $pdf = PDF::loadView('Pdf'); // 'pdf' est le nom de la vue créée
+        return $pdf->stream('exemple.pdf'); // Stream le PDF ou utilisez ->download() pour le télécharger
+    }
 }

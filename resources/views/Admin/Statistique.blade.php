@@ -1,6 +1,7 @@
 @extends('Admin.AccueilAdmin')
 @section('contenu')
 <div class="row">
+<p><a href="pdf">PDF</a></p>
 <div class="col-lg-6">
     <div class="card">
       <div class="card-body">

@@ -39,6 +39,7 @@ Route::get('/LoginAdmin', function () {
 Route::POST('loginAdmin', [AdminController::class, 'loginAdmin']);
 Route::GET('logoutAdmin', [AdminController::class, 'logoutAdmin']);
 Route::GET('AdminStatistique', [AdminController::class, 'Statistique']);
+Route::GET('pdf', [AdminController::class, 'genererPdf']);
 
 //Type TOURNOI
 Route::GET('TypeTournoi', [AdminController::class, 'TypeTournoi']);
