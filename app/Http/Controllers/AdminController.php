@@ -47,7 +47,8 @@ class AdminController extends Controller
         return redirect('/LoginAdmin');
     }
     public function Statistique(){
-        return view('Admin.Statistique');
+        $nbInscri_typetournoi=DB::table('v_nbinscription_partypetournoi')->get();
+        return view('Admin.Statistique',compact('nbInscri_typetournoi'));
     }
 
     //Type tournoi
@@ -243,7 +244,8 @@ class AdminController extends Controller
         }
         $typetournoi=TypeTournoi::all();
         $participant=Inscription::where('idtournoi','=',$idtournoi)->get();
-        return view('Admin.FicheTournoi',compact('participant','typetournoi','fichetournoi','typematch','equipe','match','classements','resultats')); 
+        $dateTournoi=DB::table('v_frais')->where('idtournoi','=',$idtournoi)->orderBy('date')->get();
+        return view('Admin.FicheTournoi',compact('participant','typetournoi','fichetournoi','typematch','equipe','match','classements','resultats','dateTournoi')); 
     }
     public function UpdateTournoi(Request $req)
     {

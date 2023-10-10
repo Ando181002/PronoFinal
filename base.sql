@@ -275,9 +275,19 @@ create or replace view v_frais_pardate_partournoi as
     group by DATE(dateinscription),i.idtournoi;
 
 create or replace view v_datetournoi as
-    SELECT TO_DATE(TO_CHAR(generate_series(debuttournoi::date, fintournoi::date, '1 day'::interval), 'YYYY-MM-DD'), 'YYYY-MM-DD') AS date,idtournoi
+    SELECT TO_DATE(TO_CHAR(generate_series(datepublication::date, fintournoi::date, '1 day'::interval), 'YYYY-MM-DD'), 'YYYY-MM-DD') AS date,idtournoi
     FROM tournoi;
 
 create or replace view v_frais as
-    select date,v.idtournoi,coalesce(frais,0) from v_datetournoi v 
+    select date,v.idtournoi,coalesce(frais,0) as frais from v_datetournoi v 
     left join v_frais_pardate_partournoi vf on v.date=vf.dateinscription and v.idtournoi=vf.idtournoi;
+	
+create or replace view v_participation as
+    select i.idinscription,i.trigramme,c.iddepartement,t.idtypetournoi,nomtypetournoi,t.idtournoi
+    from inscription i 
+    join tournoi t on i.idtournoi=t.idtournoi
+    join typetournoi tt on t.idtypetournoi=tt.idtypetournoi
+    join compte c on i.trigramme=c.trigramme;
+
+create or replace view v_nbInscription_parTypeTournoi as
+    select idtypetournoi,nomtypetournoi,count(idinscription) as nbInscription from v_participation group by idtypetournoi,nomtypetournoi;

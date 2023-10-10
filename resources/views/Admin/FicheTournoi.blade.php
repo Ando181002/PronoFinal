@@ -97,10 +97,17 @@
   
                     <script>
                       document.addEventListener("DOMContentLoaded", () => {
+                        var dateTournoi=<?php echo $dateTournoi ?>;
+                        var datee=[];
+                        var frais=[];
+                        for (i = 0; i < dateTournoi.length; i++) {
+                            datee.push(dateTournoi[i].date);
+                            frais.push(parseFloat(dateTournoi[i].frais));
+                        }
                         new ApexCharts(document.querySelector("#reportsChart"), {
                           series: [{
-                            name: 'Customers',
-                            data: [15, 11, 32, 18, 9, 24, 11]
+                            name: 'Frais',
+                            data: frais
                           }],
                           chart: {
                             height: 350,
@@ -131,11 +138,11 @@
                           },
                           xaxis: {
                             type: 'datetime',
-                            categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                            categories: datee
                           },
                           tooltip: {
                             x: {
-                              format: 'dd/MM/yy HH:mm'
+                              format: 'text'
                             },
                           }
                         }).render();
