@@ -1,9 +1,1 @@
-insert into Personnel(trigramme,nom,emailPerso,mdpperso,telephone) values ('MIA','Miantsa','miantsa@gmail.com','mdpmiantsa','0349517513');
-insert into Personnel(trigramme,nom,emailPerso,mdpperso,telephone) values ('SAR','Sarobidy','sarobidy@gmail.com','mdpsarobidy','0345678901');
-insert into Personnel(trigramme,nom,emailPerso,mdpperso,telephone) values ('SET','Seta','seta@gmail.com','mdpseta','0349818031');
-insert into Personnel(trigramme,nom,emailPerso,mdpperso,telephone) values ('NOM','Nomena','nomena@gmail.com','mdpnomena','0326818854');
-insert into Personnel(trigramme,nom,emailPerso,mdpperso,telephone) values ('FEX','Fehizoro','fex@gmail.com','mdpfex','0324565432');
-insert into Personnel(trigramme,nom,emailPerso,mdpperso,telephone) values ('FE0','Feo','feo@gmail.com','mdpfeo','0324534578');
-insert into Personnel(trigramme,nom,emailPerso,mdpperso,telephone) values ('KAL','Kaloina','kaloina@gmail.com','mdpkaloina','0325609876');
-insert into Personnel(trigramme,nom,emailPerso,mdpperso,telephone) values ('MEN','Mendrika','mendrika@gmail.com','mdpmendrika','0326789012');
-insert into Personnel(trigramme,nom,emailPerso,mdpperso,telephone) values ('AKJ','Akjea','akjea@gmail.com','mdpakjea','0327812390');
+insert into Compte(trigramme,nom,datenaissance,idgenre,,email,mdp,telephone,idtypepersonnel,iddepartement)
