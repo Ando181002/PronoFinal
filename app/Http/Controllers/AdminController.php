@@ -251,7 +251,7 @@ class AdminController extends Controller
             $resultats[$key->idmatch] = $resultat;
         }
         $typetournoi=TypeTournoi::all();
-        $participant=Inscription::where('idtournoi','=',$idtournoi)->get();
+        $participant=DB::select('select i.*,nom from inscription i join compte c on i.trigramme=c.trigramme where idtournoi = ?', [$idtournoi]);
         $dateTournoi=DB::table('v_frais')->where('idtournoi','=',$idtournoi)->orderBy('date')->get();
         return view('Admin.FicheTournoi',compact('participant','typetournoi','fichetournoi','typematch','equipe','match','classements','resultats','dateTournoi')); 
     }
@@ -368,7 +368,7 @@ class AdminController extends Controller
             'score2' => $req['score2']
         ]);
         $match = Matchs::find($req['idmatch']);
-        $match->statut="1";
+        $match->avecresultat="1";
         $match->update();
         $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
         return redirect($url); 

@@ -490,7 +490,7 @@
                                     <div class="col-xxl-4 col-md-6">
                                         <div class="card info-card sales-card">
                                             <div class="card-body">
-                                                <h5 class="card-title">Participans</h5>
+                                                <h5 class="card-title">Participants</h5>
                                                 <div class="d-flex align-items-center">
                                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
                                                         <i class="bi bi-people"></i>
@@ -536,7 +536,7 @@
                                     @foreach($participant as $part)
                                       <tr>
                                         <th scope="row">{{$part->trigramme}}</th>
-                                        <td>Ando</td>
+                                        <td>{{$part->nom}}</td>
                                         <td>OK</td>
                                       </tr>
                                       @endforeach

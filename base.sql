@@ -250,7 +250,7 @@ create or replace view v_matchFinal as
 create or replace view v_pointSupp as
 select idinscription,p.idtournoi,
     CASE
-        WHEN idequipe1=idequipe1G and idequipe2=idequipe2G THEN 50
+        WHEN idequipe1=equipe1G and idequipe2=equipe2G THEN 50
         ELSE 0
     END AS pointSupp
 from inscription p join v_matchFinal mf on p.idtournoi=mf.idtournoi;
