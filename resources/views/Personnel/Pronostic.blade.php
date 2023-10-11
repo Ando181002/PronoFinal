@@ -29,29 +29,20 @@
 @extends('Personnel.Entete')
 @section('content')
 
- <!-- Hero Section Begin -->
- <section class="hero-section set-bg" data-setbg="{{ url('assets/img/hero-1.jpg') }}">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="hs-item">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="hs-text">
-                                    <h4>30 september 2019 / 9:00 GMT+0000</h4>
-                                    <h2>Airrosten VS Lerenort in London</h2>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<section class="bg-light">
+    <div class="container py-5">
+        <div class="row text-center py-3">
+
+        </div>
+        <div class="pagetitle">
+            <h1>Bonjour</h1>
+            <nav>
+                <p class="breadcrumb-item">Vous avez actuellement <span class="card-title">100 points</span></p>
+            </nav>
         </div>
     </div>
 </section>
 <!-- Hero Section End --> 
-<p> </p>
 <section class="schedule-section spad">
     <div class="container">
         <div class="schedule-text">

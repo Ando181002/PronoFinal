@@ -20,6 +20,8 @@ use App\Models\Tournoi;
 use App\Models\Matchs;
 use App\Models\Inscription;
 use App\Models\ResultatMatch;
+use App\Models\TypePersonnel;
+use App\Models\Departement;
 
 class AdminController extends Controller
 {
@@ -234,25 +236,42 @@ class AdminController extends Controller
         return view('Admin.Tournoi',compact('typetournoi','tournoi','equipe')); 
     }
     public function FicheTournoi($idtournoi){
+        $typepersonnel=DB::table('typepersonnel')->get();
+        $departement=DB::table('departement')->get();
+        $typetournoi=TypeTournoi::all();
         $fichetournoi=Tournoi::find($idtournoi);
         $idtypetournoi=$fichetournoi->idtypetournoi;
         $equipe=Equipe_TypeTournoi::with('Equipe')->where('idtypetournoi','=',$idtypetournoi)->get();
         $typematch=TypeMatch::all();
         $match=Matchs::with('typeMatch')->with('Equipe1')->with('Equipe2')->where('idtournoi','=',$idtournoi)->get();
         $classements=[];
-       /* foreach($match as $key){
-            $classement=DB::select('select trigramme,c.*from classement c join participant p on c.idparticipant=p.idparticipant where idmatch=? order by total desc limit 5',[$key->idmatch]);
+        foreach($match as $key){
+            $classement=DB::select('select trigramme,c.*from classement c join inscription p on c.idinscription=p.idinscription where idmatch=? order by total desc limit 5',[$key->idmatch]);
             $classements[$key->idmatch] = $classement;
-        }*/
+        }
         $resultats=[];
         foreach($match as $key){
             $resultat=DB::select('select* from resultatmatch where idmatch=?',[$key->idmatch]);
             $resultats[$key->idmatch] = $resultat;
         }
+<<<<<<< Updated upstream
         $typetournoi=TypeTournoi::all();
         $participant=Inscription::where('idtournoi','=',$idtournoi)->get();
+=======
+        $query = DB::table('inscription as i')
+        ->select('i.*', 'c.nom')
+        ->join('compte as c', 'i.trigramme', '=', 'c.trigramme')
+        ->where('i.idtournoi', $idtournoi);
+        if (isset($req['idtypepersonnel'])) {
+            $query->where('c.idtypepersonnel', $req['idtypepersonnel']);
+        }
+        if (isset($req['iddepartement'])) {
+            $query->where('c.iddepartement', $req['iddepartement']);
+        }
+        $participant = $query->get();
+>>>>>>> Stashed changes
         $dateTournoi=DB::table('v_frais')->where('idtournoi','=',$idtournoi)->orderBy('date')->get();
-        return view('Admin.FicheTournoi',compact('participant','typetournoi','fichetournoi','typematch','equipe','match','classements','resultats','dateTournoi')); 
+        return view('Admin.FicheTournoi',compact('departement','typepersonnel','participant','typetournoi','fichetournoi','typematch','equipe','match','classements','resultats','dateTournoi')); 
     }
     public function UpdateTournoi(Request $req)
     {

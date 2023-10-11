@@ -321,7 +321,7 @@
                                                 </div><!-- End Vertically centered Modal-->
                                             </td> 
                                             <td>
-                                                @if(now()>$matchs->finmatch && $matchs->statut==0)
+                                                @if(now()>$matchs->finmatch && $matchs->avecresultat==0)
                                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resultat{{$matchs->idmatch}}">
                                                         Resultat
                                                     </button>
@@ -353,7 +353,7 @@
                                                         </div>
                                                     </div>
                                                 @endif
-                                                @if(now()>$matchs->finmatch && $matchs->statut==1)
+                                                @if(now()>$matchs->finmatch && $matchs->avecresultat==1)
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Classement{{$matchs->idmatch}}">
                                                     Classement
                                                 </button>
@@ -524,6 +524,26 @@
                                     </div><!-- End Revenue Card -->
                                 </div>
                                 </section>
+                                <form class="row g-3" method="post" action="/{{$fichetournoi->idtournoi}}">
+                                @csrf
+                                <div class="col-md-4">
+                                    <select name="idtypepersonnel" class="form-control" >
+                                        @foreach($typepersonnel as $typeperso)
+                                        <option value="{{$typeperso->idtypepersonnel}}">{{$typeperso->idtypepersonnel}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="iddepartement" class="form-control" >
+                                        @foreach($departement as $dept)
+                                        <option value="{{$dept->iddepartement}}">{{$dept->iddepartement}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary">Rechercher</button>
+                                </div>
+                            </form><!-- End No Labels Form -->
                                 <table class="table">
                                     <thead>
                                       <tr>
