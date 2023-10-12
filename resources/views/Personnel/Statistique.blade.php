@@ -47,9 +47,14 @@
                 
             document.addEventListener("DOMContentLoaded", () => {
                 var mise = <?php echo $mise; ?>;
+                var gain = 10000;
+                var benefice=gain-mise;
+                if(mise>gain){
+                    benefice=0;
+                }
                 new ApexCharts(document.querySelector("#barChart"), {
                 series: [{
-                    data: [mise, 100000, 80000]
+                    data: [mise, gain, benefice]
                 }],
                 chart: {
                     type: 'bar',
