@@ -43,6 +43,15 @@
     @section('contenu')
           <div class="card">
             <div class="card-body">
+            @if ($errors->any())
+                  <div class="alert alert-danger bg-danger">
+                    <ul>
+                      @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                      @endforeach
+                    </ul>
+                  </div>
+              @endif
               <h5 class="card-title">Type de match</h5>
               <!-- Default Table -->
               <div>
@@ -56,7 +65,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($typematch as $type)
+                  @foreach ($typematchs as $type)
                   <tr>
                     <td>{{ $type->PhaseJeu->nomphase }}</td>
                     <td>{{ $type->nomtypematch }}</td>
@@ -73,9 +82,8 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="row g-3" method="POST" action="updateTypeMatch">
+                                        <form class="row g-3" method="POST" action="updateTypeMatch/{{$type->idtypematch}}">
                                           @csrf
-                                            <input type="hidden" name="idtypematch" value="{{$type->idtypematch}}">
                                             <div class="col-12">
                                               <label for="inputNanme4" class="form-label">Type</label>
                                               <input type="text" class="form-control" id="inputNanme4" name="nomtypematch" value="{{$type->nomtypematch}}">
@@ -104,10 +112,9 @@
               <div class="modal fade" id="verticalycentered{{$type->idtypematch}}a" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
-                    <form methodd="POST" action="deleteTypeMatch">
+                    <form methodd="POST" action="deleteTypeMatch/{{$type->idtypematch}}">
                     <div class="modal-body">
-                      <input type="hidden" name="idtypematch" value="{{$type->idypematch}}">
-                      Etes-vous sûre de vouloir supprimer cette ligne?
+                      <p>{{$type->idtypematch}}</p>Etes-vous sûre de vouloir supprimer cette ligne?
                     </div>
                     <div class="modal-footer">
                       <button type="reset" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>

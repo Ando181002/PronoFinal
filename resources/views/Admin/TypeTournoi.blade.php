@@ -43,6 +43,15 @@
     @section('contenu')
           <div class="card">
             <div class="card-body">
+              @if ($errors->any())
+                  <div class="alert alert-danger bg-danger">
+                    <ul>
+                      @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                      @endforeach
+                    </ul>
+                  </div>
+              @endif
               <h5 class="card-title">Type de tournoi</h5>
               <!-- Default Table -->
               <div>
@@ -56,7 +65,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($typeTournoi as $type)
+                  @foreach ($typetournois as $type)
                   <tr>
                     <td>{{ $type->nomtypetournoi}}</td>
                     <td>{{ $type->dureeminute}}</td>
@@ -73,9 +82,8 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="row g-3" method="POST" action="updateTypeTournoi">
+                                        <form class="row g-3" method="POST" action="updateTypeTournoi/{{$type->idtypetournoi}}">
                                           @csrf  
-                                            <input type="hidden" name="idtypetournoi" value="{{$type->idtypetournoi}}">
                                             <div class="col-12">
                                               <label for="inputNanme4" class="form-label">Type</label>
                                               <input type="text" class="form-control" id="inputNanme4" name="nomtypetournoi" value="{{ $type->nomtypetournoi}}">
@@ -100,7 +108,7 @@
               <div class="modal fade" id="verticalycentered{{$type->idtypetournoi}}" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
-                    <form method="POST" action="deleteTypeTournoi" >
+                    <form method="POST" action="deleteTypeTournoi/{{$type->idtypetournoi}}" >
                       @csrf
                     <div class="modal-body">
                       <input type="hidden" name="idtypetournoi" value="{{$type->idtypetournoi}}">

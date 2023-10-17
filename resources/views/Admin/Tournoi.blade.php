@@ -70,7 +70,15 @@
               </div>
 
               <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-
+                @if ($errors->any())
+                <div class="alert alert-danger bg-danger">
+                  <ul>
+                    @foreach($errors->all() as $error)
+                      <li>{{$error}}</li>
+                    @endforeach
+                  </ul>
+                </div>
+            @endif
                 <!-- Profile Edit Form -->
 <h5 class="card-title">Ajouter tournoi</h5>
 

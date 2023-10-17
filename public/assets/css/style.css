@@ -1665,3 +1665,138 @@ Soccer Section
 	font-weight: 500;
 	padding-top: 22px;
 }
+
+/*Evenement*/
+.event {
+    width: 80%;
+    margin: 0 auto;
+    text-align: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border: 1px solid #ddd;
+}
+
+h1 {
+    color: #ff6600;
+}
+
+img {
+    max-width: 100%;
+}
+
+.event-details {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.activities {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.activity {
+    background-color: #eee;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.registration-button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#event-registration-button {
+    background-color: #ff6600;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.event-list {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.event-item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #f9f9f9;
+}
+
+h2 {
+  color: #ff6600;
+}
+
+a {
+  color: #ff6600;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.activity-details {
+  width: 80%;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.activity-title {
+  color: #ff6600;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  color: #ff6600;
+  font-size: 24px;
+  margin: 20px 0 10px;
+}
+
+.team-card {
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.team-name {
+  color: #ff6600;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+team-members,
+matches {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 5px 0;
+  font-size: 20px;
+}
+
+.matches li::before {
+  content: "•";
+  color: #ff6600;
+  font-weight: bold;
+  display: inline-block;
+  margin-right: 5px;
+}

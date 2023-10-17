@@ -43,6 +43,15 @@
     @section('contenu')
           <div class="card">
             <div class="card-body">
+              @if ($errors->any())
+              <div class="alert alert-danger bg-danger">
+                <ul>
+                  @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                  @endforeach
+                </ul>
+              </div>
+              @endif
               <h5 class="card-title">Phase de jeu</h5>
               <!-- Default Table -->
               <div>
@@ -55,7 +64,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($phasejeu as $type)
+                  @foreach ($phasesJeu as $type)
                   <tr>
                     <td>{{ $type->nomphase}}</td>
                     <td>              

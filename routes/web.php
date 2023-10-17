@@ -4,6 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\TypeTournoiController;
+use App\Http\Controllers\PhaseJeuController;
+use App\Http\Controllers\TypeMatchController;
+use App\Http\Controllers\EquipeController;
+use App\Http\Controllers\TournoiController;
+use App\Http\Controllers\EvenementController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,16 +47,16 @@ Route::GET('logoutAdmin', [AdminController::class, 'logoutAdmin']);
 Route::GET('AdminStatistique', [AdminController::class, 'Statistique']);
 
 //Type TOURNOI
-Route::GET('TypeTournoi', [AdminController::class, 'TypeTournoi']);
-Route::POST('addTypeTournoi', [AdminController::class, 'ajoutTypeTournoi']);
-Route::POST('updateTypeTournoi',[AdminController::class, 'updateTypeTournoi']);
-Route::POST('deleteTypeTournoi',[AdminController::class, 'deleteTypeTournoi']);
+Route::GET('TypeTournoi', [TypeTournoiController::class, 'liste']);
+Route::POST('addTypeTournoi', [TypeTournoiController::class, 'ajouter']);
+Route::POST('updateTypeTournoi/{idtypetournoi}',[TypeTournoiController::class, 'modifier']);
+Route::POST('deleteTypeTournoi/{idtypetournoi}',[TypeTournoiController::class, 'supprimer']);
 
 //Equipe
-Route::GET('Equipe', [AdminController::class, 'Equipe']);
-Route::POST('addEquipe', [AdminController::class, 'ajoutEquipe']);
-Route::POST('updateEquipe',[AdminController::class, 'updateEquipe']);
-Route::POST('deleteEquipe',[AdminController::class, 'deleteEquipe']);
+Route::GET('Equipe', [EquipeController::class, 'liste']);
+Route::POST('addEquipe', [EquipeController::class, 'ajouter']);
+Route::POST('updateEquipe/{idequipe}',[EquipeController::class, 'modifier']);
+Route::POST('deleteEquipe/{idequipe}',[EquipeController::class, 'supprimer']);
 
 //Période de pronostic
 Route::GET('PeriodePronostic', [AdminController::class, 'PeriodePronostic']);
@@ -59,23 +65,23 @@ Route::POST('updatePeriodePronostic',[AdminController::class, 'updatePeriodePron
 Route::POST('deletePeriodePronostic',[AdminController::class, 'deletePeriodePronostic']);
 
 //Phase de jeu
-Route::GET('PhaseJeu', [AdminController::class, 'PhaseJeu']);
-Route::POST('addPhaseJeu', [AdminController::class, 'ajoutPhaseJeu']);
-Route::POST('updatePhaseJeu',[AdminController::class, 'updatePhaseJeu']);
-Route::POST('deletePhaseJeu',[AdminController::class, 'deletePhaseJeu']);
+Route::GET('PhaseJeu', [PhaseJeuController::class, 'liste']);
+Route::POST('addPhaseJeu', [PhaseJeuController::class, 'ajouter']);
+Route::POST('updatePhaseJeu/{idphase}',[PhaseJeuController::class, 'modifier']);
+Route::POST('deletePhaseJeu/{idphase}',[PhaseJeuController::class, 'supprimer']);
 
 //Type MATCH
-Route::GET('TypeMatch', [AdminController::class, 'TypeMatch']);
-Route::POST('addTypeMatch', [AdminController::class, 'ajoutTypeMatch']);
-Route::POST('updateTypeMatch',[AdminController::class, 'updateTypeMatch']);
-Route::POST('deleteTypeMatch',[AdminController::class, 'deleteTypeMatch']);
+Route::GET('TypeMatch', [TypeMatchController::class, 'liste']);
+Route::POST('addTypeMatch', [TypeMatchController::class, 'ajouter']);
+Route::POST('updateTypeMatch/{idtypematch}',[TypeMatchController::class, 'modifier']);
+Route::POST('deleteTypeMatch/{idtypematch}',[TypeMatchController::class, 'supprimer']);
 
 //Tournoi
-Route::GET('Tournoi', [AdminController::class, 'Tournoi']);
-Route::GET('FicheTournoi/{idtournoi}', [AdminController::class, 'FicheTournoi']);
-Route::POST('addTournoi', [AdminController::class, 'ajoutTournoi']);
-Route::POST('/FicheTournoi/updateTournoi',[AdminController::class, 'UpdateTournoi']);
-Route::POST('deleteTournoi',[AdminController::class, 'deleteTournoi']);
+Route::GET('Tournoi', [tournoiController::class, 'liste']);
+Route::POST('addTournoi', [tournoiController::class, 'ajouter']);
+Route::POST('/FicheTournoi/updateTournoi',[tournoiController::class, 'modifier']);
+Route::POST('deleteTournoi',[tournoiController::class, 'supprimer']);
+Route::GET('FicheTournoi/{idtournoi}', [tournoiController::class, 'fiche']);
 
 //Match
 Route::GET('Match', [AdminController::class, 'Match']);
@@ -85,4 +91,7 @@ Route::POST('/{idtournoi}/updateMatch', [AdminController::class, 'updateMatch'])
 Route::POST('/{idtournoi}/addResultatMatch', [AdminController::class, 'ajoutResultatMatch']);
 Route::POST('deleteMatch',[AdminController::class, 'deleteMatch']);
 
+Route::GET('Evenement', [EvenementController::class, 'liste']);
+Route::GET('ficheEvenement', [EvenementController::class, 'fiche']);
+Route::GET('detailActivite', [EvenementController::class, 'detailActivite']);
 

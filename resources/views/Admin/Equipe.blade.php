@@ -43,6 +43,15 @@
     @section('contenu')
           <div class="card">
             <div class="card-body">
+              @if ($errors->any())
+                  <div class="alert alert-danger bg-danger">
+                    <ul>
+                      @foreach($errors->all() as $error)
+                        <li>{{$error}}</li>
+                      @endforeach
+                    </ul>
+                  </div>
+              @endif
               <h5 class="card-title">Equipe</h5>
               <!-- Default Table -->
               <div>
@@ -55,7 +64,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @foreach ($equipe as $row)
+                  @foreach ($equipes as $row)
                   <tr>
                     <td><img src="data:image/JPEG;base64,{{ $row->imageequipe }}" alt="Profile">
                       <span >{{$row->nomequipe}}</span></td>
@@ -72,9 +81,8 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="row g-3" method="post" action="updateEquipe">
+                                        <form class="row g-3" method="post" action="updateEquipe/{{$row->idequipe}}">
                                           @csrf
-                                            <input type="hidden" name="idequipe" value="{{$row->idequipe}}">
                                             <div class="col-12">
                                               <label for="inputNanme4" class="form-label">Equipe</label>
                                               <input type="text" class="form-control"  name="nomequipe" value="{{$row->nomequipe}}">
@@ -96,7 +104,7 @@
               <div class="modal fade" id="verticalycentered1" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
-                    <form methodd="get" action="#">
+                    <form methodd="get" action="deleteEquipe/{{$row->idequipe}}">
                     <div class="modal-body">
                       <input type="hidden" name="idequipe" value="">
                       Etes-vous sûre de vouloir supprimer cette ligne?
@@ -135,7 +143,7 @@
                 </div>
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">Type</label>
-                  @foreach ($typetournoi as $type)
+                  @foreach ($typetournois as $type)
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" id="gridCheck{{$type->idtypetournoi}}" value="{{$type->idtypetournoi}}" name="idtypetournoi[]">
                     <label class="form-check-label" for="gridCheck{{$type->idtypetournoi}}">

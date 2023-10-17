@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rule;
 
 
 class TypeTournoi extends Model
@@ -14,4 +15,50 @@ class TypeTournoi extends Model
     protected $table = 'typetournoi';
     protected $primaryKey='idtypetournoi';
     protected $fillable = ['nomtypetournoi','dureeminute'];
+
+    //On gère les règles de validation  des attributs
+    public static function reglesValidation($contexte){
+        $regles = [
+            'nomtypetournoi' => 'required|string',
+        ];
+        $messages = [
+            'nomtypetournoi.required' => 'Le nom de type de tournoi est requis.',
+            'nomtypetournoi.string' => 'Le nom de type de tournoi doit être une chaîne de caractères.',
+        ];
+        if($contexte === 'creation'){
+            $regles['nomtypetournoi'] .= '|unique:typetournoi,nomtypetournoi';
+            $messages['nomtypetournoi'] = 'Le nom de type de tournoi existe déjà.';
+        }
+        return [
+            'regles' => $regles,
+            'messages' => $messages,
+        ];
+    }
+
+    //Relation: un type de tournoi peut avoir plusieurs tournois
+    public function Tournois(){
+        return $this->hasMany(Activite::class);
+    }
+
+    //Pour créer un nouveau type de tournoi
+    public static function ajouterTypeTournoi($nomtypetournoi){
+        return self::create([
+            'nomtypetournoi' => $nomtypetournoi,
+        ]);
+    }
+
+    //Pour modifier un type de tournoi
+    public function modifierTypeTournoi($nomtypetournoi){
+        $this->nomtypetournoi = $nomtypetournoi;
+        $this->save();
+    }
+
+    //Pour effacer un type de tournoi
+    public function effacerTypeTournoi(){
+        //Supprimer les tournois associés à ce type de tournoi
+        $this->Tournois()->delete();
+
+        //Supprimer le type d'activité lui-même
+        $this->delete();
+    }
 }
