@@ -80,19 +80,18 @@ Route::POST('updateTypeMatch/{idtypematch}',[TypeMatchController::class, 'modifi
 Route::POST('deleteTypeMatch/{idtypematch}',[TypeMatchController::class, 'supprimer']);
 
 //Tournoi
-Route::GET('Tournoi', [tournoiController::class, 'liste']);
-Route::POST('addTournoi', [tournoiController::class, 'ajouter']);
-Route::POST('/FicheTournoi/updateTournoi',[tournoiController::class, 'modifier']);
-Route::POST('deleteTournoi',[tournoiController::class, 'supprimer']);
-Route::GET('FicheTournoi/{idtournoi}', [tournoiController::class, 'fiche']);
+Route::GET('Tournoi', [TournoiController::class, 'liste']);
+Route::POST('addTournoi', [TournoiController::class, 'ajouter']);
+Route::GET('deleteTournoi/{idtournoi}',[TournoiController::class, 'supprimer']);
+Route::POST('/FicheTournoi/updateTournoi',[TournoiController::class, 'modifier']);
+Route::GET('FicheTournoi/{idtournoi}', [TournoiController::class, 'fiche']);
 
 //Match
-Route::GET('Match', [AdminController::class, 'Match']);
-Route::POST('/{idtournoi}/addMatch', [AdminController::class, 'ajoutMatch']);
-Route::POST('/{idtournoi}/addMatchCsv', [AdminController::class, 'ajoutMatchCsv']);
-Route::POST('/{idtournoi}/updateMatch', [AdminController::class, 'updateMatch']);
-Route::POST('/{idtournoi}/addResultatMatch', [AdminController::class, 'ajoutResultatMatch']);
-Route::POST('deleteMatch',[AdminController::class, 'deleteMatch']);
+Route::POST('/{idtournoi}/addMatch', [TournoiController::class, 'ajoutMatch']);
+Route::POST('/{idtournoi}/addMatchCsv', [TournoiController::class, 'ajoutMatchCsv']);
+Route::POST('/{idtournoi}/updateMatch', [TournoiController::class, 'updateMatch']);
+Route::POST('/{idtournoi}/addResultatMatch', [TournoiController::class, 'ajoutResultatMatch']);
+Route::POST('deleteMatch',[TournoiController::class, 'deleteMatch']);
 
 //Type Activite
 Route::GET('TypeActivite', [TypeActiviteController::class, 'liste']);
@@ -115,8 +114,13 @@ Route::POST('deleteLieu/{idlieu}',[EvenementController::class, 'supprimer']);
 //Evenement
 Route::GET('Evenement', [EvenementController::class, 'liste']);
 Route::POST('addEvenement', [EvenementController::class, 'ajouter']);
+Route::POST('/evenement/updateEvenement/{idevenement}', [EvenementController::class, 'modifier']);
 Route::GET('ficheEvenement/{idevenement}', [EvenementController::class, 'fiche']);
 Route::POST('/{idevenement}/addActiviteEvenement', [EvenementController::class, 'ajouterActivite']);
-Route::POST('/{idevenement}/updateActiviteEvenement', [EvenementController::class, 'modifierActivite']);
+Route::POST('/{idevenement}/{idevenement_activite}/updateActiviteEvenement', [EvenementController::class, 'modifierActivite']);
+Route::GET('/{idevenement}/{idevenement_activite}/deleteActiviteEvenement', [EvenementController::class, 'effacerActivite']);
+
+Route::GET('listeEvenement', [EvenementController::class, 'listeEvenement']);
+Route::GET('detailEvenement/{idevenement}', [EvenementController::class, 'detailEvenement']);
 Route::GET('detailActivite', [EvenementController::class, 'detailActivite']);
 

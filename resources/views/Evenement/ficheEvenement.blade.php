@@ -34,14 +34,14 @@
 @section('content')
 <div style="height: 100px"></div>
 <div class="event">
-  <h1>Événement Sportif</h1>
+  <h1>{{$evenement->nomevenement}}</h1>
   <img src="{{ url('assets/img/product-1.jpg')}}" alt="Image de l'événement">
   
   <div class="event-details">
-      <p><strong>Date :</strong> 16 octobre 2023</p>
+      <p><strong>Date :</strong> {{$evenement->dateevenement}}</p>
       <p><strong>Heure :</strong> 10h00 - 17h00</p>
       <p><strong>Description :</strong> Cet événement sportif passionnant comprend diverses activités amusantes pour tous les âges.</p>
-      <p><strong>Lieu :</strong> Espace de Détente Batou Beach</p>
+      <p><strong>Lieu :</strong> {{$evenement->Lieu->nomlieu}}</p>
   </div>
   
   <div id="map" style="height: 350px;" >
@@ -50,20 +50,14 @@
   
   <div class="activities">
       <h2>Activités Proposées :</h2>
-      
+      @foreach ($activites as $activite)
       <div class="activity">
-          <h3>Course à pied</h3>
+          <h3>{{$activite->nomactivite}}</h3>
           <p><strong>Heure :</strong> 10h00 - 11h30</p>
           <p><strong>Description :</strong> Une course à pied sur la plage.</p>
           <a type="button" class="registration-button" href="detailActivite">Inscription</a>
       </div>
-      
-      <div class="activity">
-          <h3>Beach Volley</h3>
-          <p><strong>Heure :</strong> 12h00 - 13h30</p>
-          <p><strong>Description :</strong> Un tournoi de beach volley.</p>
-          <button class="registration-button">Inscription</button>
-      </div>
+      @endforeach
       
       <!-- Ajoutez d'autres activités ici -->
   </div>
@@ -76,19 +70,21 @@
     }).addTo(map);
 
     var iconDepart = L.icon({
-    iconUrl: '{{ asset("rouge.png") }}',
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    });
-
-    var iconArrivee = L.icon({
     iconUrl: '{{ asset("orange.png") }}',
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     });
 
+    var iconArrivee = L.icon({
+    iconUrl: '{{ asset("rouge.png") }}',
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    });
+
     var depart = L.latLng(-18.8842, 47.5232);
-    var arrivee = L.latLng(-18.8966, 47.5224);
+    var latitude=<?php echo json_encode($evenement->Lieu->latitude); ?>;
+    var longitude=<?php echo json_encode($evenement->Lieu->longitude); ?>;
+    var arrivee = L.latLng(latitude, longitude);
 
     // Ajouter le marqueur de départ personnalisé
     var departMarker = L.marker(depart, { icon: iconDepart }).addTo(map);

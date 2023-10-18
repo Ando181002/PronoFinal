@@ -95,7 +95,7 @@
                                     </div>
                                     <div class="col-12">
                                         <label for="inputAddress" class="form-label">Fin inscription</label>
-                                        <input type="date" class="form-control" name="fininscription" id="fin" value="{{$evenement->fininscription}}" required>
+                                        <input type="datetime-local" class="form-control" name="fininscription" id="fin" value="{{$evenement->fininscription}}" required>
                                     </div>
                                    
                                     <div class="text-center">
@@ -123,10 +123,10 @@
                                             <td>{{$activite->pivot->nombrejoueur}} </td>
                                             <td>{{$activite->pivot->idgenre}}</td>
                                             <td>
-                                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#basicModal{{$activite->idactivite}}">
+                                                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#basicModal{{$activite->pivot->idevenement_activite}}">
                                                     <i class="ri-edit-box-fill"></i>
                                                 </button>
-                                                <div class="modal fade" id="basicModal{{$activite->idactivite}}" tabindex="-1">
+                                                <div class="modal fade" id="basicModal{{$activite->pivot->idevenement_activite}}" tabindex="-1">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -134,7 +134,7 @@
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <form class="row g-3" method="post" action="/{{$evenement->idevenement}}/updateActiviteEvenement">
+                                                                <form class="row g-3" method="post" action="/{{$evenement->idevenement}}/{{$activite->pivot->idevenement_activite}}/updateActiviteEvenement">
                                                                     @csrf
                                                                     <div class="col-md-12">
                                                                         <label for="inputEmail5" class="form-label">Activite</label>
@@ -173,15 +173,15 @@
                                                 </div><!-- End Basic Modal--> 
                                             </td>
                                             <td>
-                                                <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#verticalycentered{{$activite->idactivite}}">
+                                                <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#verticalycentered1{{$activite->pivot->idevenement_activite}}">
                                                     <i class="ri-delete-bin-5-fill"></i>
                                                 </a>
-                                                <div class="modal fade" id="verticalycentered{{$activite->idactivite}}" tabindex="-1">
+                                                <div class="modal fade" id="verticalycentered1{{$activite->pivot->idevenement_activite}}" tabindex="-1">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
-                                                            <form methodd="get" action="#">
+                                                            <form methodd="get" action="/{{$evenement->idevenement}}/{{$activite->pivot->idevenement_activite}}/deleteActiviteEvenement">
+                                                                @csrf">
                                                                 <div class="modal-body">
-                                                                    <input type="hidden" name="idequipe" value="">
                                                                     Etes-vous sûre de vouloir supprimer cette ligne?
                                                                 </div>
                                                                 <div class="modal-footer">

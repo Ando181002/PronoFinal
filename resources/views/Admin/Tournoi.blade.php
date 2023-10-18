@@ -48,9 +48,8 @@
                   <div class="modal fade" id="verticalycentered1" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                       <div class="modal-content">
-                        <form methodd="get" action="#">
+                        <form methodd="get" action="deleteTournoi/{{$row->idtournoi}}">
                         <div class="modal-body">
-                          <input type="hidden" name="idtypetournoi" value="">
                           Etes-vous sûre de vouloir supprimer cette ligne?
                         </div>
                         <div class="modal-footer">

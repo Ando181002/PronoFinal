@@ -22,6 +22,18 @@ class EvenementController extends Controller
         return redirect('Evenement');
     }
 
+    public function modifier(Request $req,$idevenement){
+        $evenement=Evenement::find($idevenement);
+        if(!$evenement){
+            return redirect()->route('Evenement')->with('error','Evènement non trouvé.');
+        }
+        $validation=Evenement::reglesValidation('modification');
+        $req->validate($validation['regles'],$validation['messages']);
+        $evenement->modifierEvenement($req->input('nomevenement'),$req->input('dateevenement'),$req->input('fininscription'),$req->input('idlieu'));
+        $url = url('ficheEvenement', ['idevenement' => $idevenement]);
+        return redirect($url);
+    }
+
     public function fiche($idevenement){
         $evenement=Evenement::find($idevenement);
         $lieux=Lieu::all();
@@ -39,18 +51,32 @@ class EvenementController extends Controller
         return redirect($url);
     }
 
-    public function modifierActivite($idevenement,$idactivite,Request $req){
-        $evenement = Evenement::findOrFail($idEvenement);
+    public function modifierActivite(Request $req,$idevenement,$idevenement_activite){
+       $evenement = Evenement::findOrFail($idevenement);
         // Appelez la méthode modifierActivite sur l'instance de l'événement
-        $evenement->modifierActivite(
-            $idactivite,
-            $request->input('dureeactivite'),
-            $request->input('nombrejoueur'),
-            $request->input('idgenre')
-        );        $url = url('ficheEvenement', ['idevenement' => $idevenement]);
+        $evenement->modifierActivite($idevenement_activite,$req->input('dureeactivite'),$req->input('nombrejoueur'),$req->input('idgenre'));
+        $url = url('ficheEvenement', ['idevenement' => $idevenement]);
         return redirect($url);
     }
   
+    public function effacerActivite($idevenement,$idevenement_activite){
+        $evenement = Evenement::findOrFail($idevenement);
+        $evenement->supprimerActivite($idevenement_activite);
+        $url = url('ficheEvenement', ['idevenement' => $idevenement]);
+        return redirect($url);
+    }
+
+    public function listeEvenement(){
+        $status="personnel";
+        $evenements=Evenement::with('Lieu')->get();
+        return view('Evenement.listeEvenement',compact('status','evenements'));        
+    }
+    public function detailEvenement($idevenement){
+        $status="personnel";
+        $evenement=Evenement::with('Lieu')->find($idevenement);
+        $activites=$evenement->activites;
+        return view('Evenement.ficheEvenement',compact('status','evenement','activites'));        
+    }
     public function detailActivite(){
         $status="personnel";
         return view('Evenement.detailActivite',compact('status'));       

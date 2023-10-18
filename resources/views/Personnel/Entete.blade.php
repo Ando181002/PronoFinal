@@ -68,6 +68,11 @@
           </a><!-- End Notification Icon -->
         </li><!-- End Notification Nav -->
         <li class="nav-item dropdown">
+          <a class="nav-link nav-icon" href="{{ url('event') }}" >
+           Evenement
+          </a><!-- End Notification Icon -->
+        </li><!-- End Notification Nav -->
+        <li class="nav-item dropdown">
           <a class="nav-link nav-icon" href="{{ url('statistique') }}" >
            Statistique
           </a><!-- End Notification Icon -->

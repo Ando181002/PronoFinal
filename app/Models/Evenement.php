@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Support\Facades\DB;
 
 class Evenement extends Model
 {
@@ -44,7 +44,7 @@ class Evenement extends Model
 
     //Relation: un évènement peut avoir plusieurs activités
     public function activites(){
-        return $this->belongsToMany(Activite::class,'evenement_activite','idevenement','idactivite')->withPivot('dureeactivite','nombrejoueur','idgenre');
+        return $this->belongsToMany(Activite::class,'evenement_activite','idevenement','idactivite')->withPivot('idevenement_activite','dureeactivite','nombrejoueur','idgenre');
     }
 
     //Pour créer un nouvel evenement
@@ -100,14 +100,21 @@ class Evenement extends Model
     }
 
     //Modifier une activité à un évènement
-    public function modifierActivite($idactivite,$dureeactivite,$nombrejoueur,$idgenre){
-        $this->activites()->updateExistingPivot($idactivite,['dureeactivite' => $dureeactivite, 'nombrejoueur' => $nombrejoueur, 'idgenre' => $idgenre]);
+    public function modifierActivite($idevenement_activite,$dureeactivite,$nombrejoueur,$idgenre){
+        DB::table('evenement_activite')
+        ->where('idevenement_activite', $idevenement_activite)
+        ->update([
+            'dureeactivite' => $dureeactivite,
+            'nombrejoueur' => $nombrejoueur,
+            'idgenre' => $idgenre,
+        ]);  
     }
 
     //Supprimer une activité d'un évènement
-    public function supprimerActivite($idactivite){
-        $this->activites()->detach($idactivite);
-    }
+    public function supprimerActivite($idevenement_activite){
+        DB::table('evenement_activite')
+            ->where('idevenement_activite', $idevenement_activite)
+            ->delete();    }
 
     //Récupérer toutes les activités collectives
     public function activitesCollectives(){

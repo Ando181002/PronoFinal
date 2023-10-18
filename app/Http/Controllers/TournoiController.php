@@ -16,8 +16,8 @@ class TournoiController extends Controller
     public function liste(){
         $typetournoi=TypeTournoi::all();
         $equipe=Equipe::all();
-        $tournoi=Tournoi::with('TypeTournoi')->get();
-        return view('Admin.Tournoi',compact('typetournoi','equipe','tournoi'));
+        $tournois=Tournoi::with('TypeTournoi')->get();
+        return view('Admin.Tournoi',compact('typetournoi','equipe','tournois'));
     }
 
     public function ajouter(Request $req){
@@ -66,4 +66,6 @@ class TournoiController extends Controller
         return view('Admin.FicheTournoi',compact('participant','typetournoi','fichetournoi','typematch','equipe','match','classements','resultats','dateTournoi'));
 
     }
+
+    
 }

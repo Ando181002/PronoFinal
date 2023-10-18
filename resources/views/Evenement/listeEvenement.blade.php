@@ -34,23 +34,15 @@
  </div>
  <div class="event-list">
     <div class="row">
+        @foreach($evenements as $evenement)
         <div class="event-item">
-            <h2>Événement 1</h2>
+            <h2>{{$evenement->nomevenement}}</h2>
             <img src="{{ url('assets/img/product-1.jpg')}}" alt="Image de l'Événement 1">
-            <p><strong>Date :</strong> 16 octobre 2023</p>
-            <p><strong>Heure :</strong> 10h00 - 17h00</p>
-            <p><strong>Lieu :</strong> Espace de Détente Batou Beach</p>
-            <a href="ficheEvenement">Détails de l'Événement</a>
+            <p><strong>Date :</strong> {{$evenement->dateevenement}}</p>
+            <p><strong>Lieu :</strong> {{$evenement->Lieu->nomlieu}}</p>
+            <a href="detailEvenement/{{$evenement->idevenement}}">Détails de l'Événement</a>
         </div>
-        
-        <div class="event-item">
-            <h2>Événement 2</h2>
-            <img src="{{ url('assets/img/product-1.jpg')}}" alt="Image de l'Événement 2">
-            <p><strong>Date :</strong> 20 octobre 2023</p>
-            <p><strong>Heure :</strong> 09h00 - 15h00</p>
-            <p><strong>Lieu :</strong> Espace de Détente Batou Beach</p>
-            <a href="ficheEvenement">Détails de l'Événement</a>
-        </div>
+        @endforeach
     </div>
     
     <!-- Ajoutez d'autres événements ici -->
