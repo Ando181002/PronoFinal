@@ -303,3 +303,29 @@ create or replace view v_nbInscription_departement as
 	left join typetournoi tt on 1=1
 	left join v_nbInscription_pardepartement v on v.iddepartement=d.iddepartement and v.idtypetournoi=tt.idtypetournoi;
 
+create table TypeActivite(
+    idTypeActivite serial primary key,
+    nomTypeActivite varchar not null unique
+);
+
+create table Activite(
+    idActivite serial primary key,
+    nomActivite varchar not null unique,
+    idTypeActivite int not null references TypeActivite(idTypeActivite)
+);
+
+create table Lieu(
+    idLieu serial primary key,
+    nomLieu varchar not null unique,
+    imageLieu text,
+    latitude numeric(9,6),
+    longitude numeric(9,6)
+);
+
+create table Evenement(
+    idEvenement serial primary key,
+    nomEvenement varchar not null unique,
+    dateEvenement date not null,
+    finInscription timestamp not null,
+    idLieu int not null references Lieu(idLieu)
+);

@@ -49,13 +49,13 @@ class Tournoi extends Model
     }
 
     //Relation: un tournoi peut avoir plusieurs matchs
-    public function Matchs(){
-        return $this->hasMany(Matchs::class);
+    public function matchs(){
+        return $this->hasMany(Matchs::class,'idtournoi');
     }
 
     //Relation: un tournoi peut avoir plusieurs participants
-    public function Participants(){
-        return $this->hasMany(Inscription::class);
+    public function inscriptions(){
+        return $this->hasMany(Inscription::class,'idtournoi');
     }
 
     //Pour créer un nouveau tournoi

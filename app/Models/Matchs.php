@@ -15,6 +15,11 @@ class Matchs extends Model
     protected $primaryKey='idmatch';
     protected $fillable = ['idtypematch','idtournoi','datematch','finmatch','stade','idequipe1','idequipe2','ptresultat','ptscore','avecresultat'];
 
+    public function setFinmatchAttribute($datematch){
+        $typetournoi=TypeTournoi::find($this->idtournoi);
+        $this->attributes['finmatch'] = $typetournoi->calculerFinMatch($dateMatch);
+    }
+
     public function TypeMatch()
     {
         return $this->belongsTo(TypeMatch::class, 'idtypematch');
@@ -67,8 +72,16 @@ class Matchs extends Model
 
     //Pour modifier un match
     public function modifierMatch($idtournoi,$idtypematch,$datematch,$finmatch,$idequipe1,$idequipe2,$stade,$ptresultat,$ptscore,$avecresultat){
-        $this->nomtypematch = $nomtypematch;
-        $this->idphase = $idphase;
+        $this->idtournoi = $idtournoi;
+        $this->idtypematch = $idtypematch;
+        $this->datematch = $datematch;
+        $this->finmatch = $finmatch;
+        $this->idequipe1 = $idequipe1;
+        $this->idequipe2 = $idequipe2;
+        $this->stade = $stade;
+        $this->ptresultat = $ptresultat;
+        $this->ptscore = $ptscore;
+        $this->avecresultat = $avecresultat;
         $this->save();
     }
 

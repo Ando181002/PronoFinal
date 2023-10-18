@@ -52,8 +52,8 @@ class TournoiController extends Controller
         $typetournoi=TypeTournoi::all();
         $typematch=TypeMatch::all();
         $fichetournoi=Tournoi::find($idtournoi);
-        $participant=DB::select('select i.*,nom from inscription i join compte c on i.trigramme=c.trigramme where idtournoi = ?', [$idtournoi]);
-        $match=Matchs::with('typeMatch')->with('Equipe1')->with('Equipe2')->where('idtournoi','=',$idtournoi)->get();
+        $participant=$fichetournoi->inscriptions;
+        $match=$fichetournoi->matchs;
         $resultats=[];
         foreach($match as $key){
             $resultat=DB::select('select* from resultatmatch where idmatch=?',[$key->idmatch]);

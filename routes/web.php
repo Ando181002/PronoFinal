@@ -10,6 +10,9 @@ use App\Http\Controllers\TypeMatchController;
 use App\Http\Controllers\EquipeController;
 use App\Http\Controllers\TournoiController;
 use App\Http\Controllers\EvenementController;
+use App\Http\Controllers\TypeActiviteController;
+use App\Http\Controllers\ActiviteController;
+use App\Http\Controllers\LieuController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -91,7 +94,29 @@ Route::POST('/{idtournoi}/updateMatch', [AdminController::class, 'updateMatch'])
 Route::POST('/{idtournoi}/addResultatMatch', [AdminController::class, 'ajoutResultatMatch']);
 Route::POST('deleteMatch',[AdminController::class, 'deleteMatch']);
 
+//Type Activite
+Route::GET('TypeActivite', [TypeActiviteController::class, 'liste']);
+Route::POST('addTypeActivite', [TypeActiviteController::class, 'ajouter']);
+Route::POST('updateTypeActivite/{idtypeactivite}',[TypeActiviteController::class, 'modifier']);
+Route::POST('deleteTypeActivite/{idtypeactivite}',[TypeActiviteController::class, 'supprimer']);
+
+//Activite
+Route::GET('Activite', [ActiviteController::class, 'liste']);
+Route::POST('addActivite', [ActiviteController::class, 'ajouter']);
+Route::POST('updateActivite/{idactivite}',[ActiviteController::class, 'modifier']);
+Route::POST('deleteActivite/{idactivite}',[ActiviteController::class, 'supprimer']);
+
+//Lieu
+Route::GET('Lieu', [LieuController::class, 'liste']);
+Route::POST('addLieu', [LieuController::class, 'ajouter']);
+Route::POST('updateLieu/{idlieu}',[LieuController::class, 'modifier']);
+Route::POST('deleteLieu/{idlieu}',[EvenementController::class, 'supprimer']);
+
+//Evenement
 Route::GET('Evenement', [EvenementController::class, 'liste']);
-Route::GET('ficheEvenement', [EvenementController::class, 'fiche']);
+Route::POST('addEvenement', [EvenementController::class, 'ajouter']);
+Route::GET('ficheEvenement/{idevenement}', [EvenementController::class, 'fiche']);
+Route::POST('/{idevenement}/addActiviteEvenement', [EvenementController::class, 'ajouterActivite']);
+Route::POST('/{idevenement}/updateActiviteEvenement', [EvenementController::class, 'modifierActivite']);
 Route::GET('detailActivite', [EvenementController::class, 'detailActivite']);
 

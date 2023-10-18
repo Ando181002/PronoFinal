@@ -1740,10 +1740,6 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
 .activity-details {
   width: 80%;
   margin: 0 auto;

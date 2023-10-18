@@ -131,6 +131,30 @@
           <span>Statistique</span>
         </a>
       </li><!-- End Dashboard Nav -->
+      <li class="nav-item ">
+        <a class="nav-link collapsed" href="{{url('TypeActivite');}}">
+          <i class="bi bi-grid"></i>
+          <span>Type d'activité</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      <li class="nav-item ">
+        <a class="nav-link collapsed" href="{{url('Activite');}}">
+          <i class="bi bi-grid"></i>
+          <span>Activité</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      <li class="nav-item ">
+        <a class="nav-link collapsed" href="{{url('Lieu');}}">
+          <i class="bi bi-grid"></i>
+          <span>Lieu</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
+      <li class="nav-item ">
+        <a class="nav-link collapsed" href="{{url('Evenement');}}">
+          <i class="bi bi-grid"></i>
+          <span>Evenement</span>
+        </a>
+      </li><!-- End Dashboard Nav -->
     </ul>
 
   </aside><!-- End Sidebar-->

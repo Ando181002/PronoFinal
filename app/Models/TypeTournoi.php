@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
-
+use Carbon\Carbon;
 
 class TypeTournoi extends Model
 {
@@ -60,5 +60,13 @@ class TypeTournoi extends Model
 
         //Supprimer le type d'activité lui-même
         $this->delete();
+    }
+
+    public function calculerFinMatch($dateMatch){
+        $dureeMatch = $this->dureeminute;
+        $carbonDateTime = Carbon::parse($dateMatch);
+        $newCarbonDateTime = $carbonDateTime->addMinutes($dureeMatch);
+        $finMatch = $newCarbonDateTime->format('Y-m-d\TH:i');
+        return $finMatch;
     }
 }
