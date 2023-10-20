@@ -36,17 +36,33 @@ class Matchs extends Model
     {
         return $this->belongsTo(Equipe::class, 'idequipe2');
     }
+
+    //Un match a seulement un résultat
+    public function resultat()
+    {
+        return $this->hasOne(ResultatMatch::class);
+    }
+
+    //Un match peut avoir plusieurs pronostics
+    public function pronostics()
+    {
+        return $this->hasMany(Pronostic::class,'idmatch');
+    }
+
      //On gère les règles de validation  des attributs
      public static function reglesValidation($contexte){
         $regles = [
             'ptresultat' => 'required|int',
             'ptscore' => 'required|int',
+            'datematch' => 'required|date_format:Y-m-d H:i',
         ];
         $messages = [
             'ptresultat.required' => 'Le point pour le resultat est requis.',
             'ptresultat.int' => 'Le point pour le resultat doit être un nombre.',
             'ptscore.required' => 'Le point pour le score est requis.',
             'ptscore.int' => 'Le point pour le score doit être un nombre.',
+            'datematch.required' => 'La date du match est requise.',
+            'datematch.date_format' => 'Le champ Date de match doit être au format "jour-mois-année heure:minute".',
         ];
 
         return [
@@ -61,7 +77,7 @@ class Matchs extends Model
             'idtournoi' => $idtournoi,
             'idtypematch' => $idtypematch,
             'datematch' => $datematch,
-            '$finmatch' => $$finmatch,
+            'finmatch' => $finmatch,
             'idequipe1' => $idequipe1,
             'idequipe2' => $idequipe2,
             'ptresultat' => $ptresultat,
@@ -89,5 +105,27 @@ class Matchs extends Model
     public function effacerMatch(){
         //Supprimer le match lui-même
         $this->delete();
+    }
+
+    //Recupérer les matchs sans résultat
+    public function scopeSansResultat($query){
+        return $query->where('avecresultat','=','0');
+    }
+
+    //Recupérer les matchs avec résultat
+    public function scopeAvecResultat($query){
+        return $query->where('avecresultat','=','1');
+    }
+
+    //Recupérer le classement
+    public function classement(){
+        $idmatch=$this->idmatch;
+        $classement=DB::table('classement')
+            ->join('inscription', 'classement.idinscription', '=', 'inscription.idinscription')
+            ->where('idmatch', $idmatch)
+            ->orderBy('total', 'desc')
+            ->limit(5)
+            ->get();
+        return $classement;
     }
 }

@@ -14,4 +14,6 @@ class PeriodePronostic extends Model
     protected $table = 'periodepronostic';
     protected $primaryKey='idperiodepronostic';
     protected $fillable = ['numjour','nomjour','limite'];
+
+    
 }

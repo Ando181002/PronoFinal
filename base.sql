@@ -329,3 +329,20 @@ create table Evenement(
     finInscription timestamp not null,
     idLieu int not null references Lieu(idLieu)
 );
+
+create table Evenement_Activite(
+    idEvenement_Activite serial primary key,
+    idEvenement int not null references Evenement(idEvenement),
+    idActivite int not null references Activite(idActivite),
+    dureeActivite int,
+    nombrejoueur int not null,
+    idGenre int not null references Genre(idgenre)
+);
+
+create table InscriptionActivite(
+    idInscription serial primary key,
+    idEvenement_Activite int not null references Evenement_Activite(idEvenement_Activite),
+    dateInscription timestamp not null,
+    trigramme char(3) not null,
+    
+);

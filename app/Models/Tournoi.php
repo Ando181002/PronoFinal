@@ -103,4 +103,16 @@ class Tournoi extends Model
         //Supprimer le tournoi lui-même
         $this->delete();
     }
+
+    //Pour récupérer le montant de la cagnote
+    public function montantCagnote(){
+        $inscriptions=$this->inscriptions();
+        $montant=count($inscriptions)*$this->frais;
+        return $montant;
+    }
+
+    //Pour récuperer tous les tournois par type de tournoi
+    public static function recupererTournoiParType($idtypetournoi){
+        return self::where('idtypetournoi',$idtypetournoi)->get();
+    }
 }

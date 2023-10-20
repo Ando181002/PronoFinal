@@ -20,10 +20,13 @@ class TypeTournoi extends Model
     public static function reglesValidation($contexte){
         $regles = [
             'nomtypetournoi' => 'required|string',
+            'dureeminute' => 'required|int',
         ];
         $messages = [
             'nomtypetournoi.required' => 'Le nom de type de tournoi est requis.',
             'nomtypetournoi.string' => 'Le nom de type de tournoi doit être une chaîne de caractères.',
+            'dureeminute.required' => 'Le durée du tournoi est requise.',
+            'dureeminute.int' => 'Le duree du tournoi doit être un nombre.',
         ];
         if($contexte === 'creation'){
             $regles['nomtypetournoi'] .= '|unique:typetournoi,nomtypetournoi';
@@ -36,8 +39,8 @@ class TypeTournoi extends Model
     }
 
     //Relation: un type de tournoi peut avoir plusieurs tournois
-    public function Tournois(){
-        return $this->hasMany(Activite::class);
+    public function tournois(){
+        return $this->hasMany(Tournoi::class,'idtypetournoi');
     }
 
     //Pour créer un nouveau type de tournoi
@@ -56,7 +59,7 @@ class TypeTournoi extends Model
     //Pour effacer un type de tournoi
     public function effacerTypeTournoi(){
         //Supprimer les tournois associés à ce type de tournoi
-        $this->Tournois()->delete();
+        $this->tournois()->delete();
 
         //Supprimer le type d'activité lui-même
         $this->delete();

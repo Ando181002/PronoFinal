@@ -34,7 +34,7 @@ class Equipe extends Model
         ];
     }
 
-    //Relation: une activité peut être dans plusieurs types de tournoi
+    //Relation: une equipe peut être dans plusieurs types de tournoi
     public function typetournois(){
         return $this->belongsToMany(TypeTournoi::class,'equipe_typetournoi','idequipe','idtypetournoi');
     }
