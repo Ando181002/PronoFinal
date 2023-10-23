@@ -58,9 +58,6 @@
                 <div class="row">
                         <ul class="nav nav-tabs" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#tabs-tous" role="tab">Tous</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tabs-2" role="tab">Non participé</a>
                             </li>
                             <li class="nav-item">
@@ -74,24 +71,6 @@
                             </li>
                         </ul><!-- Tab panes -->
                         <div class="tab-content">
-                            <div class="tab-pane active" id="tabs-tous" role="tabpanel">
-                                <div class="row">
-                                    @foreach($Tournois as $tournoi)
-                                    <div class="col-lg-3 col-sm-6 p-0">
-                                        <div class="soccer-item set-bg" data-setbg="data:image/JPEG;base64,{{ $tournoi->imagetournoi }}">
-                                            <div class="si-tag">{{$tournoi->TypeTournoi->nomtypetournoi}}</div>
-                                            <div class="si-text">
-                                                <h5><a href="Pronostiquer/{{$tournoi->idtournoi}}" style="color: black; font:bold">{{$tournoi->nomtournoi}}</a></h5>
-                                                <ul>
-                                                    <li><i class="fa fa-calendar"></i> May 19, 2019</li>
-                                                    <li><i class="fa fa-edit"></i> 3 Comment</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
                             <div class="tab-pane" id="tabs-2" role="tabpanel">
                                 <div class="row">
                                     @foreach($nonParticipe as $nonPart)

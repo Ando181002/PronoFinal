@@ -241,14 +241,16 @@
                                         <th scope="col">Rang</th>
                                         <th scope="col">Trigramme</th>
                                         <th scope="col">Points</th>
+                                        <th scope="col">Récompense(Ar)</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($classementGlobal as $classement) 
                                     <tr>
-                                        <th scope="row">{{ $classement->numligne }}</th>
+                                        <th scope="row">{{$classement->rang}}</th>
                                         <td>{{$classement->trigramme}}</td>
-                                        <td>{{$classement->finale}}</td>
+                                        <td>{{$classement->pointfinal()}}</td>
+                                        <td>{{$classement->montant}}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>

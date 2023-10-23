@@ -19,6 +19,20 @@ class ResultatMatch extends Model
     {
         return $this->belongsTo(Matchs::class, 'idmatch');
     }
+
+    public function resultatMatch(){
+        $match=Matchs::find($this->idmatch);
+        $score1=$this->score1;
+        $score2=$this->score2;
+        $resultat=$match->idequipe2;
+        $score=$score2;
+        if($score1>$score2){
+            $resultat=$match->idequipe1;
+            $score=$score1;
+        }
+        $donnees=[$resultat,$score];
+        return $donnees;
+    }
      //On gère les règles de validation  des attributs
     public static function reglesValidation($contexte){
         $regles = [

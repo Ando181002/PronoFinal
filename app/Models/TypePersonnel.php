@@ -11,7 +11,10 @@ class TypePersonnel extends Model
     use HasFactory;
 
     public $timestamps=false;
+    public $incrementing = false;
     protected $table = 'typepersonnel';
     protected $primaryKey='idtypepersonnel';
     protected $fillable = ['nomtypepersonnel'];
+
+
 }

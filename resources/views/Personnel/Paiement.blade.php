@@ -32,6 +32,11 @@
         <div class="row text-center py-3">
 
         </div>
+        @if(session('erreur'))
+          <div class="alert alert-danger">
+              {{ session('erreur') }}
+          </div>
+        @endif
         <div class="pagetitle">
             <h1>Bonjour {{$perso->nom}}</h1>
             <nav>

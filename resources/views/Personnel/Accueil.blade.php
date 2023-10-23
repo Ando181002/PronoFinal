@@ -40,7 +40,6 @@
                                     <div class="hs-text">
                                         <h4>30 september 2019 / 9:00 GMT+0000</h4>
                                         <h2>Airrosten VS Lerenort in London</h2>
-                                        <a href="#" type="button" class="btn btn-primary" style="background-color: orange">More Details</a>
                                     </div>
                                 </div>
                             </div>

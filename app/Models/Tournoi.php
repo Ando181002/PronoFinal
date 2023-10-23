@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Validation\Rule;
 
 class Tournoi extends Model
 {
@@ -20,8 +20,13 @@ class Tournoi extends Model
         $regles = [
             'nomtournoi' => 'required|string',
             'debuttournoi' => 'required|date',
-            'fintournoi' => 'required|date',
+            'fintournoi' => 'required|date|after:debuttournoi',
             'frais' => 'required|numeric',
+            'rang1' => 'required|int',
+            'rang2' => 'required|int',
+            'rang3' => 'required|int',
+            'rang4' => 'required|int',
+            'rang5' => 'required|int',
         ];
         $messages = [
             'nomtournoi.required' => 'Le nom de tournoi est requis.',
@@ -30,8 +35,19 @@ class Tournoi extends Model
             'debuttournoi.date' => 'La date de début du tournoi doit être une date valide.',
             'fintournoi.required' => 'La date de fin du tournoi est requise.',
             'fintournoi.date' => 'La date de fin du tournoi doit être une date valide.',
+            'fintournoi.after' => 'La date de fin du tournoi doit être postérieure à la date de début du tournoi.',
             'frais.required' => 'Le frais du tournoi est requis.',
             'frais.numeric' => 'Le frais du tournoi doit être un montant valide.',
+            'rang1.required' => 'Le pourcentage pour le vainqueur n°1 du tournoi est requis.',
+            'rang1.int' => 'Le pourcentage doit être un nombre.',
+            'rang2.required' => 'Le pourcentage pour le vainqueur n°2 du tournoi est requis.',
+            'rang2.int' => 'Le pourcentage doit être un nombre.',
+            'rang3.required' => 'Le pourcentage pour le vainqueur n°3 du tournoi est requis.',
+            'rang3.int' => 'Le pourcentage doit être un nombre.',
+            'rang4.required' => 'Le pourcentage pour le vainqueur n°4 du tournoi est requis.',
+            'rang4.int' => 'Le pourcentage doit être un nombre.',
+            'rang5.required' => 'Le pourcentage pour le vainqueur n°5 du tournoi est requis.',
+            'rang5.int' => 'Le pourcentage doit être un nombre.',
         ];
         if($contexte === 'creation'){
             $regles['nomtournoi'] .= '|unique:tournoi,nomtournoi';
@@ -104,15 +120,46 @@ class Tournoi extends Model
         $this->delete();
     }
 
+    //Pour récupérer le nombre d'inscriptions
+    public function nombreInscriptions(){
+        $inscriptions=$this->inscriptions;
+        $nombre=count($inscriptions);
+        return $nombre;
+    }
+
     //Pour récupérer le montant de la cagnote
     public function montantCagnote(){
-        $inscriptions=$this->inscriptions();
-        $montant=count($inscriptions)*$this->frais;
-        return $montant;
+        return $this->nombreInscriptions()*$this->frais;
     }
 
     //Pour récuperer tous les tournois par type de tournoi
     public static function recupererTournoiParType($idtypetournoi){
         return self::where('idtypetournoi',$idtypetournoi)->get();
     }
+
+    public function equipesFinalistes(){
+        $idtournoi=$this->idtournoi;
+        $typematch=TypeMatch::where('nomtypematch','=','Finale')->first();
+        $matchfinal=Matchs::where('idtournoi','=',$idtournoi)->where('idtypematch','=',$typematch->idtypematch)->first();
+        $finalistes=[$matchfinal->idequipe1,$matchfinal->idequipe2];
+        return $finalistes;
+    }
+
+    public function vainqueurs(){
+        $inscriptions=$this->inscriptions;
+        $inscriptions=$inscriptions->sortByDesc(function($inscription){
+            return $inscription->pointfinal();
+        });
+        $vainqueurs=$inscriptions->take(5);
+        $rang=1;
+        $cagnote=$this->montantCagnote();
+        foreach($vainqueurs as $vainqueur){
+            $vainqueur->rang=$rang;
+            $recompense="rang".$rang;
+            $vainqueur->montant=$cagnote*($this->$recompense/100);
+            $rang++;
+        }
+        return $vainqueurs;
+    }
+
 }

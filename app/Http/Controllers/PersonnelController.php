@@ -50,31 +50,6 @@ class PersonnelController extends Controller
         Mail::to($email)->send(new MonEmail($name,$email,$subject,$message));
     }
     public function TraitementInscription(Request $req){
-        /*// Paramètres de connexion à Active Directory
-        $serveurAD = "ldap.forumsys.com";
-        $PortAD = 389; // Port par défaut pour LDAP non sécurisé
-        $UtilisateurAD = "cn=read-only-admin,dc=example,dc=com";
-        $MotDePasseAD = "password";
-        $ldapConnection = ldap_connect($serveurAD, $PortAD);
-        ldap_set_option($ldapConnection, LDAP_OPT_PROTOCOL_VERSION, 3); // Utilisation du protocole LDAP version 3
-        ldap_bind($ldapConnection, $UtilisateurAD, $MotDePasseAD);
-        $filtre = "(sAMAccountName=$trigramme)";
-        $resultatRecherche = ldap_search($ldapConnection, "dc=example,dc=com", $filtre);
-        if ($resultatRecherche) {
-            $donnees = ldap_get_entries($ldapConnection, $resultatRecherche);
-            if ($donnees["count"] > 0) {
-                for ($i = 0; $i < $donnees["count"]; $i++) {
-                    $mail = $donnees[$i]["mail"];
-                    $mdp=PasswordUtils::generateTemporaryPassword();
-                    $this->envoyerEmail($mdp,$mail);
-                }
-            }
-        } else {
-            echo "Erreur lors de la recherche dans l'annuaire AD.";
-        }
-
-        // Fermeture de la connexion LDAP
-        ldap_close($ldapConnection);*/
         $trigramme=$req['trigramme'];
         $perso=Personnel::where('trigramme','=',$req['trigramme'])->first();
         if(isset($perso)){
@@ -169,11 +144,10 @@ class PersonnelController extends Controller
     }
     public function Liste(){
         $perso=session()->get('perso');
-        $Tournois=Tournoi::with('TypeTournoi')->get();
         $nonParticipe=DB::select('select t.*,nomtypetournoi from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where idtournoi not in (select idtournoi from inscription where trigramme=?)', [$perso->trigramme]);
         $encours=DB::select('select t.*,nomtypetournoi from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where now()<fintournoi and idtournoi in (select idtournoi from inscription where trigramme=?)', [$perso->trigramme]);
         $status="participant";
-        return view('Personnel.Liste',compact('status','Tournois','nonParticipe','encours'));       
+        return view('Personnel.Liste',compact('status','nonParticipe','encours'));       
     }    
     public function Statistique(){
         $perso=session()->get('perso');
@@ -183,7 +157,9 @@ class PersonnelController extends Controller
             ->groupBy('trigramme')
             ->sum('frais');       
         $status="participant";
-        return view('Personnel.Statistique',compact('status','mise'));       
+        $compte=Compte::find($perso->trigramme);
+        $gagne=$compte->montantGagne();
+        return view('Personnel.Statistique',compact('status','mise','gagne','compte'));       
     }
     public function formulaireParticipation($idtournoi,$erreur){
         $perso=session()->get('perso');
@@ -232,14 +208,14 @@ class PersonnelController extends Controller
                 return redirect($url);
             }
             else{
-                $erreur=$apiData['data'];
-                $url = url('participerPronostic', ['idtournoi' => $idtournoi,'erreur' => $erreur]);
-                return redirect($url);
+                $erreur = $apiData['data'];
+                session()->flash('erreur', $erreur); // Stockez le message d'erreur dans la variable de session flash
+                return redirect()->back();
             }
         } catch (Exception $e) {
             $erreur="Erreur de connexion. Veuillez réessayer plus tard";
-            $url = url('participerPronostic', ['idtournoi' => $idtournoi,'erreur' => $erreur]);
-            return redirect($url);
+            session()->flash('erreur', $erreur); // Stockez le message d'erreur dans la variable de session flash
+            return redirect()->back();
         }
     }
 
@@ -257,17 +233,14 @@ class PersonnelController extends Controller
             $classements[$match->idmatch] = $classement;
         }
         $Point=DB::table('v_point_partournoi')->where('idtournoi','=',$idtournoi)->where('idinscription','=',$idinscription)->first();
-        $classementGlobal=DB::select('select ROW_NUMBER() OVER (ORDER BY finale DESC) AS numligne,trigramme,v.* from v_pointFinal v join inscription p on v.idinscription=p.idinscription where v.idtournoi=? order by finale desc limit 5',[$idtournoi]);
+        $classementGlobal=$tournoi->vainqueurs();
         return view('Personnel.Pronostic', compact('Point','montantCagnote','idinscription','tournoi','matchs','classements','classementGlobal','status'));       
     }
     public function ajoutPronostic(Request $req,$idinscription,$idtournoi){
-        $pronostic = Pronostic::create([
-            'idmatch' => $req['idmatch'],
-            'idinscription' => $idinscription,
-            'prono1' => $req['prono1'],
-            'prono2' => $req['prono2'],
-            'datepronostic' => "now()",
-        ]);
+        $validation=Pronostic::reglesValidation('creation');
+        $datepronostic=now();
+        $req->validate($validation['regles'],$validation['messages']);
+        Pronostic::ajouterPronostic($req->input('idmatch'),$idinscription,$req->input('prono1'),$req->input('prono2'),$datepronostic);
         $url = url('Pronostiquer', ['idtournoi' => $idtournoi]);
         return redirect($url);
     }

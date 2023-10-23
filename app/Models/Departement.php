@@ -11,6 +11,7 @@ class Departement extends Model
     use HasFactory;
 
     public $timestamps=false;
+    public $incrementing = false;
     protected $table = 'departement';
     protected $primaryKey='iddepartement';
     protected $fillable = ['nomdepartement'];

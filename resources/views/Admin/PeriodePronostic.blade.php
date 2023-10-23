@@ -43,6 +43,15 @@
     @section('contenu')
           <div class="card">
             <div class="card-body">
+              @if ($errors->any())
+              <div class="alert alert-danger bg-danger">
+                <ul>
+                  @foreach($errors->all() as $error)
+                    <li>{{$error}}</li>
+                  @endforeach
+                </ul>
+              </div>
+              @endif
               <h5 class="card-title">Periode de pronostic</h5>
               <!-- Default Table -->
               <div>
@@ -75,9 +84,8 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="row g-3" method="POST" action="updatePeriodePronostic">
+                                        <form class="row g-3" method="POST" action="updatePeriodePronostic/{{$type->idperiodepronostic}}">
                                           @csrf  
-                                            <input type="hidden" name="idperiodepronostic" value="{{$type->idperiodepronostic}}">
                                             <div class="col-12">
                                               <label for="inputNanme4" class="form-label">Jour</label>
                                               <input type="text" class="form-control" id="inputNanme4" name="numjour" value="{{ $type->numjour}}">

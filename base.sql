@@ -141,12 +141,6 @@ create table ResultatMatch(
     score2 int not null
 );
 
-create table ResultatPris(
-    idResultatPris serial primary key,
-    idTournoi int not null unique references Tournoi(idTournoi),
-    idMatch int not null references Matchs(idMatch)
-);
-
 create table Inscription(
     idInscription serial primary key,
     idTournoi int not null references Tournoi(idTournoi),
@@ -164,6 +158,13 @@ create table Pronostic(
     idInscription int not null references Inscription(idInscription),
     prono1 int not null,
     prono2 int not null
+);
+
+create table Vainqueur(
+    idVainqueur serial primary key,
+    idtournoi int not null references Tournoi(idtournoi),
+    trigramme char(3) not null references Compte(trigramme),
+    montant decimal(10,2)
 );
 
 create or replace view v_idequipe_partournoi as

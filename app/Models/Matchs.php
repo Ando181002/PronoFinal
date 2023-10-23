@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Carbon\Carbon;
 
 class Matchs extends Model
 {
@@ -17,7 +17,7 @@ class Matchs extends Model
 
     public function setFinmatchAttribute($datematch){
         $typetournoi=TypeTournoi::find($this->idtournoi);
-        $this->attributes['finmatch'] = $typetournoi->calculerFinMatch($dateMatch);
+        $this->attributes['finmatch'] = $typetournoi->calculerFinMatch($datematch);
     }
 
     public function TypeMatch()
@@ -40,7 +40,7 @@ class Matchs extends Model
     //Un match a seulement un résultat
     public function resultat()
     {
-        return $this->hasOne(ResultatMatch::class);
+        return $this->hasOne(ResultatMatch::class,'idmatch');
     }
 
     //Un match peut avoir plusieurs pronostics
@@ -86,6 +86,7 @@ class Matchs extends Model
         ]);
     }
 
+
     //Pour modifier un match
     public function modifierMatch($idtournoi,$idtypematch,$datematch,$finmatch,$idequipe1,$idequipe2,$stade,$ptresultat,$ptscore,$avecresultat){
         $this->idtournoi = $idtournoi;
@@ -107,6 +108,26 @@ class Matchs extends Model
         $this->delete();
     }
 
+    //Verifier si c'est un match final
+    public function estFinal(){
+        $typematch=TypeMatch::find($this->idtypematch);
+        $resultat=false;
+        if($typematch->nomtypematch=="Finale"){
+            $resultat=true;
+        }
+        return $resultat;
+    }
+
+    //Voir la date limite de pronostic
+    public function limitePronostic(){
+        $datematch=$this->datematch();
+        $date = Carbon::parse($datematch);
+        $numeroJour = $date->dayOfWeek;
+        $limite=PeriodePronostic::where('numjour','=',$numerojour)->first();
+        $valeur="PT".$limite->limte."H";
+        $finpronostic=$date->sub(new DateInterval($valeur));
+        return $finpronostic;
+    }
     //Recupérer les matchs sans résultat
     public function scopeSansResultat($query){
         return $query->where('avecresultat','=','0');

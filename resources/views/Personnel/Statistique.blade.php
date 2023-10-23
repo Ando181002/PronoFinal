@@ -47,9 +47,11 @@
                 
             document.addEventListener("DOMContentLoaded", () => {
                 var mise = <?php echo $mise; ?>;
+                var gagne = <?php echo $gagne; ?>;
+                var benefice=gagne-mise;
                 new ApexCharts(document.querySelector("#barChart"), {
                 series: [{
-                    data: [mise, 100000, 80000]
+                    data: [mise, gagne, benefice]
                 }],
                 chart: {
                     type: 'bar',
@@ -65,8 +67,7 @@
                     enabled: false
                 },
                 xaxis: {
-                    categories: ['Misé', 'Gagné', 'Bénéfice'
-                    ],
+                    categories: ['Misé', 'Gagné', 'Bénéfice'],
                 },
                 colors: ['#ff5733', '#007bff', '#28a745'],
                 }).render();
@@ -88,8 +89,10 @@
 
             <script>
             document.addEventListener("DOMContentLoaded", () => {
+                var gagne = <?php echo $compte->nombreGagne(); ?>;
+                var perdu = <?php echo $compte->nombrePerdu(); ?>;
                 new ApexCharts(document.querySelector("#pieChart"), {
-                series: [7, 4],
+                series: [perdu, gagne],
                 chart: {
                     height: 350,
                     type: 'pie',

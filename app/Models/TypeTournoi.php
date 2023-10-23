@@ -43,6 +43,10 @@ class TypeTournoi extends Model
         return $this->hasMany(Tournoi::class,'idtypetournoi');
     }
 
+    public function equipes(){
+        return $this->belongsToMany(Equipe::class,'equipe_typetournoi','idtypetournoi','idequipe');
+    }
+
     //Pour créer un nouveau type de tournoi
     public static function ajouterTypeTournoi($nomtypetournoi){
         return self::create([

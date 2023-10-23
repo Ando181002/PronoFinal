@@ -23,8 +23,48 @@ class Pronostic extends Model
     {
         return $this->belongsTo(Matchs::class, 'idmatch');
     }
-      //On gère les règles de validation  des attributs
-      public static function reglesValidation($contexte){
+
+    public function resultatProno(){
+        $match=Matchs::find($this->idmatch);
+        $prono1=$this->prono1;
+        $prono2=$this->prono2;
+        $resultat=$match->idequipe2;
+        $score=$prono2;
+        if($prono1>$prono2){
+            $resultat=$match->idequipe1;
+            $score=$prono1;
+        }
+        $donnees=[$resultat,$score];
+        return $donnees;
+    }
+
+    public function points(){
+        $match=Matchs::find($this->idmatch);
+        $resultatProno=$this->resultatProno();
+        $resultat=0;
+        $score=0;
+        if($match->resultat){
+            $resultatmatch=$match->resultat->resultatMatch();
+            if($resultatProno[0]==$resultatmatch[0]){
+                $resultat=$match->ptresultat;
+                if($resultatProno[1]==$resultatmatch[1]){
+                    $score=$match->ptscore;
+                }
+                else{
+                    $score=0;
+                }
+            }
+        }
+        $points=[$resultat,$score];
+        return $points;
+    }
+
+    public function totalpoint(){
+        return $this->points()[0]+$this->points()[1];
+    }
+
+    //On gère les règles de validation  des attributs
+    public static function reglesValidation($contexte){
         $regles = [
             'prono1' => 'required|int',
             'prono2' => 'required|int',
@@ -64,15 +104,5 @@ class Pronostic extends Model
     public function effacerPronostic(){
         $this->delete();
     }
-
-    //Pour récupérer le resultat à comparer avec le pronostic émis
-    public function resultatAComparer(){
-        $idmatch=$this->idmatch;
-        $resultat=ResultatMatch::where('idmatch','=',$idmatch)->get();
-        return $resultat;
-    }
-
-
-
 }
 

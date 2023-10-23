@@ -319,20 +319,21 @@
                                                         </div>
                                                     </div>
                                                 </div><!-- End Vertically centered Modal-->
-                                            </td> 
-                                            <td>
-                                                @if(now()>$matchs->finmatch && $matchs->statut==0)
-                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#resultat{{$matchs->idmatch}}">
-                                                        Resultat
-                                                    </button>
-                                                    <div class="modal fade" id="resultat{{$matchs->idmatch}}" tabindex="-1">
-                                                        <div class="modal-dialog modal-dialog-centered">
+                                            </td>
+                                            @if(now()>$matchs->finmatch) 
+                                            <td>                
+                                                <a type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#verticalycenteredx{{$matchs->idmatch}}">
+                                                    Resultat
+                                                </a>
+                                                <div class="modal fade" id="verticalycenteredx{{$matchs->idmatch}}" tabindex="-1">
+                                                    <div class="modal-dialog modal-xl">
                                                             <div class="modal-content">
                                                                 <div class="modal-header">
-                                                                    <h5 class="modal-title">Saisir résultat</h5>
+                                                                    <h5 class="modal-title">Liste des pronostics</h5>
                                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                                 </div>
                                                                 <div class="modal-body">
+                                                                    @if(!$matchs->resultat)
                                                                     <form class="row g-3" method="post" action="/{{$fichetournoi->idtournoi}}/addResultatMatch">
                                                                         @csrf
                                                                         <input type="hidden" name="idmatch" value="{{$matchs->idmatch}}">
@@ -348,61 +349,51 @@
                                                                             <button type="submit" class="btn btn-primary">Valider</button>
                                                                         </div>
                                                                     </form><!-- End Multi Columns Form -->
-                                                                </div><!-- End Vertically centered Modal-->
+                                                                    @else
+                                                                    <form class="row g-3">
+                                                                        <div class="col-md-6">
+                                                                            <label for="inputEmail5" class="form-label">{{$matchs->Equipe1->nomequipe}}</label>
+                                                                            <input type="equipe1" class="form-control" value="{{$matchs->resultat->score1}}" disabled>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <label for="inputPassword5" class="form-label">{{$matchs->Equipe2->nomequipe}}</label>
+                                                                            <input type="equipe2" class="form-control" value="{{$matchs->resultat->score2}}" disabled>
+                                                                        </div>
+                                                                    </form>
+                                                                    <table class="table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">Trigramme</th>
+                                                                                <th scope="col">Date</th>
+                                                                                <th scope="col">{{$matchs->Equipe1->nomequipe}}</th>
+                                                                                <th scope="col">{{$matchs->Equipe2->nomequipe}}</th>
+                                                                                <th scope="col">Point résultat</th>
+                                                                                <th scope="col">Point score</th>
+                                                                                <th scope="col">Total</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @foreach($matchs->pronostics as $pronostic)
+                                                                            <tr>
+                                                                                <td>{{$pronostic->Inscription->trigramme}}</td>
+                                                                                <td>{{$pronostic->datepronostic}}</td>
+                                                                                <td>{{$pronostic->prono1}}</td>
+                                                                                <td>{{$pronostic->prono2}}</td>
+                                                                                <td>{{$pronostic->points()[0]}}</td>
+                                                                                <td>{{$pronostic->points()[1]}}</td>
+                                                                                <td>{{$pronostic->totalpoint()}}</td>
+                                                                            </tr>
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>  
+                                                                    @endif 
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                @endif
-                                                @if(now()>$matchs->finmatch && $matchs->statut==1)
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#Classement{{$matchs->idmatch}}">
-                                                    Classement
-                                                </button>
-                                                <div class="modal fade" id="Classement{{$matchs->idmatch}}" tabindex="-1">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title">Classement</h5>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form class="row g-3">
-                                                                    <div class="col-md-6">
-                                                                      <label for="inputEmail5" class="form-label">{{$matchs->Equipe1->nomequipe}}</label>
-                                                                      <input type="equipe1" class="form-control" id="inputEmail5" value="5" disabled>
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                      <label for="inputPassword5" class="form-label">{{$matchs->Equipe2->nomequipe}}</label>
-                                                                      <input type="equipe2" class="form-control" id="inputPassword5" value="2" disabled>
-                                                                    </div>
-                                                                  </form><!-- End Multi Columns Form -->
-                                                                  <table class="table">
-                                                                    <thead>
-                                                                      <tr>
-                                                                        <th scope="col">Rang</th>
-                                                                        <th scope="col">Trigramme</th>
-                                                                        <th scope="col">Pronostics</th>
-                                                                        <th scope="col">Points</th>
-                                                                      </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <?php for ($i=0; $i <count($classements[$matchs->idmatch]) ; $i++) { ?>
-                                                                        <tr>
-                                                                            <th scope="row">{{$i+1}}</th>
-                                                                            <td>{{ $classements[$matchs->idmatch][$i]->trigramme }}</td>
-                                                                            <td>{{ $classements[$matchs->idmatch][$i]->prono1 }} - {{ $classements[$matchs->idmatch][$i]->prono2 }}</td>
-                                                                            <td>{{ $classements[$matchs->idmatch][$i]->total }}</td>
-                                                                        </tr>
-                                                                        <?php } ?>
-                                                                    </tbody>
-                                                                  </table>
-                                                            </div><!-- End Vertically centered Modal-->
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                @else
-                                                <p></p>
-                                                @endif
-                                            </td>
+                                                </div><!-- End Vertically centered Modal-->
+                                            </td> 
+                                            @endif
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -496,7 +487,7 @@
                                                         <i class="bi bi-people"></i>
                                                     </div>
                                                     <div class="ps-3">
-                                                        <h6>{{count($participant)}}</h6>
+                                                        <h6>{{$fichetournoi->nombreInscriptions()}}</h6>
                                                         <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
                                                     </div>
                                                 </div>
@@ -514,8 +505,7 @@
                                                     <i class="bi bi-currency-dollar"></i>
                                                 </div>
                                                 <div class="ps-3">
-                                                    <?php $cagnote=count($participant)*$fichetournoi->frais; ?>
-                                                    <h6>{{$cagnote}}</h6>
+                                                    <h6>{{$fichetournoi->montantCagnote()}}</h6>
                                                     <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
                                                 </div>
                                                 </div>
@@ -529,6 +519,7 @@
                                       <tr>
                                         <th scope="col">Trigramme</th>
                                         <th scope="col">Nom</th>
+                                        <th scope="col">Point supplémentaire</th>
                                         <th scope="col">Paiement</th>
                                       </tr>
                                     </thead>
@@ -536,7 +527,8 @@
                                     @foreach($participant as $part)
                                       <tr>
                                         <th scope="row">{{$part->trigramme}}</th>
-                                        <td>{{$part->nom}}</td>
+                                        <td>{{$part->Compte->nom}}</td>
+                                        <td>{{$part->pointSupplementaire()}}</td>
                                         <td>OK</td>
                                       </tr>
                                       @endforeach
@@ -546,10 +538,10 @@
                             <div class="tab-pane fade pt-3" id="profile-change-password">
                                 <form class="row g-3" method="get" action="#">
                                     <div class="col-md-2">    
-                                    <select name="idtypedepense" class="form-select">
-                                        <option value="">Globale</option>
-                                        <option value="">Eliminatoire</option>
-                                        <option value="">Qualification</option>
+                                    <select name="idphase" class="form-select">
+                                        @foreach($phasejeu as $phase)
+                                        <option value="{{$phase->idphase}}">{{$phase->nomphase}}</option>
+                                        @endforeach
                                     </select>
                                     </div>
                                     <div class="col-md-2">
@@ -562,16 +554,25 @@
                                             <th scope="col">Rang</th>
                                             <th scope="col">Trigramme</th>
                                             <th scope="col">Points</th>
-                                            <th scope="col">Lot</th>
                                         </tr>
                                     </thead>
+                                    @php
+                                        $rang=1;
+                                        $inscriptions=$participant->sortByDesc(function($inscription){
+                                            return $inscription->pointfinal();
+                                        });
+                                    @endphp
                                     <tbody>
+                                        @foreach($inscriptions as $inscription)
                                         <tr>
-                                            <th scope="row">1</th>
-                                            <td>ANY</td>
-                                            <td>950</td>
-                                            <td>100000Ar</td>
+                                            <th scope="row">{{$rang}}</th>
+                                            <td>{{$inscription->trigramme}}</td>
+                                            <td>{{$inscription->pointfinal()}}</td>
                                         </tr>
+                                        @php
+                                            $rang++;
+                                        @endphp
+                                        @endforeach
                                     </tbody>
                                 </table>          
                             </div>

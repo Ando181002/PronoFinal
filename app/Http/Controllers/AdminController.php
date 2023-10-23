@@ -21,6 +21,7 @@ use App\Models\Tournoi;
 use App\Models\Matchs;
 use App\Models\Inscription;
 use App\Models\ResultatMatch;
+use App\Models\Vainqueur;
 
 class AdminController extends Controller
 {
@@ -59,33 +60,6 @@ class AdminController extends Controller
         return view('Admin.Statistique',compact('nbInscri_typetournoi','nbInscri_departement','typetournoi'));
     }
     
-     //Periode pronostic
-     public function PeriodePronostic(){
-        $periode=PeriodePronostic::orderBy('numjour')->get();
-        return view('Admin.PeriodePronostic',compact('periode')); 
-    }
-    public function ajoutPeriodePronostic(Request $req){
-        $periode = PeriodePronostic::create([
-            'numjour' => $req['numjour'],
-            'nomjour' => $req['nomjour'],
-            'limite' => $req['limite']
-        ]);
-        $url = url('PeriodePronostic');
-        return redirect($url);
-    }
-    public function updatePeriodePronostic(Request $req)
-    {
-        $periode = PeriodePronostic::find($req['idperiodepronostic']);
-        $periode->numjour = $req['numjour'];
-        $periode->nomjour = $req['nomjour'];
-        $periode->limite = $req['limite'];
-        $periode->update();
-        $url = url('PeriodePronostic');
-        return redirect($url);    
-    }
-    public function deletePeriode(){
-        $periode = PeriodeProno::find($req['idperiode']);
-    } 
 
     //Match
     public function ajoutMatch(Request $req,$idtournoi){
@@ -169,16 +143,22 @@ class AdminController extends Controller
     public function deleteMatch(){
         $typematch = TypeMatch::find($req['idtypematch']);
     }
-    public function ajoutResultatMatch(Request $req,$idtournoi){
-        $resultatmatch = ResultatMatch::create([
-            'idmatch' => $req['idmatch'],
-            'dateresultat' => now(),
-            'score1' => $req['score1'],
-            'score2' => $req['score2']
-        ]);
-        $match = Matchs::find($req['idmatch']);
+    public function ajoutResultatMatch(Request $req,$idtournoi){        
+        $validation=ResultatMatch::reglesValidation('creation');
+        $dateresultat=now();
+        $req->validate($validation['regles'],$validation['messages']);
+        ResultatMatch::ajouterResultatMatch($req->input('idmatch'),$dateresultat,$req->input('score1'),$req->input('score2'));
+        $match = Matchs::find($req->input('idmatch'));
         $match->avecresultat="1";
         $match->update();
+        $estfinal=$match->estFinal();
+        if($estfinal){
+            $tournoi=Tournoi::find($idtournoi);
+            $vainqueurs=$tournoi->vainqueurs();
+            foreach($vainqueurs as $vainqueur){
+                Vainqueur::ajouterVainqueur($idtournoi,$vainqueur->trigramme,$vainqueur->montant);
+            }
+        }
         $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
         return redirect($url); 
     } 

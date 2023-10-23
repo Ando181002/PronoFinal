@@ -10,6 +10,7 @@ use App\Models\Equipe;
 use App\Models\Equipe_TypeTournoi;
 use App\Models\TypeMatch;
 use App\Models\Matchs;
+use App\Models\PhaseJeu;
 
 class TournoiController extends Controller
 {
@@ -51,19 +52,15 @@ class TournoiController extends Controller
     public function fiche($idtournoi){
         $typetournoi=TypeTournoi::all();
         $typematch=TypeMatch::all();
+        $phasejeu=PhaseJeu::all();
         $fichetournoi=Tournoi::find($idtournoi);
         $participant=$fichetournoi->inscriptions;
-        $match=$fichetournoi->matchs;
-        $resultats=[];
-        foreach($match as $key){
-            $resultat=DB::select('select* from resultatmatch where idmatch=?',[$key->idmatch]);
-            $resultats[$key->idmatch] = $resultat;
-        }
+        $match=$fichetournoi->matchs->load(['pronostics','resultat']);
         $dateTournoi=DB::table('v_frais')->where('idtournoi','=',$idtournoi)->orderBy('date')->get();
         $classements=[];
         $idtypetournoi=$fichetournoi->idtypetournoi;
         $equipe=Equipe_TypeTournoi::with('Equipe')->where('idtypetournoi','=',$idtypetournoi)->get();
-        return view('Admin.FicheTournoi',compact('participant','typetournoi','fichetournoi','typematch','equipe','match','classements','resultats','dateTournoi'));
+        return view('Admin.FicheTournoi',compact('phasejeu','participant','typetournoi','fichetournoi','typematch','equipe','match','classements','dateTournoi'));
     }
     
 }

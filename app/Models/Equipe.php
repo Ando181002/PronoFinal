@@ -24,7 +24,7 @@ class Equipe extends Model
             'nomequipe.required' => 'Le nom de l\'equipe est requis.',
             'nomequipe.string' => 'Le nom de l\'equipe doit être une chaîne de caractères.',
         ];
-        if($contexte === 'creation' || $contexte === 'modification'){
+        if($contexte === 'creation'){
             $regles['nomequipe'] .= '|unique:equipe,nomequipe';
             $messages['nomequipe'] = 'Le nom de l\'equipe existe déjà.';
         }
