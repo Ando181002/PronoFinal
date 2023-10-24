@@ -27,24 +27,18 @@
                 <th>Position</th>
                 <th>Participant</th>
                 <th>Score</th>
+                <th>Montant(Ar)</th>
             </tr>
         </thead>
         <tbody>
+            @foreach($vainqueurs as $vainqueur)
             <tr>
-                <td>1</td>
-                <td>Participant A</td>
-                <td>95</td>
+                <td>{{$vainqueur->rang}}</td>
+                <td>{{$vainqueur->trigramme}}</td>
+                <td>{{$vainqueur->points}}</td>
+                <td>{{$vainqueur->montant}}</td>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>Participant B</td>
-                <td>88</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>Participant C</td>
-                <td>75</td>
-            </tr>
+            @endforeach
             <!-- Ajoutez plus de lignes pour d'autres participants -->
         </tbody>
     </table>

@@ -14,6 +14,7 @@ use App\Models\Matchs;
 use App\Models\Pronostic;
 use App\Models\Personnel;
 use App\Models\Inscription;
+use App\Models\Vainqueur;
 
 class PersonnelController extends Controller
 {
@@ -146,8 +147,9 @@ class PersonnelController extends Controller
         $perso=session()->get('perso');
         $nonParticipe=DB::select('select t.*,nomtypetournoi from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where idtournoi not in (select idtournoi from inscription where trigramme=?)', [$perso->trigramme]);
         $encours=DB::select('select t.*,nomtypetournoi from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where now()<fintournoi and idtournoi in (select idtournoi from inscription where trigramme=?)', [$perso->trigramme]);
+        $gagnes=Vainqueur::with('Tournoi')->where('trigramme','=',$perso->trigramme)->get();
         $status="participant";
-        return view('Personnel.Liste',compact('status','nonParticipe','encours'));       
+        return view('Personnel.Liste',compact('status','nonParticipe','encours','gagnes'));       
     }    
     public function Statistique(){
         $perso=session()->get('perso');

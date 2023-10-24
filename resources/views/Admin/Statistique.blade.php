@@ -5,6 +5,7 @@
     <div class="card">
       <div class="card-body">
         <p><a href="pdf">PDF</a></p>
+        <p><a href="exportCsv">Export CSV</a></p>
         <h5 class="card-title">Nombre de participant par type de tournoi</h5>
         <div class="card-body">
             <p> </p>

@@ -164,7 +164,9 @@ create table Vainqueur(
     idVainqueur serial primary key,
     idtournoi int not null references Tournoi(idtournoi),
     trigramme char(3) not null references Compte(trigramme),
-    montant decimal(10,2)
+    montant decimal(10,2),
+    points int not null,
+    rang int not null
 );
 
 create or replace view v_idequipe_partournoi as

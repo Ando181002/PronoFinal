@@ -54,15 +54,12 @@ class Matchs extends Model
         $regles = [
             'ptresultat' => 'required|int',
             'ptscore' => 'required|int',
-            'datematch' => 'required|date_format:Y-m-d H:i',
         ];
         $messages = [
             'ptresultat.required' => 'Le point pour le resultat est requis.',
             'ptresultat.int' => 'Le point pour le resultat doit être un nombre.',
             'ptscore.required' => 'Le point pour le score est requis.',
             'ptscore.int' => 'Le point pour le score doit être un nombre.',
-            'datematch.required' => 'La date du match est requise.',
-            'datematch.date_format' => 'Le champ Date de match doit être au format "jour-mois-année heure:minute".',
         ];
 
         return [
@@ -78,6 +75,7 @@ class Matchs extends Model
             'idtypematch' => $idtypematch,
             'datematch' => $datematch,
             'finmatch' => $finmatch,
+            'stade' => $stade,
             'idequipe1' => $idequipe1,
             'idequipe2' => $idequipe2,
             'ptresultat' => $ptresultat,
@@ -88,7 +86,7 @@ class Matchs extends Model
 
 
     //Pour modifier un match
-    public function modifierMatch($idtournoi,$idtypematch,$datematch,$finmatch,$idequipe1,$idequipe2,$stade,$ptresultat,$ptscore,$avecresultat){
+    public function modifierMatch($idtournoi,$idtypematch,$datematch,$finmatch,$idequipe1,$idequipe2,$stade,$ptresultat,$ptscore){
         $this->idtournoi = $idtournoi;
         $this->idtypematch = $idtypematch;
         $this->datematch = $datematch;
@@ -98,7 +96,6 @@ class Matchs extends Model
         $this->stade = $stade;
         $this->ptresultat = $ptresultat;
         $this->ptscore = $ptscore;
-        $this->avecresultat = $avecresultat;
         $this->save();
     }
 

@@ -59,112 +59,38 @@ class AdminController extends Controller
         $nbInscri_departement = $query->get();
         return view('Admin.Statistique',compact('nbInscri_typetournoi','nbInscri_departement','typetournoi'));
     }
-    
-
-    //Match
-    public function ajoutMatch(Request $req,$idtournoi){
-        $duree=DB::select('Select dureeminute from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where idtournoi=?',[$req['idtournoi']]);
-        $dureematch=$duree[0]->dureeminute;
-        $stringDateTime = $req['datematch']; // Votre chaîne de caractères représentant la date et l'heure
-        $carbonDateTime = Carbon::parse($stringDateTime);
-        $newCarbonDateTime = $carbonDateTime->addMinutes($dureematch);       
-        $newDateTime = $newCarbonDateTime->format('Y-m-d\TH:i'); // Format de sortie : "2023-08-16T13:14"       
-        $match = Matchs::create([
-            'idtournoi' => $idtournoi,
-            'idtypematch' => $req['idtypematch'],
-            'datematch' => $req['datematch'],
-            'finmatch' => $newDateTime,
-            'idequipe1' => $req['idequipe1'],
-            'idequipe2' => $req['idequipe2'],
-            'ptresultat' => $req['ptresultat'],
-            'ptscore' => $req['ptscore'],
-            'stade' => $req['stade'],
-            'avecresultat' => "0"
-        ]);
-        $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
-        return redirect($url);
-    }
-    public function ajoutMatchCsv(Request $req,$idtournoi){
-        if ($req->hasFile('csv')) {
-            $file=$req->file('csv');
-            $handle=fopen($file->getPathname(), 'r');
-            $table_data=array();
-            while(($data=fgetcsv($handle, 0, ';')) !==false) {
-                $values=$data;
-                $typematch=TypeMatch::Where('nomtypematch',$values[0])->first();
-                $datematch=Carbon::createFromFormat('d/m/Y H:i',$values[1])->format('Y-m-d H:i'); 
-                $duree=DB::select('Select dureeminute from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where idtournoi=?',[$idtournoi]);
-                $dureematch=$duree[0]->dureeminute;
-                $datee = Carbon::parse($datematch);
-                $finmatch = $datee->addMinutes($dureematch);       
-                $finmatch = $finmatch->format('Y-m-d H:i');  
-                $equipe1=Equipe::Where('nomequipe',$values[3])->first(); 
-                $equipe2=Equipe::Where('nomequipe',$values[4])->first();            
-                $table_data[]=[
-                    'idtypematch'=> $typematch->idtypematch,
-                    'idtournoi'=>$idtournoi,
-                    'datematch'=>$datematch,
-                    'finmatch'=>$finmatch,
-                    'stade'=>$values[2],
-                    'idequipe1'=>$equipe1->idequipe,
-                    'idequipe2'=>$equipe2->idequipe,
-                    'ptresultat'=>$values[5],
-                    'ptscore'=>$values[6],
-                    'avecresultat'=>"0"
-                ];
-            }
-            fclose($handle);
-            DB::table('matchs')->insert($table_data);
-            return redirect()->back()->with('succes','Enregistrer');
-        }
-        else return redirect()->back()->with('succes','Erreur d enregistrement');      
-    }
-    public function updateMatch(Request $req,$idtournoi)
-    {
-        $duree=DB::select('Select dureeminute from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where idtournoi=?',[$req['idtournoi']]);
-        $dureematch=$duree[0]->dureeminute;
-        $stringDateTime = $req['datematch']; // Votre chaîne de caractères représentant la date et l'heure
-        $carbonDateTime = Carbon::parse($stringDateTime);
-        $newCarbonDateTime = $carbonDateTime->addMinutes($dureematch);       
-        $newDateTime = $newCarbonDateTime->format('Y-m-d\TH:i');
-        $match = Matchs::find($req['idmatch']);
-        $match->idtournoi = $idtournoi;
-        $match->idtypematch = $req['idtypematch'];
-        $match->datematch = $newDateTime;
-        $match->finmatch = $req['datematch'];
-        $match->idequipe1 = $req['idequipe1'];
-        $match->idequipe2 = $req['idequipe2'];
-        $match->ptresultat = $req['ptresultat'];
-        $match->ptscore = $req['ptscore'];
-        $match->update();
-        $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
-        return redirect($url); 
-    }
-    public function deleteMatch(){
-        $typematch = TypeMatch::find($req['idtypematch']);
-    }
-    public function ajoutResultatMatch(Request $req,$idtournoi){        
-        $validation=ResultatMatch::reglesValidation('creation');
-        $dateresultat=now();
-        $req->validate($validation['regles'],$validation['messages']);
-        ResultatMatch::ajouterResultatMatch($req->input('idmatch'),$dateresultat,$req->input('score1'),$req->input('score2'));
-        $match = Matchs::find($req->input('idmatch'));
-        $match->avecresultat="1";
-        $match->update();
-        $estfinal=$match->estFinal();
-        if($estfinal){
-            $tournoi=Tournoi::find($idtournoi);
-            $vainqueurs=$tournoi->vainqueurs();
-            foreach($vainqueurs as $vainqueur){
-                Vainqueur::ajouterVainqueur($idtournoi,$vainqueur->trigramme,$vainqueur->montant);
-            }
-        }
-        $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
-        return redirect($url); 
-    } 
 
     public function genererPdf() {
-        $pdf = PDF::loadView('Admin.Pdf'); // 'pdf' est le nom de la vue créée
+        $vainqueurs=Vainqueur::where('idtournoi','=',4)->get();
+        $pdf = PDF::loadView('Admin.Pdf',compact('vainqueurs')); // 'pdf' est le nom de la vue créée
         return $pdf->stream('exemple.pdf'); // Stream le PDF ou utilisez ->download() pour le télécharger
+    }
+    public function exportCsv(){
+        $vainqueurs=Vainqueur::where('idtournoi','=',4)->get();
+        $csvFileName = "exported_data.csv";
+        // Créez une réponse avec le contenu du fichier CSV et les en-têtes appropriés
+        $response = response()
+            ->stream(
+                function () use ($vainqueurs) {
+                    $handle = fopen('php://output', 'w');
+    
+                    // Entête CSV
+                    fputcsv($handle, ['Rang', 'Trigramme', 'Points','Montant']); // Remplacez par les en-têtes de votre CSV
+    
+                    // Lignes de données
+                    foreach ($vainqueurs as $row) {
+                        fputcsv($handle, [$row->rang, $row->trigramme, $row->points, $row->montant]); // Remplacez les champs par les données de votre modèle
+                    }
+    
+                    fclose($handle);
+                },
+                200,
+                [
+                    'Content-Type' => 'text/csv',
+                    'Content-Disposition' => "attachment; filename=$csvFileName",
+                ]
+            );
+    
+        return $response;
     }
 }

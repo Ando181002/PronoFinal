@@ -43,6 +43,15 @@
     <section class="section profile">
         <div class="row"> 
                 <div class="card">
+                    @if ($errors->any())
+                    <div class="alert alert-danger bg-danger">
+                      <ul>
+                        @foreach($errors->all() as $error)
+                          <li>{{$error}}</li>
+                        @endforeach
+                      </ul>
+                    </div>
+                    @endif
                     <div class="card-body">
                         <ul class="nav nav-tabs nav-tabs-bordered"> 
                             <li class="nav-item">
@@ -247,9 +256,8 @@
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
-                                                                <form class="row g-3" method="post" action="/{{$fichetournoi->idtournoi}}/updateMatch">
+                                                                <form class="row g-3" method="post" action="/{{$fichetournoi->idtournoi}}/{{$matchs->idmatch}}/updateMatch">
                                                                     @csrf
-                                                                    <input type="hidden" name="idmatch" value="{{$matchs->idmatch}}">
                                                                     <div class="col-md-12">
                                                                         <label for="inputName5" class="form-label">Type</label>
                                                                         <select name="idtypematch" id="idtypematch" class="form-control">
@@ -306,9 +314,8 @@
                                                 <div class="modal fade" id="verticalycentered{{$matchs->idmatch}}" tabindex="-1">
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
-                                                            <form methodd="get" action="#">
+                                                            <form methodd="get" action="/{{$fichetournoi->idtournoi}}/{{$matchs->idmatch}}/deleteMatch">
                                                                 <div class="modal-body">
-                                                                    <input type="hidden" name="idequipe" value="">
                                                                     Etes-vous sûre de vouloir supprimer cette ligne?
                                                                 </div>
                                                                 <div class="modal-footer">

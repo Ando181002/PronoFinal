@@ -50,6 +50,7 @@ Route::POST('loginAdmin', [AdminController::class, 'loginAdmin']);
 Route::GET('logoutAdmin', [AdminController::class, 'logoutAdmin']);
 Route::GET('AdminStatistique', [AdminController::class, 'Statistique']);
 Route::GET('pdf', [AdminController::class, 'genererPdf']);
+Route::GET('exportCsv', [AdminController::class, 'exportCsv']);
 
 //Type TOURNOI
 Route::GET('TypeTournoi', [TypeTournoiController::class, 'liste']);
@@ -88,11 +89,11 @@ Route::POST('/FicheTournoi/updateTournoi',[TournoiController::class, 'modifier']
 Route::GET('FicheTournoi/{idtournoi}', [TournoiController::class, 'fiche']);
 
 //Match
-Route::POST('/{idtournoi}/addMatch', [AdminController::class, 'ajoutMatch']);
-Route::POST('/{idtournoi}/addMatchCsv', [AdminController::class, 'ajoutMatchCsv']);
-Route::POST('/{idtournoi}/updateMatch', [AdminController::class, 'updateMatch']);
-Route::POST('/{idtournoi}/addResultatMatch', [AdminController::class, 'ajoutResultatMatch']);
-Route::POST('deleteMatch',[AdminController::class, 'deleteMatch']);
+Route::POST('/{idtournoi}/addMatch', [TournoiController::class, 'ajouterMatch']);
+Route::POST('/{idtournoi}/addMatchCsv', [TournoiController::class, 'ajouterMatchCsv']);
+Route::POST('/{idtournoi}/{idmatch}/updateMatch', [TournoiController::class, 'modifierMatch']);
+Route::GET('/{idtournoi}/{idmatch}/deleteMatch', [TournoiController::class, 'supprimerMatch']);
+Route::POST('/{idtournoi}/addResultatMatch', [TournoiController::class, 'ajoutResultatMatch']);
 
 //Type Activite
 Route::GET('TypeActivite', [TypeActiviteController::class, 'liste']);

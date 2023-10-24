@@ -14,7 +14,7 @@ class Vainqueur extends Model
     public $timestamps=false;
     protected $table = 'vainqueur';
     protected $primaryKey='idvainqueur';
-    protected $fillable = ['idtournoi','trigramme','montant'];
+    protected $fillable = ['idtournoi','trigramme','montant','points','rang'];
 
     //Relation: une vainqueur appartient à un tournoi
     public function Tournoi(){
@@ -46,11 +46,13 @@ class Vainqueur extends Model
     }
 
     //Pour créer un nouveau vainqueur
-    public static function ajouterVainqueur($idtournoi,$trigramme,$montant){
+    public static function ajouterVainqueur($idtournoi,$trigramme,$montant,$points,$rang){
         return self::create([
             'idtournoi' => $idtournoi,
             'trigramme' => $trigramme,
             'montant' => $montant,
+            'points' => $points,
+            'rang' => $rang,
         ]);
     }
 

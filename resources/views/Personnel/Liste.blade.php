@@ -107,11 +107,12 @@
                             </div>
                             <div class="tab-pane" id="tabs-4" role="tabpanel">
                                 <div class="row">
+                                    @foreach($gagnes as $gagne)
                                     <div class="col-lg-3 col-sm-6 p-0">
                                         <div class="soccer-item set-bg" data-setbg="assets/img/product-1.jpg">
-                                            <div class="si-tag">Rugby</div>
+                                            <div class="si-tag">{{$gagne->idtournoi}}</div>
                                             <div class="si-text">
-                                                <h5><a href="#">Counting Your Chicken Before They Hatch</a></h5>
+                                                <h5><a href="#">{{$gagne->Tournoi->nomtournoi}}</a></h5>
                                                 <ul>
                                                     <li><i class="fa fa-calendar"></i> May 19, 2019</li>
                                                     <li><i class="fa fa-edit"></i> 3 Comment</li>
@@ -119,6 +120,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
                             </div>
                             <div class="tab-pane" id="tabs-5" role="tabpanel">
