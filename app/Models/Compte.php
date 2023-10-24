@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class Compte extends Model
 {
@@ -99,6 +100,42 @@ class Compte extends Model
         $this->idtypepersonnel = $idtypepersonnel;
         $this->iddepartement = $iddepartement;
         $this->save();
+    }
+
+    public function tournoiParticipePasse(){
+        $dateActuelle=Carbon::now();
+        $inscriptions=$this->inscriptions;
+        $idtournois=$inscriptions->pluck('idtournoi');
+        $tournoiPasse=Tournoi::whereIn('idtournoi',$idtournois)->where('fintournoi','<',$dateActuelle)->get();
+        return $tournoiPasse;       
+    }
+    public function tournoiGagne(){
+        $vainqueurs=Vainqueur::where('trigramme','=',$this->trigramme)->get();
+        $idtournois=$vainqueurs->pluck('idtournoi');
+        $tournois=Tournoi::whereIn('idtournoi',$idtournois)->get();
+        return $tournois;
+    }
+
+    public function tournoiPerdu(){
+        $tournoiParticipe=$this->tournoiParticipePasse();
+        $tournoiGagne=$this->tournoiGagne();
+        $tournoiPerdu=$tournoiParticipe->diff($tournoiGagne);
+        return $tournoiPerdu;
+    }
+    public function tournoiNonParticipe(){
+        $tournois=Tournoi::all();
+        $inscriptions=$this->inscriptions;
+        $idtournois=$inscriptions->pluck('idtournoi');
+        $tournoiParticipe=Tournoi::whereIn('idtournoi',$idtournois)->get();
+        $nonParticipe=$tournois->diff($tournoiParticipe);
+        return $nonParticipe;
+    }
+    public function tournoiEnCours(){
+        $dateActuelle=Carbon::now();
+        $tournoiParticipe=$this->inscriptions;
+        $idtournois=$tournoiParticipe->pluck('idtournoi');
+        $tournois=Tournoi::whereIn('idtournoi',$idtournois)->where('fintournoi','>',$dateActuelle)->get();
+        return $tournois;
     }
     
     public function montantGagne(){

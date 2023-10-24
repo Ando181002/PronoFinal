@@ -344,8 +344,10 @@ create table Evenement_Activite(
 
 create table InscriptionActivite(
     idInscription serial primary key,
-    idEvenement_Activite int not null references Evenement_Activite(idEvenement_Activite),
     dateInscription timestamp not null,
+    idEvenement_Activite int not null references Evenement_Activite(idEvenement_Activite),
     trigramme char(3) not null,
-    
+    idgenre int not null references Genre(idgenre),
+    iddepartement int not null references Departement(iddepartement),
+    statut int not null
 );

@@ -145,11 +145,13 @@ class PersonnelController extends Controller
     }
     public function Liste(){
         $perso=session()->get('perso');
-        $nonParticipe=DB::select('select t.*,nomtypetournoi from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where idtournoi not in (select idtournoi from inscription where trigramme=?)', [$perso->trigramme]);
-        $encours=DB::select('select t.*,nomtypetournoi from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where now()<fintournoi and idtournoi in (select idtournoi from inscription where trigramme=?)', [$perso->trigramme]);
-        $gagnes=Vainqueur::with('Tournoi')->where('trigramme','=',$perso->trigramme)->get();
+        $compte=Compte::find($perso->trigramme);
+        $nonParticipe=$compte->tournoiNonParticipe();
+        $encours=$compte->tournoiEnCours();
+        $gagnes=$compte->tournoiGagne();
+        $perdus=$compte->tournoiPerdu();
         $status="participant";
-        return view('Personnel.Liste',compact('status','nonParticipe','encours','gagnes'));       
+        return view('Personnel.Liste',compact('status','nonParticipe','encours','gagnes','perdus'));       
     }    
     public function Statistique(){
         $perso=session()->get('perso');

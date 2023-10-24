@@ -76,7 +76,7 @@
                                     @foreach($nonParticipe as $nonPart)
                                     <div class="col-lg-3 col-sm-6 p-0">
                                         <div class="soccer-item set-bg" data-setbg="data:image/JPEG;base64,{{ $nonPart->imagetournoi }}">
-                                            <div class="si-tag">{{$nonPart->nomtypetournoi}}</div>
+                                            <div class="si-tag">{{$nonPart->TypeTournoi->nomtypetournoi}}</div>
                                             <div class="si-text">
                                                 <h5><a href="detailTournoi?id={{$nonPart->idtournoi}}&status=participant" style="color: black; font:bold">{{$nonPart->nomtournoi}}</a></h5>
                                                 <ul>
@@ -96,7 +96,7 @@
                                     @foreach($encours as $encour)
                                     <div class="col-lg-3 col-sm-6 p-0">
                                         <div class="soccer-item set-bg" data-setbg="data:image/JPEG;base64,{{ $encour->imagetournoi }}">
-                                            <div class="si-tag">{{$encour->nomtypetournoi}}</div>
+                                            <div class="si-tag">{{$encour->TypeTournoi->nomtypetournoi}}</div>
                                             <div class="si-text">
                                                 <h5><a href="Pronostiquer/{{$encour->idtournoi}}" style="color: black; font:bold">{{$encour->nomtournoi}}</a></h5>
                                             </div>
@@ -109,10 +109,10 @@
                                 <div class="row">
                                     @foreach($gagnes as $gagne)
                                     <div class="col-lg-3 col-sm-6 p-0">
-                                        <div class="soccer-item set-bg" data-setbg="assets/img/product-1.jpg">
-                                            <div class="si-tag">{{$gagne->idtournoi}}</div>
+                                        <div class="soccer-item set-bg" data-setbg="data:image/JPEG;base64,{{ $gagne->imagetournoi }}">
+                                            <div class="si-tag">{{$gagne->TypeTournoi->nomtypetournoi}}</div>
                                             <div class="si-text">
-                                                <h5><a href="#">{{$gagne->Tournoi->nomtournoi}}</a></h5>
+                                                <h5><a href="#" style="color: black; font:bold">{{$gagne->nomtournoi}}</a></h5>
                                                 <ul>
                                                     <li><i class="fa fa-calendar"></i> May 19, 2019</li>
                                                     <li><i class="fa fa-edit"></i> 3 Comment</li>
@@ -125,12 +125,12 @@
                             </div>
                             <div class="tab-pane" id="tabs-5" role="tabpanel">
                                 <div class="row">
-                                    <?php for ($i=0; $i <10 ; $i++) { ?>
+                                    @foreach($perdus as $perdu)
                                     <div class="col-lg-3 col-sm-6 p-0">
-                                        <div class="soccer-item set-bg" data-setbg="assets/img/product-1.jpg">
-                                            <div class="si-tag">Tennis</div>
+                                        <div class="soccer-item set-bg" data-setbg="data:image/JPEG;base64,{{ $perdu->imagetournoi }}">
+                                            <div class="si-tag">{{$perdu->TypeTournoi->nomtypetournoi}}</div>
                                             <div class="si-text">
-                                                <h5><a href="#">Counting Your Chicken Before They Hatch</a></h5>
+                                                <h5><a href="#" style="color: black; font:bold">{{$perdu->nomtournoi}}</a></h5>
                                                 <ul>
                                                     <li><i class="fa fa-calendar"></i> May 19, 2019</li>
                                                     <li><i class="fa fa-edit"></i> 3 Comment</li>
@@ -138,7 +138,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <?php } ?>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
