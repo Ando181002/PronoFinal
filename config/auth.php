@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'ldap' => [
+            'driver' => 'session',
+            'provider' => 'ldap', // Utilisez le fournisseur LDAP
+        ],
     ],
 
     /*
@@ -64,6 +68,11 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+        'ldap' => [
+            'driver' => 'ldap',
+            'model' => App\Models\LdapUser::class, // Assurez-vous que le modèle utilisateur LDAP est correct
+        ],
+    
     
 
         // 'users' => [

@@ -50,7 +50,7 @@ return [
             |
             */
 
-            'auto_connect' => env('LDAP_AUTO_CONNECT', true),
+            'auto_connect' => env('LDAP_AUTO_CONNECT', false),
 
             /*
             |--------------------------------------------------------------------------
@@ -127,7 +127,7 @@ return [
                 |
                 */
 
-                'account_suffix' => env('LDAP_ACCOUNT_SUFFIX', ''),
+                'account_suffix' => '@ldap.forumsys.com',
 
                 /*
                 |--------------------------------------------------------------------------
@@ -143,7 +143,7 @@ return [
                 |
                 */
 
-                'hosts' => explode(' ', env('LDAP_HOSTS', 'corp-dc1.corp.acme.org corp-dc2.corp.acme.org')),
+                'hosts' => ['ldap.forumsys.com'],
 
                 /*
                 |--------------------------------------------------------------------------
@@ -154,7 +154,7 @@ return [
                 |
                 */
 
-                'port' => env('LDAP_PORT', 389),
+                'port' => 389,
 
                 /*
                 |--------------------------------------------------------------------------
@@ -183,7 +183,7 @@ return [
                 |
                 */
 
-                'base_dn' => env('LDAP_BASE_DN', 'dc=corp,dc=acme,dc=org'),
+                'base_dn' => env('LDAP_BASE_DN'),
 
                 /*
                 |--------------------------------------------------------------------------
@@ -198,8 +198,8 @@ return [
                 |
                 */
 
-                'username' => env('LDAP_USERNAME', 'username'),
-                'password' => env('LDAP_PASSWORD', 'secret'),
+                'username' => env('LDAP_USER'),
+                'password' => env('LDAP_PASSWORD'),
 
                 /*
                 |--------------------------------------------------------------------------

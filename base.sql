@@ -349,3 +349,10 @@ create table InscriptionActivite(
     trigramme char(3) not null,
     
 );
+
+create table testLdap(
+	idtest serial primary key,
+	nom varchar not null,
+	email varchar not null unique,
+	mdp varchar not null
+);

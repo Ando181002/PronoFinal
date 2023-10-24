@@ -65,21 +65,25 @@
                   <form class="row g-3 needs-validation" action="traitementInscription" method="POST">
                     @csrf
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Trigramme</label>
+                      <label for="yourUsername" class="form-label">Uid</label>
                       <div class="input-group has-validation">
-                        <input type="text" name="trigramme" class="form-control"  required>
-                        <div class="invalid-feedback">Veuillez entrer votre trigramme.</div>
+                        <input type="text" name="uid" class="form-control"  required>
+                        <div class="invalid-feedback">Veuillez entrer votre uid.</div>
                       </div>
                     </div>
-                    <?php 
-                      $error="";
-                      if(isset($erreur)){
-                        $error=$erreur;
-                      }
-                    ?>
                     <div class="col-12">
-                      <label for="yourPassword" class="form-label" style="color: red;">{{ $error;}}</label>
+                      <label for="yourUsername" class="form-label">Mot de passe</label>
+                      <div class="input-group has-validation">
+                        <input type="password" name="password" class="form-control"  required>
+                        <div class="invalid-feedback">Veuillez entrer votre mot de passe.</div>
+                      </div>
                     </div>
+                    @if ($errors->any())
+                        @foreach($errors->all() as $error)
+                          <p style="color: red">{{$error}}</p>
+                        @endforeach
+                    </div>
+                    @endif
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Valider</button>
                     </div>

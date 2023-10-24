@@ -2,11 +2,12 @@
 namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Helpers\PasswordUtils;
+use Adldap\Laravel\Facades\Adldap;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use GuzzleHttp\Client;
-//use Illuminate\Support\Facades\Mail;
-//use App\Mail\MonEmail;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\MonEmail;
 use App\Models\TypeTournoi;
 use App\Models\Tournoi;
 use App\Models\Compte;
@@ -51,36 +52,52 @@ class PersonnelController extends Controller
         Mail::to($email)->send(new MonEmail($name,$email,$subject,$message));
     }
     public function TraitementInscription(Request $req){
-        $trigramme=$req['trigramme'];
-        $perso=Personnel::where('trigramme','=',$req['trigramme'])->first();
-        if(isset($perso)){
-            $mdp=PasswordUtils::generateTemporaryPassword();
-            $compte = new Compte;
-            $compte->trigramme= $trigramme;
-            $compte->nom= $perso->nom;
-            $compte->datenaissance= $perso->datenaissance;
-            $compte->idgenre= $perso->idgenre;
-            $compte->email= $perso->email;
-            $compte->mdp= $mdp;
-            $compte->telephone= $perso->telephone;
-            $compte->idtypepersonnel= $perso->idtypepersonnel;
-            $compte->iddepartement= $perso->iddepartement;
-            $compte->save();
-
-            $url = url('reinitialisationMdp',['trigramme' => $trigramme]);
-            return redirect($url);
-        }
-        else{
-            $erreur="Utilisateur non trouvé!";
-            return view(
-                'Personnel.CreerCompte',
-                [
-                    'erreur'  => $erreur,
-                    'trigramme' => $req['trigramme']
-                ]
-            );            
-        }
-
+         // Récupérer l'UID et le mot de passe fournis par l'utilisateur
+         $uid = $req->input('uid');
+         $password = $req->input('password');
+ 
+         // Paramètres de connexion à Active Directory
+         $serveurAD = "ldap.forumsys.com";
+         $PortAD = 389; // Port par défaut pour LDAP non sécurisé
+         $UtilisateurAD = "cn=read-only-admin,dc=example,dc=com";
+         $MotDePasseAD = "password";
+ 
+         // Connexion à AD
+         $ldapConnection = ldap_connect($serveurAD, $PortAD);
+         ldap_set_option($ldapConnection, LDAP_OPT_PROTOCOL_VERSION, 3); // Utilisation du protocole LDAP version 3
+             if (ldap_bind($ldapConnection, $UtilisateurAD, $MotDePasseAD)) {
+                 $filtre = "(uid=$uid)";
+                 $resultatRecherche = ldap_search($ldapConnection, "dc=example,dc=com", $filtre);
+ 
+                 if ($resultatRecherche) {
+                     $donnees = ldap_get_entries($ldapConnection, $resultatRecherche);
+                     if ($donnees["count"] > 0) {
+                         $dn = $donnees[0]["dn"];
+                         $bindUser = @ldap_bind($ldapConnection, $dn, $password);
+ 
+                         if ($bindUser) {
+                             $mdp=PasswordUtils::generateTemporaryPassword();
+                             $mail="afalimanantsoa@gmail.com";
+                             $this->envoyerEmail($mail,$mdp);
+                             DB::insert('insert into testldap (nom, email, mdp) values (?, ?, ?)', [$donnees[0]["cn"][0], $donnees[0]["mail"][0], $mdp]);
+                             
+                             $url = url('reinitialisationMdp',['trigramme' => $uid]);
+                             return redirect($url);
+                         } else {
+                            return redirect()->back()->withErrors('Échec de l\'authentification. Le mot de passe est incorrect.');
+                         }
+                     } else {
+                        return redirect()->back()->withErrors('L\'UID n\'a pas été trouvé dans l\'annuaire AD.');
+                     }
+                 } else {
+                    return redirect()->back()->withErrors('Erreur lors de la recherche dans l\'annuaire AD.');
+                 }
+             } else {
+                return redirect()->back()->withErrors('Échec de l\'authentification de l\'administrateur AD.');
+             }
+ 
+         // Fermeture de la connexion LDAP
+         ldap_close($ldapConnection);
     }
     public function Reinitialisation($trigramme){
         return view('Personnel.Reinitialisation',compact('trigramme'));
