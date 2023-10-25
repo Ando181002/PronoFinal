@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\TypeTournoi;
 use App\Models\Tournoi;
 use App\Models\Equipe;
@@ -19,7 +20,7 @@ class TournoiController extends Controller
     public function liste(){
         $typetournoi=TypeTournoi::all();
         $equipe=Equipe::all();
-        $tournois=Tournoi::with('TypeTournoi')->get();
+        $tournois=Tournoi::with('TypeTournoi')->paginate(10);
         return view('Admin.Tournoi',compact('typetournoi','equipe','tournois'));
     }
 
@@ -57,7 +58,7 @@ class TournoiController extends Controller
         $phasejeu=PhaseJeu::all();
         $fichetournoi=Tournoi::find($idtournoi);
         $participant=$fichetournoi->inscriptions;
-        $match=$fichetournoi->matchs->load(['pronostics','resultat']);
+        $match=$fichetournoi->matchs()->with('pronostics','resultat')->paginate(2);
         $dateTournoi=DB::table('v_frais')->where('idtournoi','=',$idtournoi)->orderBy('date')->get();
         $classements=[];
         $idtypetournoi=$fichetournoi->idtypetournoi;

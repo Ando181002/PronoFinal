@@ -5,12 +5,12 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard - NiceAdmin Bootstrap Template</title>
+  <title>ASOM</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="{{ url('assets/img/orange.png') }}" rel="icon">
+  <link href="assets/img/orange.png" rel="icon">
   <link href="{{ url('assets/img/apple-touch-icon.png') }}" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -405,6 +405,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
+                                {{$match->links('custom-pagination')}}
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered">
                                     Ajouter
                                 </button>

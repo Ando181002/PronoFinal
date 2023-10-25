@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard - NiceAdmin Bootstrap Template</title>
+  <title>ASOM</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -90,67 +90,67 @@
     <ul class="sidebar-nav" id="sidebar-nav">
 
       <li class="nav-item">
-        <a class="nav-link " href="{{url('Tournoi');}}">
+        <a class="nav-link collapsed{{ Request::is('Tournoi')}} ? 'active' : 'collapsed' }}" href="{{url('Tournoi');}}">
           <i class="bi bi-grid"></i>
           <span>Tournoi</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item ">
-        <a class="nav-link collapsed" href="{{url('TypeTournoi');}}">
+        <a class="nav-link  collapsed{{ Request::is('TypeTournoi')}} ? 'active' : 'collapsed' }}" href="{{url('TypeTournoi');}}">
           <i class="bi bi-grid"></i>
           <span>Type de tournoi</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item ">
-        <a class="nav-link collapsed" href="{{url('Equipe');}}">
+        <a class="nav-link collapsed{{ Request::is('Equipe')}} ? 'active' : 'collapsed' }}" href="{{url('Equipe');}}">
           <i class="bi bi-grid"></i>
           <span>Equipe</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item ">
-        <a class="nav-link collapsed" href="{{url('PeriodePronostic');}}">
+        <a class="nav-link collapsed{{ Request::is('PeriodePronostic')}} ? 'active' : 'collapsed' }}" href="{{url('PeriodePronostic');}}">
           <i class="bi bi-grid"></i>
           <span>Periode de pronostic</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item ">
-        <a class="nav-link collapsed" href="{{url('PhaseJeu');}}">
+        <a class="nav-link collapsed{{ Request::is('PhaseJeu')}} ? 'active' : 'collapsed' }}" href="{{url('PhaseJeu');}}">
           <i class="bi bi-grid"></i>
           <span>Phase de jeu</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item ">
-        <a class="nav-link collapsed" href="{{url('TypeMatch');}}">
+        <a class="nav-link collapsed{{ Request::is('TypeMatch')}} ? 'active' : 'collapsed' }}" href="{{url('TypeMatch');}}">
           <i class="bi bi-grid"></i>
           <span>Type de match</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item ">
-        <a class="nav-link collapsed" href="{{url('AdminStatistique');}}">
+        <a class="nav-link collapsed{{ Request::is('AdminStatistique')}} ? 'active' : 'collapsed' }}" href="{{url('AdminStatistique');}}">
           <i class="bi bi-grid"></i>
           <span>Statistique</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item ">
-        <a class="nav-link collapsed" href="{{url('TypeActivite');}}">
+        <a class="nav-link collapsed{{ Request::is('TypeActivite')}} ? 'active' : 'collapsed' }}" href="{{url('TypeActivite');}}">
           <i class="bi bi-grid"></i>
           <span>Type d'activité</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item ">
-        <a class="nav-link collapsed" href="{{url('Activite');}}">
+        <a class="nav-link collapsed{{ Request::is('Activite')}} ? 'active' : 'collapsed' }}" href="{{url('Activite');}}">
           <i class="bi bi-grid"></i>
           <span>Activité</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item ">
-        <a class="nav-link collapsed" href="{{url('Lieu');}}">
+        <a class="nav-link collapsed{{ Request::is('Lieu')}} ? 'active' : 'collapsed' }}" href="{{url('Lieu');}}">
           <i class="bi bi-grid"></i>
           <span>Lieu</span>
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item ">
-        <a class="nav-link collapsed" href="{{url('Evenement');}}">
+        <a class="nav-link collapsed{{ Request::is('Evenement')}} ? 'active' : 'collapsed' }}" href="{{url('Evenement');}}">
           <i class="bi bi-grid"></i>
           <span>Evenement</span>
         </a>
@@ -177,6 +177,18 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script>
+    $(document).ready(function(){
+      $('.sidebar-nav .nav-link').each(function(){
+        $(this).click(function(){
+          $('.sidebar-nav .nav-link').removeClass('nav-link');
+          $(this).addClass('nav-link');
+          $('.sidebar-nav .nav-link').addClass('collapsed');
+          $(this).addClass('nav-link:not(.nav-link)');
+        });
+      });
+    });
+  </script>
 
 </body>
 

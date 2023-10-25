@@ -30,7 +30,7 @@ class AdminController extends Controller
         if(count($admin)!=0){
             session(['idadmin'=> $admin[0]['idadmin']]); 
             $val=session()->get('idadmin');
-            return view('Admin.AccueilAdmin');
+            return redirect('Tournoi');
         }
         else{
             $erreur="Email ou mot de passe éroné!";

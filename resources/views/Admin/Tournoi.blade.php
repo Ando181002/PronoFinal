@@ -78,6 +78,7 @@
                   </ul>
                 </div>
             @endif
+            {{$tournois->links()}}
                 <!-- Profile Edit Form -->
 <h5 class="card-title">Ajouter tournoi</h5>
 
