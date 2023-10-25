@@ -47,7 +47,6 @@ class PersonnelController extends Controller
     public function envoyerEmail($message,$email)
     {
         $name="ASOM";
-        $email="rakotoarisoatendry13@gmail.com";
         $subject="Renvoie de mot de passe temporaire";
         Mail::to($email)->send(new MonEmail($name,$email,$subject,$message));
     }
@@ -77,8 +76,8 @@ class PersonnelController extends Controller
  
                          if ($bindUser) {
                              $mdp=PasswordUtils::generateTemporaryPassword();
-                             $mail="afalimanantsoa@gmail.com";
-                             $this->envoyerEmail($mail,$mdp);
+                             $mail="rindrarakotoarisoa.stg@orange.com";
+                             $this->envoyerEmail($mdp,$mail);
                              DB::insert('insert into testldap (nom, email, mdp) values (?, ?, ?)', [$donnees[0]["cn"][0], $donnees[0]["mail"][0], $mdp]);
                              
                              $url = url('reinitialisationMdp',['trigramme' => $uid]);
