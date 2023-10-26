@@ -14,6 +14,9 @@ use App\Models\Matchs;
 use App\Models\PhaseJeu;
 use App\Models\ResultatMatch;
 use App\Models\Vainqueur;
+use App\Models\TypePersonnel;
+use App\Models\Departement;
+use App\Models\Inscription;
 
 class TournoiController extends Controller
 {
@@ -52,18 +55,38 @@ class TournoiController extends Controller
         return redirect('Tournoi');
     }
 
-    public function fiche($idtournoi){
+    public function fiche(Request $req,$idtournoi){
         $typetournoi=TypeTournoi::all();
         $typematch=TypeMatch::all();
         $phasejeu=PhaseJeu::all();
+        $typepersonnels=TypePersonnel::all();
+        $departements=Departement::all();
         $fichetournoi=Tournoi::find($idtournoi);
-        $participant=$fichetournoi->inscriptions;
+        //$participant=$fichetournoi->inscriptions()->paginate(5);
+        $participant=$fichetournoi->inscriptions();
+        if ($req->input('nom')) {
+            $participant->whereHas('compte',function($participant) use ($req){
+                $participant->where('nom', 'ilike', '%' . $req->input('nom') . '%');
+            });
+        }
+        if ($req->input('idtypepersonnel')) {
+            $participant->whereHas('compte',function($participant) use ($req){
+                $participant->where('idtypepersonnel', $req->input('idtypepersonnel') );
+            });
+        }
+        if ($req->input('iddepartement')) {
+            $participant->whereHas('compte',function($participant) use ($req){
+                $participant->where('iddepartement', $req->input('iddepartement') );
+            });
+        }
+        $participant = $participant->paginate(3);
         $match=$fichetournoi->matchs()->with('pronostics','resultat')->paginate(2);
         $dateTournoi=DB::table('v_frais')->where('idtournoi','=',$idtournoi)->orderBy('date')->get();
-        $classements=[];
         $idtypetournoi=$fichetournoi->idtypetournoi;
         $equipe=Equipe_TypeTournoi::with('Equipe')->where('idtypetournoi','=',$idtypetournoi)->get();
-        return view('Admin.FicheTournoi',compact('phasejeu','participant','typetournoi','fichetournoi','typematch','equipe','match','classements','dateTournoi'));
+        $classements=$fichetournoi->inscriptions;
+        $idphase=$req->input('idphase');
+        return view('Admin.FicheTournoi',compact('phasejeu','participant','typetournoi','fichetournoi','typematch','equipe','match','dateTournoi','typepersonnels','departements','classements','idphase'));
     }
 
     public function ajouterMatch(Request $req,$idtournoi){
@@ -147,5 +170,22 @@ class TournoiController extends Controller
         $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
         return redirect($url); 
     } 
+
+    public function recherche(){
+        /*$tournoi=Tournoi::find($inscription->idtournoi);
+        $matchs=$tournoi->matchsParPhase(1);
+        $points=0;
+        foreach($matchs as $match){
+            $pronostic=$match->pronostics()->where('idinscription',46)->first();
+            $points=$points+$pronostic->totalpoint();
+        }
+        echo $points."</br>";*/
+       $tournoi=Tournoi::find(4);
+        $inscriptions=$tournoi->inscriptions;
+        foreach($inscriptions as $inscription){
+            $points=$inscription->pointParPhase(2);
+            echo $inscription->trigramme." ".$points."</br>";
+        }
+    }
     
 }

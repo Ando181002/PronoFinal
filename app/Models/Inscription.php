@@ -61,8 +61,19 @@ class Inscription extends Model
         return $pointsupp;
     }
 
-    public function pointParPhase(){
-        
+    public function pointParPhase($idphase){
+        $points=0;
+        $tournoi=Tournoi::find($this->idtournoi);
+        $matchs=$tournoi->matchsParPhase($idphase);
+        foreach($matchs as $match){
+            $point=0;
+            $pronostic=$match->pronostics()->where('idinscription',$this->idinscription)->first();
+            if($pronostic){
+                $point=$pronostic->totalpoint();
+            }
+            $points=$points+$point;       
+        }
+        return $points;
     }
     public function pointfinal(){
         $pronostics=$this->pronostics;

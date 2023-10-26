@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\Equipe;
 use App\Models\TypeTournoi;
 use App\Models\Equipe_TypeTournoi;
@@ -12,7 +13,7 @@ class EquipeController extends Controller
 {
     public function liste(){
         $typetournois=TypeTournoi::all();
-        $equipes=Equipe::all();
+        $equipes=Equipe::paginate(5);
         return view('Admin.Equipe',compact('equipes','typetournois'));
     }
 

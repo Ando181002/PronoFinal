@@ -20,7 +20,7 @@
             max-width: 50px; /* Ajustez la largeur en fonction de la taille de votre logo */
         }
         h1 {
-            color: #FFA500; /* Orange */
+            color: #fc7609; /* Orange */
             text-align: center;
         }
         table {
@@ -34,7 +34,7 @@
             text-align: center;
         }
         th {
-            background-color: #FFA500; /* Orange */
+            background-color: #fc7609; /* Orange */
             color: black;
         }
         td {

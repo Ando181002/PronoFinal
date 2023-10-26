@@ -25,6 +25,7 @@
   <link href="assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  <script src="{{ url('assets/js/jquery-3.3.1.min.js') }}"></script>
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
@@ -43,7 +44,7 @@
   <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="d-flex align-items-center justify-content-between">
-      <a href="index.html" class="logo d-flex align-items-center">
+      <a href="#" class="logo d-flex align-items-center">
         <img src="assets/img/logo.png" alt="">
         <span class="d-none d-lg-block">Orange</span>
       </a>
@@ -57,12 +58,12 @@
 
           <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
             <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+            <span class="d-none d-md-block dropdown-toggle ps-2">Admin</span>
           </a><!-- End Profile Iamge Icon -->
 
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
-              <h6>Kevin Anderson</h6>
+              <h6>Admin</h6>
               <span>Web Designer</span>
             </li>
             <li>
@@ -177,18 +178,19 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-  <script>
-    $(document).ready(function(){
-      $('.sidebar-nav .nav-link').each(function(){
-        $(this).click(function(){
-          $('.sidebar-nav .nav-link').removeClass('nav-link');
-          $(this).addClass('nav-link');
-          $('.sidebar-nav .nav-link').addClass('collapsed');
-          $(this).addClass('nav-link:not(.nav-link)');
-        });
-      });
+<script>
+  $(document).ready(function(){
+    $(".toggle-sidebar-btn").click(function(){
+      var sidebar=$(".sidebar");
+      if(sidebar.is(":visible")){
+        sidebar.hide();
+      }
+      else{
+        sidebar.show();
+      }
     });
-  </script>
+  });
+</script>
 
 </body>
 

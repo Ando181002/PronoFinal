@@ -162,4 +162,14 @@ class Tournoi extends Model
         return $vainqueurs;
     }
 
+    public function matchsParPhase($idphase){
+        $matchs=$this->matchs();
+        if($idphase != 0){
+            $matchs->whereHas('typematch',function($matchs) use ($idphase){
+                $matchs->where('idphase', $idphase);
+            });  
+        }   
+        $matchs=$matchs->get();   
+        return $matchs;
+    }
 }

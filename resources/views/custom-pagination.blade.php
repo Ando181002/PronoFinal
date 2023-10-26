@@ -12,8 +12,8 @@
         @endif
 
         {{-- Afficher le numéro de page --}}
-        <li class="page-item active orange" aria-current="page" style="color: rgb(252, 136, 4)">
-            <a class="page-link" href="#" >{{ $paginator->currentPage() }}</a>
+        <li class="page-item active" aria-current="page" style="color: rgb(252, 136, 4)">
+            <a class="page-link" href="#" style="background-color:rgb(252, 136, 4); border-color: rgb(252, 136, 4) ">{{ $paginator->currentPage() }}</a>
         </li>
 
         {{-- Afficher le bouton "Suivant" --}}

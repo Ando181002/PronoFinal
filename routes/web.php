@@ -87,6 +87,7 @@ Route::POST('addTournoi', [TournoiController::class, 'ajouter']);
 Route::GET('deleteTournoi/{idtournoi}',[TournoiController::class, 'supprimer']);
 Route::POST('/FicheTournoi/updateTournoi',[TournoiController::class, 'modifier']);
 Route::GET('FicheTournoi/{idtournoi}', [TournoiController::class, 'fiche']);
+Route::GET('recherche', [TournoiController::class, 'recherche']);
 
 //Match
 Route::POST('/{idtournoi}/addMatch', [TournoiController::class, 'ajouterMatch']);

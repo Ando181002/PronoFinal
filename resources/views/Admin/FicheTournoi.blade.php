@@ -437,7 +437,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="inputEmail5" class="form-label">Equipe1</label>
-                                                        <select name="idequipe1" class="form-control">
+                                                        <select name="idequipe1" id="equipe1" class="form-control">
                                                             @foreach($equipe as $equipe1)
                                                             <option value="{{$equipe1->Equipe->idequipe}}">{{$equipe1->Equipe->nomequipe}}</option>
                                                             @endforeach
@@ -445,7 +445,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="inputPassword5" class="form-label">Equipe2</label>
-                                                        <select name="idequipe2"  class="form-control">
+                                                        <select name="idequipe2"  id="equipe2" class="form-control">
                                                             @foreach($equipe as $equipe2)
                                                             <option value="{{$equipe2->Equipe->idequipe}}">{{$equipe2->Equipe->nomequipe}}</option>
                                                             @endforeach
@@ -522,11 +522,39 @@
                                     </div><!-- End Revenue Card -->
                                 </div>
                                 </section>
+                                <div>
+                                    <form class="row g-3" method="get" action="{{ url('FicheTournoi') }}/{{$fichetournoi->idtournoi}}">
+                                        <div class="col-md-2">    
+                                            <input type="text" class="form-control" name="nom" placeholder="Nom">
+                                        </div>
+                                        <div class="col-md-2">    
+                                            <select name="idtypepersonnel" class="form-select">
+                                                <option value="">Type</option>
+                                                @foreach($typepersonnels as $typepersonnel)
+                                                    <option value="{{$typepersonnel->idtypepersonnel}}">{{$typepersonnel->idtypepersonnel}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">    
+                                            <select name="iddepartement" class="form-select">
+                                                <option value="">Département</option>
+                                                @foreach($departements as $departement)
+                                                    <option value="{{$departement->iddepartement}}">{{$departement->iddepartement}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="submit" class="btn btn-primary">Rechercher</button>
+                                        </div>
+                                    </form><!-- End No Labels Form -->
+                                </div>
                                 <table class="table">
                                     <thead>
                                       <tr>
                                         <th scope="col">Trigramme</th>
                                         <th scope="col">Nom</th>
+                                        <th scope="col">Type</th>
+                                        <th scope="col">Département</th>
                                         <th scope="col">Point supplémentaire</th>
                                         <th scope="col">Paiement</th>
                                       </tr>
@@ -536,26 +564,33 @@
                                       <tr>
                                         <th scope="row">{{$part->trigramme}}</th>
                                         <td>{{$part->Compte->nom}}</td>
+                                        <td>{{$part->Compte->idtypepersonnel}}</td>
+                                        <td>{{$part->Compte->iddepartement}}</td>
                                         <td>{{$part->pointSupplementaire()}}</td>
                                         <td>OK</td>
                                       </tr>
                                       @endforeach
                                     </tbody>
                                   </table>
+                                  {{$participant->links('custom-pagination')}}
                             </div>              
                             <div class="tab-pane fade pt-3" id="profile-change-password">
-                                <form class="row g-3" method="get" action="#">
+                                <form class="row g-3" method="get" action="{{ url('FicheTournoi') }}/{{$fichetournoi->idtournoi}}">
                                     <div class="col-md-2">    
                                     <select name="idphase" class="form-select">
+                                        <option value="0">Globale</option>
                                         @foreach($phasejeu as $phase)
                                         <option value="{{$phase->idphase}}">{{$phase->nomphase}}</option>
                                         @endforeach
                                     </select>
                                     </div>
                                     <div class="col-md-2">
-                                      <button type="submit" class="btn btn-primary">Rechercher</button>
+                                    <button type="submit" class="btn btn-primary">Rechercher</button>
                                     </div>
-                                  </form><!-- End No Labels Form -->
+                                </form><!-- End No Labels Form -->
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered" style="float: right">
+                                    Ajouter
+                                </button>
                                 <table class="table">
                                     <thead>
                                         <tr>
@@ -566,16 +601,20 @@
                                     </thead>
                                     @php
                                         $rang=1;
-                                        $inscriptions=$participant->sortByDesc(function($inscription){
-                                            return $inscription->pointfinal();
+                                        $classements=$classements->sortByDesc(function($classement){
+                                            return $classement->pointfinal();
                                         });
                                     @endphp
                                     <tbody>
-                                        @foreach($inscriptions as $inscription)
+                                        @foreach($classements as $classement)
                                         <tr>
                                             <th scope="row">{{$rang}}</th>
-                                            <td>{{$inscription->trigramme}}</td>
-                                            <td>{{$inscription->pointfinal()}}</td>
+                                            <td>{{$classement->trigramme}}</td>
+                                            @if($idphase==0)
+                                                <td>{{$classement->pointfinal()}}</td>
+                                            @else
+                                                <td>{{$classement->pointParPhase($idphase)}}</td>
+                                            @endif
                                         </tr>
                                         @php
                                             $rang++;
@@ -602,6 +641,25 @@
 
   <!-- Template Main JS File -->
   <script src="{{ url('assets/js/main.js') }}"></script>
+  <script>
+    function getEquipe2(){
+        var equipes=@json($equipe);
+        //alert(JSON.stringify(equipes));
+        var equipe1=document.getElementById('equipe1');
+        equipe1.addEventListener('change',function(){
+            var idequipe1=equipe1.value;
+            alert(idequipe1);
+            var nouvelleEquipes=equipes.filter(function(equipe){
+                return equipe.idequipe !== idequipe1;
+            });
+            var ids='';
+            nouvelleEquipes.forEach(function(equipe){
+                ids += 'ID: ' + equipe.idequipe + '\n';
+            });
+            alert(ids);
+        });
+    }
+</script>
 
 </body>
 

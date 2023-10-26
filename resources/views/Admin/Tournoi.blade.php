@@ -19,7 +19,7 @@
 
             </ul>
             <div class="tab-content pt-2">
-
+              <p><a href="recherche">Recherche</a></p>
               <div class="tab-pane fade show active profile-overview" id="profile-overview">
                 <h5 class="card-title">Liste des tournois</h5>
                 <table class="table" style="margin-top: 20px;">
@@ -78,7 +78,7 @@
                   </ul>
                 </div>
             @endif
-            {{$tournois->links()}}
+            {{$tournois->links('custom-pagination')}}
                 <!-- Profile Edit Form -->
 <h5 class="card-title">Ajouter tournoi</h5>
 
