@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use PDF;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\DB;
@@ -85,7 +86,10 @@ class TournoiController extends Controller
         $idtypetournoi=$fichetournoi->idtypetournoi;
         $equipe=Equipe_TypeTournoi::with('Equipe')->where('idtypetournoi','=',$idtypetournoi)->get();
         $classements=$fichetournoi->inscriptions;
-        $idphase=$req->input('idphase');
+        $idphase=0;
+        if($req->input('idphase')){
+            $idphase=$req->input('idphase');
+        }
         return view('Admin.FicheTournoi',compact('phasejeu','participant','typetournoi','fichetournoi','typematch','equipe','match','dateTournoi','typepersonnels','departements','classements','idphase'));
     }
 
@@ -170,22 +174,60 @@ class TournoiController extends Controller
         $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
         return redirect($url); 
     } 
-
-    public function recherche(){
-        /*$tournoi=Tournoi::find($inscription->idtournoi);
-        $matchs=$tournoi->matchsParPhase(1);
-        $points=0;
-        foreach($matchs as $match){
-            $pronostic=$match->pronostics()->where('idinscription',46)->first();
-            $points=$points+$pronostic->totalpoint();
-        }
-        echo $points."</br>";*/
-       $tournoi=Tournoi::find(4);
-        $inscriptions=$tournoi->inscriptions;
-        foreach($inscriptions as $inscription){
-            $points=$inscription->pointParPhase(2);
-            echo $inscription->trigramme." ".$points."</br>";
-        }
+    public function genererPdf($idtournoi,$idphase) {
+        $tournoi=Tournoi::find($idtournoi);
+        $classements=$tournoi->inscriptions;
+        $pdf = PDF::loadView('Admin.Pdf',compact('classements','idphase')); // 'pdf' est le nom de la vue créée
+        return $pdf->stream('exemple.pdf'); // Stream le PDF ou utilisez ->download() pour le télécharger
+    }
+    public function exportCsv($idtournoi,$idphase){
+        $tournoi=Tournoi::find($idtournoi);
+        $classements=$tournoi->inscriptions;
+        $classements=$classements->sortByDesc(function($classement){
+            $point=$classement->pointParPhase($idphase);
+            if($idphase==0){
+                $point=$classement->pointfinal();
+            }
+            return $classement->$point;
+        });
+        
+        /*$csvFileName = "exported_data.csv";
+        // Créez une réponse avec le contenu du fichier CSV et les en-têtes appropriés
+        $response = response()
+            ->stream(
+                function () use ($classements) {
+                    $handle = fopen('php://output', 'w');
+    
+                    // Entête CSV
+                    fputcsv($handle, ['Position', 'Participant', 'Score']); // Remplacez par les en-têtes de votre CSV
+                    $rang=1;
+                    $classements=$classements->sortByDesc(function($classement){
+                        $point=$classement->pointParPhase($idphase);
+                        if($idphase==0){
+                            $point=$classement->pointfinal();
+                        }
+                        return $classement->$point;
+                    });
+                    // Lignes de données
+                    foreach ($classements as $row) {
+                        $point=$row->pointParPhase($idphase);
+                        if($idphase==0){
+                            $point=$row->pointfinal();
+                        }
+                        fputcsv($handle, [$rang, $row->trigramme, $points]); // Remplacez les champs par les données de votre modèle
+                        $rang++;
+                    }
+    
+                    fclose($handle);
+                },
+                200,
+                [
+                    'Content-Type' => 'text/csv',
+                    'Content-Disposition' => "attachment; filename=$csvFileName",
+                ]
+            );
+    
+        return $response;*/
     }
     
 }

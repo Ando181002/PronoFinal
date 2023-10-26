@@ -54,19 +54,29 @@
                 <th>Position</th>
                 <th>Participant</th>
                 <th>Score</th>
-                <th>Montant(Ar)</th>
             </tr>
         </thead>
+        @php
+            $rang=1;
+            $classements=$classements->sortByDesc(function($classement){
+                return $classement->pointfinal();
+            });
+        @endphp
         <tbody>
-            @foreach($vainqueurs as $vainqueur)
+            @foreach($classements as $classement)
             <tr>
-                <td>{{$vainqueur->rang}}</td>
-                <td>{{$vainqueur->trigramme}}</td>
-                <td>{{$vainqueur->points}}</td>
-                <td>{{$vainqueur->montant}}</td>
+                <td>{{$rang}}</td>
+                <td>{{$classement->trigramme}}</td>
+                @if($idphase==0)
+                    <td>{{$classement->pointfinal()}}</td>
+                @else
+                    <td>{{$classement->pointParPhase($idphase)}}</td>
+                @endif
             </tr>
+            @php
+                $rang++;
+            @endphp
             @endforeach
-            <!-- Ajoutez plus de lignes pour d'autres participants -->
         </tbody>
     </table>
 </body>

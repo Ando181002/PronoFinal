@@ -575,22 +575,31 @@
                                   {{$participant->links('custom-pagination')}}
                             </div>              
                             <div class="tab-pane fade pt-3" id="profile-change-password">
-                                <form class="row g-3" method="get" action="{{ url('FicheTournoi') }}/{{$fichetournoi->idtournoi}}">
-                                    <div class="col-md-2">    
-                                    <select name="idphase" class="form-select">
-                                        <option value="0">Globale</option>
-                                        @foreach($phasejeu as $phase)
-                                        <option value="{{$phase->idphase}}">{{$phase->nomphase}}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <form class="row g-3" method="get" action="{{ url('FicheTournoi') }}/{{$fichetournoi->idtournoi}}">
+                                            <div class="col-md-4">    
+                                                <select name="idphase" class="form-select">
+                                                    <option value="0">Globale</option>
+                                                    @foreach($phasejeu as $phase)
+                                                        <option value="{{$phase->idphase}}">{{$phase->nomphase}}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="submit" class="btn btn-primary">Rechercher</button>
+                                            </div>
+                                        </form><!-- End No Labels Form -->
                                     </div>
-                                    <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary">Rechercher</button>
+                                    <div class="col-lg-4">
+                                        <a type="button" class="btn btn-primary" href="{{ url('FicheTournoi/pdf') }}/{{$fichetournoi->idtournoi}}/{{$idphase}}">
+                                            PDF
+                                        </a>
+                                        <a type="button" class="btn btn-primary" href="{{ url('FicheTournoi/exportCsv') }}/{{$fichetournoi->idtournoi}}/{{$idphase}}">
+                                            CSV
+                                        </a>
                                     </div>
-                                </form><!-- End No Labels Form -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#verticalycentered" style="float: right">
-                                    Ajouter
-                                </button>
+                                </div>
                                 <table class="table">
                                     <thead>
                                         <tr>
