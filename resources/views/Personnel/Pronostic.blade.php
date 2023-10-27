@@ -29,6 +29,7 @@
 @extends('Personnel.Entete')
 @section('content')
 
+<<<<<<< Updated upstream
  <!-- Hero Section Begin -->
  <section class="hero-section set-bg" data-setbg="{{ url('assets/img/hero-1.jpg') }}">
     <div class="container">
@@ -51,6 +52,9 @@
     </div>
 </section>
 <!-- Hero Section End --> 
+=======
+ 
+>>>>>>> Stashed changes
 <p> </p>
 <section class="schedule-section spad">
     <div class="container">
