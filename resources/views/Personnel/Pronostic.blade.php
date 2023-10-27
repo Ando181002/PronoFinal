@@ -30,7 +30,7 @@
 @section('content')
 
  <!-- Hero Section Begin -->
- <section class="hero-section set-bg" data-setbg="{{ url('assets/img/hero-1.jpg') }}">
+ <section class="hero-section set-bg" data-setbg="assets/img/hero-1.jpg">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">

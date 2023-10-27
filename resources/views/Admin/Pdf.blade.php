@@ -58,20 +58,13 @@
         </thead>
         @php
             $rang=1;
-            $classements=$classements->sortByDesc(function($classement){
-                return $classement->pointfinal();
-            });
         @endphp
         <tbody>
             @foreach($classements as $classement)
             <tr>
                 <td>{{$rang}}</td>
                 <td>{{$classement->trigramme}}</td>
-                @if($idphase==0)
-                    <td>{{$classement->pointfinal()}}</td>
-                @else
-                    <td>{{$classement->pointParPhase($idphase)}}</td>
-                @endif
+                <td>{{$classement->pointParPhase($idphase)}}</td>
             </tr>
             @php
                 $rang++;

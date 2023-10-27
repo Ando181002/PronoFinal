@@ -64,7 +64,12 @@ class Inscription extends Model
     public function pointParPhase($idphase){
         $points=0;
         $tournoi=Tournoi::find($this->idtournoi);
-        $matchs=$tournoi->matchsParPhase($idphase);
+        if($idphase==0){
+            $matchs=$tournoi->matchs;
+        }
+        else{
+            $matchs=$tournoi->matchsParPhase($idphase);
+        }
         foreach($matchs as $match){
             $point=0;
             $pronostic=$match->pronostics()->where('idinscription',$this->idinscription)->first();
@@ -72,6 +77,9 @@ class Inscription extends Model
                 $point=$pronostic->totalpoint();
             }
             $points=$points+$point;       
+        }
+        if($idphase==0){
+            $points=$points+$this->pointSupplementaire();
         }
         return $points;
     }
