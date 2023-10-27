@@ -16,6 +16,7 @@ use App\Models\Pronostic;
 use App\Models\Personnel;
 use App\Models\Inscription;
 use App\Models\Vainqueur;
+use App\Models\TestLdap;
 
 class PersonnelController extends Controller
 {
@@ -78,7 +79,10 @@ class PersonnelController extends Controller
                              $mdp=PasswordUtils::generateTemporaryPassword();
                              $mail="rindrarakotoarisoa.stg@orange.com";
                              $this->envoyerEmail($mdp,$mail);
-                             DB::insert('insert into testldap (nom, email, mdp) values (?, ?, ?)', [$donnees[0]["cn"][0], $donnees[0]["mail"][0], $mdp]);
+                             $dateActuelle = now();
+                             $dateActuelleCopie= clone $dateActuelle;
+                             $dateExpiration = $dateActuelleCopie->addMinutes(2);                             
+                             DB::insert('insert into testldap (uid, nom, email, mdp, datecreation, dateexpiration) values (?,?, ?, ?,?,?)', [$donnees[0]["uid"][0],$donnees[0]["cn"][0], $donnees[0]["mail"][0], $mdp,$dateActuelle,$dateExpiration]);
                              
                              $url = url('reinitialisationMdp',['trigramme' => $uid]);
                              return redirect($url);
@@ -102,34 +106,21 @@ class PersonnelController extends Controller
         return view('Personnel.Reinitialisation',compact('trigramme'));
     }
     public function Reinitialiser(Request $req){
-        $compte = Compte::find($req['trigramme']);
+        $compte = TestLdap::find($req['trigramme']);
         if($req['ancien']==$compte->mdp){
             if($req['nouveau']==$req['confirmation']){
                 $compte->mdp=$req['nouveau'];
+                $compte->dateexpiration=null;
                 $compte->update();
                 $url = url('login');
                 return redirect($url);
             }
             else{
-                $erreur="Vérifiez le mot de passe";
-                return view(
-                    'Personnel.Reinitialisation',
-                    [
-                        'erreur'  => $erreur,
-                        'trigramme' => $req['trigramme']
-                    ]
-                );
+                return redirect()->back()->withErrors('Vérifiez le mot de passe.');
             }
         }
         else{
-            $erreur="Vérifiez le mot de passe";
-            return view(
-                'Personnel.Reinitialisation',
-                [
-                    'erreur'  => $erreur,
-                    'trigramme' => $req['trigramme']
-                ]
-            );
+            return redirect()->back()->withErrors('Vérifiez le mot de passe.');
         }
     }
     public function Login(){

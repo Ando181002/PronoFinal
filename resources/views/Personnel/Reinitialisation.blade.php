@@ -68,15 +68,12 @@
                 <input type="password" class="form-control" name="confirmation">
               </div>
             </div>
-            <?php 
-            $error="";
-            if(isset($erreur)){
-              $error=$erreur;
-            }
-          ?>
-          <div class="col-12">
-            <label for="yourPassword" class="form-label" style="color: red;">{{ $error;}}</label>
+            @if ($errors->any())
+            @foreach($errors->all() as $error)
+              <p style="color: red">{{$error}}</p>
+            @endforeach
           </div>
+          @endif
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Valider</button>
             </div>
