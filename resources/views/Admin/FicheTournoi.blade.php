@@ -171,6 +171,7 @@
                                     <div class="col-12">
                                         <label for="inputNanme4" class="form-label">Type</label>
                                         <select name="idtypetournoi" class="form-control" >
+                                            <option value="" selected>Type</option>
                                             @foreach ($typetournoi as $type)
                                             <option value="{{$type->idtypetournoi}}">{{$type->nomtypetournoi}}</option>
                                             @endforeach
