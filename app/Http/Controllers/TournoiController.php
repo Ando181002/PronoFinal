@@ -46,8 +46,9 @@ class TournoiController extends Controller
         }
         $validation=Tournoi::reglesValidation('modification');
         $req->validate($validation['regles'],$validation['messages']);
-        $tournoi->modifierTypeTournoi($req->input('nomtournoi'),$req->input('idtypetournoi'),$req->input('debuttournoi'),$req->input('fintournoi'),$req->input('frais'),$req->input('question'),$req->input('descri'),$req->input('rang1'),$req->input('rang2'),$req->input('rang3'),$req->input('rang4'),$req->input('rang5'));
-        return redirect('Tournoi');
+        $tournoi->modifierTypeTournoi($req->input('nomtournoi'),$req->input('idtypetournoi'),$req->input('debuttournoi'),$req->input('fintournoi'),$req->input('descri'),$req->input('frais'),$req->input('question'),$req->input('rang1'),$req->input('rang2'),$req->input('rang3'),$req->input('rang4'),$req->input('rang5'));
+        $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
+        return redirect($url);  
     }
 
     public function supprimer($idtournoi){

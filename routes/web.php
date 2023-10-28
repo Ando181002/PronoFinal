@@ -85,7 +85,7 @@ Route::POST('deleteTypeMatch/{idtypematch}',[TypeMatchController::class, 'suppri
 Route::GET('Tournoi', [TournoiController::class, 'liste']);
 Route::POST('addTournoi', [TournoiController::class, 'ajouter']);
 Route::GET('deleteTournoi/{idtournoi}',[TournoiController::class, 'supprimer']);
-Route::POST('/FicheTournoi/updateTournoi',[TournoiController::class, 'modifier']);
+Route::POST('/FicheTournoi/updateTournoi/{idtournoi}',[TournoiController::class, 'modifier']);
 Route::GET('FicheTournoi/{idtournoi}', [TournoiController::class, 'fiche']);
 Route::GET('FicheTournoi/pdf/{idtournoi}/{idphase}', [TournoiController::class, 'genererPdf']);
 Route::GET('FicheTournoi/exportCsv/{idtournoi}/{idphase}', [TournoiController::class, 'exportCsv']);

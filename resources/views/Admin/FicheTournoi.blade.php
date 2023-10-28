@@ -166,9 +166,8 @@
                             </div>
   
                             <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                <form action="/FicheTournoi/updateTournoi" class="row g-3" method="POST">
+                                <form action="/FicheTournoi/updateTournoi/{{$fichetournoi->idtournoi}}" class="row g-3" method="POST">
                                     @csrf
-                                    <input type="hidden" name="idtournoi" value="{{$fichetournoi->idtournoi}}">
                                     <div class="col-12">
                                         <label for="inputNanme4" class="form-label">Type</label>
                                         <select name="idtypetournoi" class="form-control" >
@@ -199,7 +198,7 @@
                                     </div>
                                     <div class="col-12">
                                         <label for="inputAddress" class="form-label">Description</label>
-                                        <input type="text" name="description" class="form-control" id="description" style="height: 100px" value="{{$fichetournoi->descri}}">
+                                        <input type="text" name="descri" class="form-control" id="description" style="height: 100px" value="{{$fichetournoi->descri}}">
                                     </div>
                                     <div class="col-12">
                                         <label for="inputAddress" class="form-label">Répartition cagnote</label>
