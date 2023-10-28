@@ -19,6 +19,7 @@ class Tournoi extends Model
     public static function reglesValidation($contexte){
         $regles = [
             'nomtournoi' => 'required|string',
+            'idtypetournoi' => 'required|int',
             'debuttournoi' => 'required|date',
             'fintournoi' => 'required|date|after:debuttournoi',
             'frais' => 'required|numeric',
@@ -31,6 +32,7 @@ class Tournoi extends Model
         $messages = [
             'nomtournoi.required' => 'Le nom de tournoi est requis.',
             'nomtournoi.string' => 'Le nom de tournoi doit être une chaîne de caractères.',
+            'idtypetournoi.required' => 'Le type de tournoi est requis.',
             'debuttournoi.required' => 'La date de debut du tournoi est requise.',
             'debuttournoi.date' => 'La date de début du tournoi doit être une date valide.',
             'fintournoi.required' => 'La date de fin du tournoi est requise.',
