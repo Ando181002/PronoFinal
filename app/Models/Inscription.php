@@ -83,12 +83,22 @@ class Inscription extends Model
         }
         return $points;
     }
-    public function pointfinal(){
+    public function pronosticParMatch($idmatch){
+        $prono=null;
         $pronostics=$this->pronostics;
-        $point=0;
         foreach($pronostics as $pronostic){
-            $point=$point+$pronostic->totalpoint();
+            if($pronostic->idmatch==$idmatch){
+                $prono=$pronostic;
+            }
         }
-        return $point+$this->pointSupplementaire();
+        return $prono;
+    }
+    public function pointParMatch($idmatch){
+        $pronostic=$this->pronosticParMatch($idmatch);
+        $points=[0,0];
+        if($pronostic!=null){
+            $points=$pronostic->points();
+        }
+        return $points;
     }
 }

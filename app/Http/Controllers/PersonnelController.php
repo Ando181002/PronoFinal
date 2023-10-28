@@ -15,6 +15,7 @@ use App\Models\Pronostic;
 use App\Models\Personnel;
 use App\Models\Inscription;
 use App\Models\Vainqueur;
+use App\Models\PhaseJeu;
 
 class PersonnelController extends Controller
 {
@@ -223,7 +224,7 @@ class PersonnelController extends Controller
         }
     }
 
-    public function Pronostiquer($idtournoi){
+  /*  public function Pronostiquer($idtournoi){
         $status="participant";
         $perso=session()->get('perso');
         $inscription=Inscription::where('idtournoi','=',$idtournoi)->where('trigramme','=',$perso->trigramme)->first();
@@ -239,6 +240,15 @@ class PersonnelController extends Controller
         $Point=DB::table('v_point_partournoi')->where('idtournoi','=',$idtournoi)->where('idinscription','=',$idinscription)->first();
         $classementGlobal=$tournoi->vainqueurs();
         return view('Personnel.Pronostic', compact('Point','montantCagnote','idinscription','tournoi','matchs','classements','classementGlobal','status'));       
+    }*/
+    public function Pronostiquer($idtournoi){
+        $status="participant";
+        $perso=session()->get('perso'); 
+        $inscription=Inscription::where('idtournoi','=',$idtournoi)->where('trigramme','=',$perso->trigramme)->first(); 
+        $tournoi =Tournoi::findOrFail($idtournoi);
+        $matchs=$tournoi->matchs;
+        $phasejeu=PhaseJeu::all();
+        return view('Personnel.Pronostic2',compact('status','tournoi','matchs','inscription','phasejeu'));  
     }
     public function ajoutPronostic(Request $req,$idinscription,$idtournoi){
         $validation=Pronostic::reglesValidation('creation');
