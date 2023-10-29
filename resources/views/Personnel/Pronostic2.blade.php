@@ -36,58 +36,101 @@
             <nav>
                 <p class="breadcrumb-item">Vous avez actuellement <span class="card-title">{{$inscription->pointParPhase(0)}} points</span></p>
             </nav>
-            <a href="#" data-bs-toggle="modal" data-bs-target="#historique{{ $inscription->idinscription }}"><h4>Historique</h4></a>
-            <div class="modal fade" id="historique{{ $inscription->idinscription }}" tabindex="-1">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Historique</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="row">
+                <div class="col-lg-6">
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#historique{{ $inscription->idinscription }}"><h4>Historique</h4></a>
+                    <div class="modal fade" id="historique{{ $inscription->idinscription }}" tabindex="-1">
+                        <div class="modal-dialog modal-xl">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Historique</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Type de match</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Equipe1</th>
+                                                <th></th>
+                                                <th scope="col">Equipe2</th>
+                                                <th scope="col">Point résultat</th>
+                                                <th scope="col">Point score</th>
+                                                <th scope="col">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($inscription->pronostics as $pronostic)
+                                            <?php $match=$pronostic->Match;?>
+                                            <tr>
+                                                <td>{{$match->typeMatch->nomtypematch}}</td>
+                                                <td>{{$pronostic->datepronostic}}</td>
+                                                <td>{{$match->Equipe1->nomequipe}}</td>
+                                                <td>{{$pronostic->prono1}} - {{$pronostic->prono2}}</td>
+                                                <td> {{$match->Equipe2->nomequipe}}</td>
+                                                <td>{{$pronostic->points()[0]}}</td>
+                                                <td>{{$pronostic->points()[1]}}</td>
+                                                <td>{{$pronostic->totalpoint()}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>  
+                                </div><!-- End Vertically centered Modal-->
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <form class="row g-3" method="get" action="#">
-                                <div class="col-md-4">    
-                                    <select name="idphase" class="form-select">
-                                        <option value="0">Globale</option>
-                                        @foreach($phasejeu as $phase)
-                                            <option value="{{$phase->idphase}}">{{$phase->nomphase}}</option>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <a href="#" data-bs-toggle="modal" data-bs-target="#classement{{ $inscription->idinscription }}"><h4>Classements</h4></a>
+                <div class="modal fade" id="classement{{ $inscription->idinscription }}" tabindex="-1">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Classement</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="row g-3" method="get" action="{{ url('Pronostiquer')}}/{{$tournoi->idtournoi}}">
+                                    <div class="col-md-4">    
+                                        <select name="idphase" class="form-select">
+                                            <option value="0">Globale</option>
+                                            @foreach($phasejeu as $phase)
+                                                <option value="{{$phase->idphase}}">{{$phase->nomphase}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <button type="submit" class="btn btn-primary">Rechercher</button>
+                                    </div>
+                                </form><!-- End No Labels Form -->
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Rang</th>
+                                            <th scope="col">Trigramme</th>
+                                            <th scope="col">Points</th>
+                                        </tr>
+                                    </thead>
+                                    @php
+                                        $rang=1;
+                                    @endphp
+                                    <tbody>
+                                        @foreach($classements as $classement)
+                                        <tr>
+                                            <th scope="row">{{$rang}}</th>
+                                            <td>{{$classement->trigramme}}</td>
+                                            <td>{{$classement->pointParPhase($idphase)}}</td>
+                                        </tr>
+                                        @php
+                                            $rang++;
+                                        @endphp
                                         @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-md-2">
-                                    <button type="submit" class="btn btn-primary">Rechercher</button>
-                                </div>
-                            </form><!-- End No Labels Form -->
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Type de match</th>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">Equipe1</th>
-                                        <th></th>
-                                        <th scope="col">Equipe2</th>
-                                        <th scope="col">Point résultat</th>
-                                        <th scope="col">Point score</th>
-                                        <th scope="col">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($inscription->pronostics as $pronostic)
-                                    <?php $match=$pronostic->Match;?>
-                                    <tr>
-                                        <td>{{$match->typeMatch->nomtypematch}}</td>
-                                        <td>{{$pronostic->datepronostic}}</td>
-                                        <td>{{$match->Equipe1->nomequipe}}</td>
-                                        <td>{{$pronostic->prono1}} - {{$pronostic->prono2}}</td>
-                                        <td> {{$match->Equipe2->nomequipe}}</td>
-                                        <td>{{$pronostic->points()[0]}}</td>
-                                        <td>{{$pronostic->points()[1]}}</td>
-                                        <td>{{$pronostic->totalpoint()}}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>  
-                        </div><!-- End Vertically centered Modal-->
+                                    </tbody>
+                                </table>       
+                            </div><!-- End Vertically centered Modal-->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -191,6 +234,26 @@
                                                                 <input type="equipe2" class="form-control" id="inputPassword5" value="{{ $pronostic->prono2 }}" disabled>
                                                             </div>
                                                         </form><!-- End Multi Columns Form -->
+                                                        <table class="table">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th scope="col">Rang</th>
+                                                                    <th scope="col">Trigramme</th>
+                                                                    <th scope="col">Pronostics</th>
+                                                                    <th scope="col">Points</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach($match->pronostics as $pronostic)
+                                                                    <tr>
+                                                                        <td>1</td>
+                                                                        <td>{{$pronostic->Inscription->trigramme}}</td>
+                                                                        <td>{{$pronostic->prono1}}-{{$pronostic->prono2}}</td>
+                                                                        <td>{{$pronostic->totalpoint()}}</td>
+                                                                    </tr>
+                                                                    @endforeach
+                                                            </tbody>
+                                                        </table>
                                                     </div><!-- End Vertically centered Modal-->
                                                 </div>
                                             </div>
@@ -209,6 +272,72 @@
                 </div>
             </div>
         </div>
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Recompense</h5>
+                            <nav>
+                                <p class="breadcrumb-item">Montant de la cagnote <span class="card-title">{{$tournoi->montantCagnote()}}Ar</span></p>
+                            </nav>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Rang</th>
+                                        <th scope="col">Taux</th>
+                                        <th scope="col">Montant(Ar)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php for ($i=1; $i <=5 ; $i++) { 
+                                        $rang="rang".$i;
+                                        $pourcentage=$tournoi->$rang;
+                                        $montant=$tournoi->montantCagnote()*($tournoi->$rang/100);
+                                        ?>
+                                    <tr>
+                                        <th scope="row">{{$i}}</th>
+                                        <td>{{$pourcentage}}%</td>
+                                        <td>{{$montant}}Ar</td>
+                                    </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Classement</h5>
+                            <nav>
+                                <p class="breadcrumb-item" style="height: 25px"> <span class="card-title"> </span></p>
+                            </nav>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Rang</th>
+                                        <th scope="col">Trigramme</th>
+                                        <th scope="col">Points</th>
+                                        <th scope="col">Récompense(Ar)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($classementGlobal as $classement) 
+                                    <tr>
+                                        <th scope="row">{{$classement->rang}}</th>
+                                        <td>{{$classement->trigramme}}</td>
+                                        <td>{{$classement->pointParPhase(0)}}</td>
+                                        <td>{{$classement->montant}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                         </div> 
+                    </div>
+                </div>                      
+            </div>
+        </section>
     </div>
 </section>
 <!-- Schedule Section End -->

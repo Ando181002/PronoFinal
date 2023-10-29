@@ -241,14 +241,23 @@ class PersonnelController extends Controller
         $classementGlobal=$tournoi->vainqueurs();
         return view('Personnel.Pronostic', compact('Point','montantCagnote','idinscription','tournoi','matchs','classements','classementGlobal','status'));       
     }*/
-    public function Pronostiquer($idtournoi){
+    public function Pronostiquer(Request $req,$idtournoi){
         $status="participant";
         $perso=session()->get('perso'); 
         $inscription=Inscription::where('idtournoi','=',$idtournoi)->where('trigramme','=',$perso->trigramme)->first(); 
         $tournoi =Tournoi::findOrFail($idtournoi);
-        $matchs=$tournoi->matchs;
+        $matchs=$tournoi->matchs()->with('resultat')->get();
         $phasejeu=PhaseJeu::all();
-        return view('Personnel.Pronostic2',compact('status','tournoi','matchs','inscription','phasejeu'));  
+        $classementGlobal=$tournoi->vainqueurs();
+        $idphase=0;
+        if($req->input('idphase')){
+            $idphase=$req->input('idphase');
+        }
+        $classements=$tournoi->inscriptions;
+        $classements=$classements->sortByDesc(function($classement) use ($idphase){
+            return $classement->pointParPhase($idphase);
+        });
+        return view('Personnel.Pronostic2',compact('status','tournoi','matchs','inscription','phasejeu','classementGlobal','idphase','classements'));  
     }
     public function ajoutPronostic(Request $req,$idinscription,$idtournoi){
         $validation=Pronostic::reglesValidation('creation');

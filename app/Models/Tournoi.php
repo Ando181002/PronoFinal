@@ -148,7 +148,7 @@ class Tournoi extends Model
     public function vainqueurs(){
         $inscriptions=$this->inscriptions;
         $inscriptions=$inscriptions->sortByDesc(function($inscription){
-            return $inscription->pointfinal();
+            return $inscription->pointParPhase(0);
         });
         $vainqueurs=$inscriptions->take(5);
         $rang=1;
