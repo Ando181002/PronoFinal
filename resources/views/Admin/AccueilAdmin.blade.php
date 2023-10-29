@@ -64,7 +64,7 @@
           <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
             <li class="dropdown-header">
               <h6>Admin</h6>
-              <span>Web Designer</span>
+              <span>Administrateur ASOM</span>
             </li>
             <li>
               <hr class="dropdown-divider">

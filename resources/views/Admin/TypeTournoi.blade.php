@@ -59,7 +59,7 @@
                 <thead>
                   <tr>
                     <th scope="col">Type</th>
-                    <th scope="col">Duree</th>
+                    <th scope="col">Duree(mn)</th>
                     <th></th>
                     <th></th>
                   </tr>

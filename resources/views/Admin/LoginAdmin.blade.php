@@ -49,7 +49,7 @@
 
               <div class="d-flex justify-content-center py-4">
                 <a href="index.html" class="logo d-flex align-items-center w-auto">
-                  <img src="assets/img/logo.png" alt="">
+                  <img src="assets/img/orange.png" alt="">
                   <span class="d-none d-lg-block">Orange</span>
                 </a>
               </div><!-- End Logo -->
@@ -60,7 +60,7 @@
 
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Veuillez vous connectez</h5>
-                    <p class="text-center small">Entrez votre email et mot de passe</p>
+                    <p class="text-center small">Entrez votre identifiant et mot de passe</p>
                   </div>
                   <form class="row g-3 needs-validation" action="/loginAdmin" method="POST">
                     @csrf
