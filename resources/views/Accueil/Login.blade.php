@@ -85,6 +85,9 @@
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Se connecter</button>
                     </div>
+                    <div class="col-12">
+                      <p class="small mb-0">Pas de compte? <a href="creerCompte" style="color: orange">S'inscrire</a></p>
+                    </div>
                   </form>
 
                 </div>
