@@ -567,7 +567,18 @@
                                         <td>{{$part->Compte->idtypepersonnel}}</td>
                                         <td>{{$part->Compte->iddepartement}}</td>
                                         <td>{{$part->pointSupplementaire()}}</td>
-                                        <td>OK</td>
+                                        <td>
+                                            <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#paiement{{$part->idinscription}}">
+                                                    Détails
+                                                </a>
+                                                <div class="modal fade" id="paiement{{$part->idinscription}}" tabindex="-1">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            Hello
+                                                        </div>
+                                                    </div>
+                                                </div><!-- End Vertically centered Modal-->
+                                        </td>
                                       </tr>
                                       @endforeach
                                     </tbody>
