@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\AuthentificationController;
 use App\Http\Controllers\PersonnelController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\TypeTournoiController;
@@ -27,15 +28,15 @@ use App\Http\Controllers\PeriodePronosticController;
 Route::get('/', function () {
     return view('Accueil.Accueil');
 });
-//Personnel
 Route::GET('Pronostics', [PersonnelController::class, 'Accueil']);
+Route::GET('login', [AuthentificationController::class, 'Login']);
+Route::POST('traitementLogin', [AuthentificationController::class, 'TraitementLogin']);
+//Personnel
 Route::GET('detailTournoi', [PersonnelController::class, 'DetailTournoi']);
 Route::GET('creerCompte', [PersonnelController::class, 'CreerCompte']);
 Route::POST('traitementInscription', [PersonnelController::class, 'TraitementInscription']);
 Route::GET('reinitialisationMdp/{trigramme}', [PersonnelController::class, 'Reinitialisation']);
 Route::POST('reinitialisationMdp/reinitialiser', [PersonnelController::class, 'Reinitialiser']);
-Route::GET('login', [PersonnelController::class, 'Login']);
-Route::POST('traitementLogin', [PersonnelController::class, 'TraitementLogin']);
 Route::GET('deconnexion', [PersonnelController::class, 'Deconnexion']);
 Route::GET('liste', [PersonnelController::class, 'Liste']);
 Route::GET('participerPronostic/{idtournoi}/{erreur}', [PersonnelController::class, 'formulaireParticipation']);
@@ -45,10 +46,6 @@ Route::POST('/{idinscription}/{idtournoi}/addUPronostic', [PersonnelController::
 Route::GET('statistique', [PersonnelController::class, 'Statistique']);
 
 //Admin
-Route::get('/LoginAdmin', function () {
-    return view('Admin.LoginAdmin');
-});
-Route::POST('loginAdmin', [AdminController::class, 'loginAdmin']);
 Route::GET('logoutAdmin', [AdminController::class, 'logoutAdmin']);
 Route::GET('AdminStatistique', [AdminController::class, 'Statistique']);
 Route::GET('pdf', [AdminController::class, 'genererPdf']);

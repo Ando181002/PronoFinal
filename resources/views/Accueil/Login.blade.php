@@ -60,15 +60,15 @@
 
                   <div class="pt-4 pb-2">
                     <h5 class="card-title text-center pb-0 fs-4">Veuillez vous connectez</h5>
-                    <p class="text-center small">Entrez votre trigramme et mot de passe</p>
+                    <p class="text-center small">Entrez votre identifiant et mot de passe</p>
                   </div>
                   <form class="row g-3 needs-validation" action="traitementLogin" method="POST">
                     @csrf
                     <div class="col-12">
-                      <label for="yourUsername" class="form-label">Trigramme</label>
+                      <label for="yourUsername" class="form-label">Identifiant</label>
                       <div class="input-group has-validation">
-                        <input type="text" name="trigramme" class="form-control" id="yourUsername" required>
-                        <div class="invalid-feedback">Veuillez entrer votre trigramme.</div>
+                        <input type="text" name="identifiant" class="form-control" id="yourUsername" required>
+                        <div class="invalid-feedback">Veuillez entrer votre identifiant.</div>
                       </div>
                     </div>
 
@@ -77,15 +77,11 @@
                       <input type="password" name="mdp" class="form-control" id="yourPassword" required>
                       <div class="invalid-feedback">Veuillez entrer votre mot de passe!</div>
                     </div>
-                    <?php 
-                      $error="";
-                      if(isset($erreur)){
-                        $error=$erreur;
-                      }
-                    ?>
-                    <div class="col-12">
-                      <label for="yourPassword" class="form-label" style="color: red;">{{ $error;}}</label>
-                    </div>
+                    @if ($errors->any())
+                        @foreach($errors->all() as $error)
+                        <p style="color: red">{{ $error;}}</p>
+                        @endforeach
+                    @endif
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Se connecter</button>
                     </div>

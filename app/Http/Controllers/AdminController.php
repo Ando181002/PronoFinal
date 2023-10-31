@@ -25,24 +25,6 @@ use App\Models\Vainqueur;
 
 class AdminController extends Controller
 {
-    public function loginAdmin(Request $req){
-        $admin=Admin::where('email','=',$req['email'])->where('mdp','=',$req['mdp'])->get();
-        if(count($admin)!=0){
-            session(['idadmin'=> $admin[0]['idadmin']]); 
-            $val=session()->get('idadmin');
-            return redirect('Tournoi');
-        }
-        else{
-            $erreur="Email ou mot de passe éroné!";
-            return view(
-                'Admin.LoginAdmin',
-                [
-                    'erreur'  => $erreur,
-                    'email' => $req['email']
-                ]
-            );
-        }
-    }
     public function logoutAdmin(){
         session()->flush();
         return redirect('/LoginAdmin');

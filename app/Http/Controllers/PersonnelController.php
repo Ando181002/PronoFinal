@@ -116,35 +116,12 @@ class PersonnelController extends Controller
             );
         }
     }
-    public function Login(){
-        return view('Personnel.Login');
-    }
-    public function TraitementLogin(Request $req){
-        $perso=Compte::where('trigramme','=',$req['trigramme'])->where('mdp','=',$req['mdp'])->first();
-        if(isset($perso)){
-            session(['perso'=> $perso]);
-            $tournois=Tournoi::with('TypeTournoi')->get();
-            $status="participant";
-            $url = url('liste');
-            return redirect($url);
-        }
-        else{
-            $erreur="Email ou mot de passe éroné!";
-            return view(
-                'Personnel.Login',
-                [
-                    'erreur'  => $erreur,
-                    'trigramme' => $req['trigramme']
-                ]
-            );
-        }    
-    }
     public function Deconnexion(){
         session()->flush();
         return redirect('/');       
     }
     public function Liste(){
-        $perso=session()->get('perso');
+        $perso=session()->get('utilisateur');
         $compte=Compte::find($perso->trigramme);
         $nonParticipe=$compte->tournoiNonParticipe();
         $encours=$compte->tournoiEnCours();
@@ -154,7 +131,7 @@ class PersonnelController extends Controller
         return view('Personnel.Liste',compact('status','nonParticipe','encours','gagnes','perdus'));       
     }    
     public function Statistique(){
-        $perso=session()->get('perso');
+        $perso=session()->get('utilisateur');
         $mise = DB::table('inscription')
             ->join('tournoi', 'inscription.idtournoi', '=', 'tournoi.idtournoi')
             ->where('trigramme', $perso->trigramme)
@@ -166,7 +143,7 @@ class PersonnelController extends Controller
         return view('Personnel.Statistique',compact('status','mise','gagne','compte'));       
     }
     public function formulaireParticipation($idtournoi,$erreur){
-        $perso=session()->get('perso');
+        $perso=session()->get('utilisateur');
         $status="participant";
         $tournoi=Tournoi::find($idtournoi);
         $equipes = DB::select('Select * from v_equipe_parTournoi');
@@ -175,7 +152,7 @@ class PersonnelController extends Controller
     public function Participer(Request $req){
         $idtournoi=$req['idtournoi'];
         $tournoi=Tournoi::find($idtournoi);
-        $perso=session()->get('perso');
+        $perso=session()->get('utilisateur');
         $descri="Tournoi".$idtournoi."-".$perso->trigramme;
           // Créez une instance de client Guzzle
         $client = new Client();
@@ -225,7 +202,7 @@ class PersonnelController extends Controller
 
     public function Pronostiquer($idtournoi){
         $status="participant";
-        $perso=session()->get('perso');
+        $perso=session()->get('utilisateur');
         $inscription=Inscription::where('idtournoi','=',$idtournoi)->where('trigramme','=',$perso->trigramme)->first();
         $idinscription=$inscription->idinscription;
         $tournoi =Tournoi::findOrFail($idtournoi);
