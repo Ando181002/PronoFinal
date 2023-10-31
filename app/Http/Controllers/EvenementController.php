@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Intervention\Image\Facades\Image;
 use Illuminate\Http\Request;
 use App\Models\Evenement;
 use App\Models\Lieu;
@@ -16,20 +17,26 @@ class EvenementController extends Controller
     }
 
     public function ajouter(Request $req){
+        $image = $req->file('image');
+        $imageRedimensionnee = Image::make($image->getRealPath())->resize(298, 169);
+        $base64_image = base64_encode($imageRedimensionnee->encode());
         $validation=Evenement::reglesValidation('creation');
         $req->validate($validation['regles'],$validation['messages']);
-        Evenement::ajouterEvenement($req->input('nomevenement'),$req->input('dateevenement'),$req->input('fininscription'),$req->input('idlieu'));
+        Evenement::ajouterEvenement($req->input('nomevenement'),$req->input('dateevenement'),$req->input('fininscription'),$req->input('idlieu'),$base64_image);
         return redirect('Evenement');
     }
 
     public function modifier(Request $req,$idevenement){
+        $image = $req->file('image');
+        $imageRedimensionnee = Image::make($image->getRealPath())->resize(298, 169);
+        $base64_image = base64_encode($imageRedimensionnee->encode());
         $evenement=Evenement::find($idevenement);
         if(!$evenement){
             return redirect()->route('Evenement')->with('error','Evènement non trouvé.');
         }
         $validation=Evenement::reglesValidation('modification');
         $req->validate($validation['regles'],$validation['messages']);
-        $evenement->modifierEvenement($req->input('nomevenement'),$req->input('dateevenement'),$req->input('fininscription'),$req->input('idlieu'));
+        $evenement->modifierEvenement($req->input('nomevenement'),$req->input('dateevenement'),$req->input('fininscription'),$req->input('idlieu'),$base64_image);
         $url = url('ficheEvenement', ['idevenement' => $idevenement]);
         return redirect($url);
     }

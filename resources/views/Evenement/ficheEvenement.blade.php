@@ -35,7 +35,7 @@
 <div style="height: 100px"></div>
 <div class="event">
   <h1>{{$evenement->nomevenement}}</h1>
-  <img src="{{ url('assets/img/product-1.jpg')}}" alt="Image de l'événement">
+  <img src="data:image/JPEG;base64,{{ $evenement->imageevenement }}" alt="Image de l'événement">
   
   <div class="event-details">
       <p><strong>Date :</strong> {{$evenement->dateevenement}}</p>

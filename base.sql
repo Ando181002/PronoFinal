@@ -328,6 +328,7 @@ create table Lieu(
 create table Evenement(
     idEvenement serial primary key,
     nomEvenement varchar not null unique,
+    imageEvenement text,
     dateEvenement date not null,
     finInscription timestamp not null,
     idLieu int not null references Lieu(idLieu)
@@ -348,6 +349,26 @@ create table InscriptionActivite(
     idEvenement_Activite int not null references Evenement_Activite(idEvenement_Activite),
     trigramme char(3) not null,
     idgenre int not null references Genre(idgenre),
-    iddepartement int not null references Departement(iddepartement),
-    statut int not null
+    iddepartement int not null references Departement(iddepartement)
+);
+
+create table InscriptionEvenement(
+    idInscription serial primary key,
+    dateInscription timestamp not null,
+    idEvenement int not null references Evenement(idEvenement),
+    trigramme char(3) not null,
+    idgenre int not null references Genre(idgenre),
+    iddepartement int not null references Departement(iddepartement)
+);
+
+create table MatchsEvenement(
+    idMatch serial not null primary key,
+    idEvenement_Activite int not null references Evenement_Activite(idEvenement_Activite),
+    idDepartement1 int not null references Departement(idDepartement),
+    idDepartement2 int not null references Departement(idDepartement),
+    dateMatch timestamp not null
+);
+
+create table ResultatMatchEvenement(
+    
 );

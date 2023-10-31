@@ -75,7 +75,7 @@
                             </div>
                                      <!-- Reports -->
                             <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
-                                <form action="/evenement/updateEvenement/{{$evenement->idevenement}}" class="row g-3" method="POST">
+                                <form action="/evenement/updateEvenement/{{$evenement->idevenement}}" class="row g-3" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="col-12">
                                         <label for="inputNanme4" class="form-label">Lieu</label>
@@ -89,6 +89,10 @@
                                         <label for="inputEmail4" class="form-label">Titre</label>
                                         <input type="text" class="form-control" name="nomevenement" id="titre" value="{{$evenement->nomevenement}}" required>
                                     </div>
+                                    <div class="col-12">
+                                        <label for="inputEmail4" class="form-label">Image</label>
+                                        <input type="file" class="form-control" id="subject" name="image" placeholder="image" >
+                                      </div>
                                     <div class="col-12">
                                         <label for="inputPassword4" class="form-label">Date</label>
                                         <input type="date" class="form-control" name="dateevenement" id="debut" value="{{$evenement->dateevenement}}" required>

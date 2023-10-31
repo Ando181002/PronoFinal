@@ -37,7 +37,7 @@
         @foreach($evenements as $evenement)
         <div class="event-item">
             <h2>{{$evenement->nomevenement}}</h2>
-            <img src="{{ url('assets/img/product-1.jpg')}}" alt="Image de l'Événement 1">
+            <img src="data:image/JPEG;base64,{{ $evenement->imageevenement }}" alt="Image de l'Événement 1">
             <p><strong>Date :</strong> {{$evenement->dateevenement}}</p>
             <p><strong>Lieu :</strong> {{$evenement->Lieu->nomlieu}}</p>
             <a href="detailEvenement/{{$evenement->idevenement}}">Détails de l'Événement</a>

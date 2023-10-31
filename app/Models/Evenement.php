@@ -13,7 +13,7 @@ class Evenement extends Model
     public $timestamps=false;
     protected $table = 'evenement';
     protected $primaryKey='idevenement';
-    protected $fillable = ['nomevenement','dateevenement','fininscription','idlieu'];
+    protected $fillable = ['nomevenement','dateevenement','fininscription','idlieu','imageEvenement'];
 
     //On gère les règles de validation  des attributs
     public static function reglesValidation($contexte){
@@ -48,21 +48,23 @@ class Evenement extends Model
     }
 
     //Pour créer un nouvel evenement
-    public static function ajouterEvenement($nomevenement,$dateevenement,$fininscription,$idlieu){
+    public static function ajouterEvenement($nomevenement,$dateevenement,$fininscription,$idlieu,$imageevenement){
         return self::create([
             'nomevenement' => $nomevenement,
             'dateevenement' => $dateevenement,
             'fininscription' => $fininscription,
             'idlieu' => $idlieu,
+            'imageevenement' => $imageevenement,
         ]);
     }
 
     //Pour modifier un évènement
-    public function modifierEvenement($nomevenement,$dateevenement,$fininscription,$idlieu){
+    public function modifierEvenement($nomevenement,$dateevenement,$fininscription,$idlieu,$imageevenement){
         $this->nomevenement = $nomevenement;
         $this->dateevenement = $dateevenement;
         $this->fininscription = $fininscription;
         $this->idlieu = $idlieu;
+        $this->imageevenement = $imageevenement;
         $this->save();
     }
 

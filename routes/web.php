@@ -24,9 +24,11 @@ use App\Http\Controllers\PeriodePronosticController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/', function () {
+    return view('Accueil.Accueil');
+});
 //Personnel
-Route::GET('/', [PersonnelController::class, 'Accueil']);
+Route::GET('Pronostics', [PersonnelController::class, 'Accueil']);
 Route::GET('detailTournoi', [PersonnelController::class, 'DetailTournoi']);
 Route::GET('creerCompte', [PersonnelController::class, 'CreerCompte']);
 Route::POST('traitementInscription', [PersonnelController::class, 'TraitementInscription']);
