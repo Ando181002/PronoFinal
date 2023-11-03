@@ -78,9 +78,6 @@
             <span>Deconnexion</span>
           </a><!-- End Notification Icon -->
         </li><!-- End Notification Nav -->
-
-          </ul><!-- End Profile Dropdown Items -->
-        </li><!-- End Profile Nav -->
         @endif
       </ul>
     </nav><!-- End Icons Navigation -->

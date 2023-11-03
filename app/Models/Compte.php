@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
@@ -123,12 +124,15 @@ class Compte extends Model
         return $tournoiPerdu;
     }
     public function tournoiNonParticipe(){
-        $tournois=Tournoi::all();
-        $inscriptions=$this->inscriptions;
-        $idtournois=$inscriptions->pluck('idtournoi');
-        $tournoiParticipe=Tournoi::whereIn('idtournoi',$idtournois)->get();
-        $nonParticipe=$tournois->diff($tournoiParticipe);
-        return $nonParticipe;
+        $tournois=DB::table('tournoi')
+            ->join('typetournoi', 'tournoi.idtypetournoi', '=', 'typetournoi.idtypetournoi')
+            ->whereNotIn('idtournoi',function($query){
+                $query->select('idtournoi')
+                    ->from('inscription')
+                    ->where('trigramme',$this->trigramme);
+            })
+            ->get();
+        return $tournois;
     }
     public function tournoiEnCours(){
         $dateActuelle=Carbon::now();

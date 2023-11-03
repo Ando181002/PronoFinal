@@ -496,7 +496,6 @@
                                                     </div>
                                                     <div class="ps-3">
                                                         <h6>{{$fichetournoi->nombreInscriptions()}}</h6>
-                                                        <span class="text-success small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">increase</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -514,7 +513,6 @@
                                                 </div>
                                                 <div class="ps-3">
                                                     <h6>{{$fichetournoi->montantCagnote()}}</h6>
-                                                    <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
                                                 </div>
                                                 </div>
                                             </div>
@@ -567,7 +565,23 @@
                                         <td>{{$part->Compte->idtypepersonnel}}</td>
                                         <td>{{$part->Compte->iddepartement}}</td>
                                         <td>{{$part->pointSupplementaire()}}</td>
-                                        <td>OK</td>
+                                        <td>
+                                            <a type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#verticalycentered{{$part->trigramme}}">
+                                                Détail paiement
+                                            </a>
+                                            <div class="modal fade" id="verticalycentered{{$part->trigramme}}" tabindex="-1">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div style="text-align: justify">
+                                                            30-10-2023 17:43 Vous avez reçu un versement de 5000Ar du 0324567890.
+                                                             Objet: Tournoi-43-ANY. Ref:ER231026.0853.A04991.
+                                                              Nouveau solde: 235000 Ar. 
+                                                              Orange Money vous remercie.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div><!-- End Vertically centered Modal-->
+                                        </td>
                                       </tr>
                                       @endforeach
                                     </tbody>

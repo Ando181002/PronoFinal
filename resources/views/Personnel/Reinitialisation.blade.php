@@ -68,17 +68,16 @@
                 <input type="password" class="form-control" name="confirmation">
               </div>
             </div>
-            <?php 
-            $error="";
-            if(isset($erreur)){
-              $error=$erreur;
-            }
-          ?>
-          <div class="col-12">
-            <label for="yourPassword" class="form-label" style="color: red;">{{ $error;}}</label>
-          </div>
+            @if ($errors->any())
+            @foreach($errors->all() as $error)
+            <p style="color: red">{{ $error;}}</p>
+            @endforeach
+            @endif
             <div class="text-center">
               <button type="submit" class="btn btn-primary">Valider</button>
+            </div>
+            <div class="col-12">
+              <p class="small mb-0">Mot de passe expiré? <a href="{{ url('creerCompte') }}" style="color: orange">Demander un nouveau mot de passe</a></p>
             </div>
           </form><!-- End Change Password Form -->
     </div>

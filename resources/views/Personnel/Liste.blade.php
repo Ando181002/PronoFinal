@@ -76,7 +76,7 @@
                                     @foreach($nonParticipe as $nonPart)
                                     <div class="col-lg-3 col-sm-6 p-0">
                                         <div class="soccer-item set-bg" data-setbg="data:image/JPEG;base64,{{ $nonPart->imagetournoi }}">
-                                            <div class="si-tag">{{$nonPart->TypeTournoi->nomtypetournoi}}</div>
+                                            <div class="si-tag">{{$nonPart->nomtypetournoi}}</div>
                                             <div class="si-text">
                                                 <h5><a href="detailTournoi?id={{$nonPart->idtournoi}}&status=participant" style="color: black; font:bold">{{$nonPart->nomtournoi}}</a></h5>
                                                 <ul>

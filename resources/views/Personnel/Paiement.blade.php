@@ -48,6 +48,8 @@
             <div class="card recent-sales overflow-auto">
               <div class="card-body">
                 <h5 class="card-title">{{$tournoi->nomtournoi}}</h5>
+                <h6>Frais de participation <span style="color: orange">{{$tournoi->frais}}Ar</span></h6>
+                <p> </p>
                 <form class="row g-3" action="{{url('participer')}}" method="post">
                   @csrf
                   <input type="hidden" value="{{$tournoi->idtournoi}}" name="idtournoi">

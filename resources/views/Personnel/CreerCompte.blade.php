@@ -71,17 +71,16 @@
                         <div class="invalid-feedback">Veuillez entrer votre trigramme.</div>
                       </div>
                     </div>
-                    <?php 
-                      $error="";
-                      if(isset($erreur)){
-                        $error=$erreur;
-                      }
-                    ?>
-                    <div class="col-12">
-                      <label for="yourPassword" class="form-label" style="color: red;">{{ $error;}}</label>
-                    </div>
+                    @if ($errors->any())
+                        @foreach($errors->all() as $error)
+                        <p style="color: red">{{ $error;}}</p>
+                        @endforeach
+                    @endif
                     <div class="col-12">
                       <button class="btn btn-primary w-100" type="submit">Valider</button>
+                    </div>
+                    <div class="col-12">
+                      <p class="small mb-0">Déjà un compte? <a href="login" style="color: orange">Se connecter</a></p>
                     </div>
                   </form>
 

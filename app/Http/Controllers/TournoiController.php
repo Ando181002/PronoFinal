@@ -81,7 +81,7 @@ class TournoiController extends Controller
                 $participant->where('iddepartement', $req->input('iddepartement') );
             });
         }
-        $participant = $participant->paginate(3);
+        $participant = $participant->paginate(5);
         $match=$fichetournoi->matchs()->with('pronostics','resultat')->paginate(2);
         $dateTournoi=DB::table('v_frais')->where('idtournoi','=',$idtournoi)->orderBy('date')->get();
         $idtypetournoi=$fichetournoi->idtypetournoi;

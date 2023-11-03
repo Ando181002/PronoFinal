@@ -16,7 +16,8 @@ class Matchs extends Model
     protected $fillable = ['idtypematch','idtournoi','datematch','finmatch','stade','idequipe1','idequipe2','ptresultat','ptscore','avecresultat'];
 
     public function setFinmatchAttribute($datematch){
-        $typetournoi=TypeTournoi::find($this->idtournoi);
+        $tournoi=Tournoi::find($this->idtournoi);
+        $typetournoi=TypeTournoi::find($tournoi->idtypetournoi);
         $this->attributes['finmatch'] = $typetournoi->calculerFinMatch($datematch);
     }
 

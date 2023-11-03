@@ -63,7 +63,9 @@ create table Compte(
     mdp varchar not null,
     telephone char(10) not null unique,
     idTypePersonnel char(5) not null references TypePersonnel(idTypePersonnel),
-    idDepartement char(5) not null references Departement(idDepartement)
+    idDepartement char(5) not null references Departement(idDepartement),
+    datecreation timestamp not null,
+    dateexpiration timestamp
 );
 
 create table PeriodePronostic(
