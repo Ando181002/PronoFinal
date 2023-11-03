@@ -142,8 +142,11 @@ class Tournoi extends Model
     public function equipesFinalistes(){
         $idtournoi=$this->idtournoi;
         $typematch=TypeMatch::where('nomtypematch','=','Finale')->first();
+        $finalistes=[null,null];
         $matchfinal=Matchs::where('idtournoi','=',$idtournoi)->where('idtypematch','=',$typematch->idtypematch)->first();
-        $finalistes=[$matchfinal->idequipe1,$matchfinal->idequipe2];
+        if($matchfinal){
+            $finalistes=[$matchfinal->idequipe1,$matchfinal->idequipe2];
+        }
         return $finalistes;
     }
 

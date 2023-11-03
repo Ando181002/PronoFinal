@@ -146,7 +146,7 @@ class PersonnelController extends Controller
         $perso=session()->get('utilisateur');
         $status="participant";
         $tournoi=Tournoi::find($idtournoi);
-        $equipes = DB::select('Select * from v_equipe_parTournoi');
+        $equipes = DB::select('Select * from v_equipe_parTournoi where idtournoi=?',[$idtournoi]);
         return view('Personnel.Paiement',compact('status','tournoi','equipes','erreur','perso'));  
     }
     public function Participer(Request $req){
