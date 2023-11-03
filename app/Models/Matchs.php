@@ -117,12 +117,11 @@ class Matchs extends Model
 
     //Voir la date limite de pronostic
     public function limitePronostic(){
-        $datematch=$this->datematch();
+        $datematch=$this->datematch;
         $date = Carbon::parse($datematch);
         $numeroJour = $date->dayOfWeek;
-        $limite=PeriodePronostic::where('numjour','=',$numerojour)->first();
-        $valeur="PT".$limite->limte."H";
-        $finpronostic=$date->sub(new DateInterval($valeur));
+        $limite=PeriodePronostic::where('numjour','=',$numeroJour)->first();
+        $finpronostic=$date->subHours($limite->limite);
         return $finpronostic;
     }
     //Recupérer les matchs sans résultat

@@ -112,7 +112,7 @@
                                         <div class="soccer-item set-bg" data-setbg="data:image/JPEG;base64,{{ $gagne->imagetournoi }}">
                                             <div class="si-tag">{{$gagne->TypeTournoi->nomtypetournoi}}</div>
                                             <div class="si-text">
-                                                <h5><a href="#" style="color: black; font:bold">{{$gagne->nomtournoi}}</a></h5>
+                                                <h5><a href="Pronostiquer/{{$gagne->idtournoi}}" style="color: black; font:bold">{{$gagne->nomtournoi}}</a></h5>
                                                 <ul>
                                                     <li><i class="fa fa-calendar"></i> May 19, 2019</li>
                                                     <li><i class="fa fa-edit"></i> 3 Comment</li>
