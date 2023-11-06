@@ -218,7 +218,7 @@
                                             <div class="modal-dialog modal-dialog-centered">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title">Classement</h5>
+                                                        <h5 class="modal-title">Résultat</h5>
                                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
@@ -237,7 +237,6 @@
                                                         <table class="table">
                                                             <thead>
                                                                 <tr>
-                                                                    <th scope="col">Rang</th>
                                                                     <th scope="col">Trigramme</th>
                                                                     <th scope="col">Pronostics</th>
                                                                     <th scope="col">Points</th>
@@ -246,7 +245,6 @@
                                                             <tbody>
                                                                 @foreach($match->pronostics as $pronostic)
                                                                     <tr>
-                                                                        <td>1</td>
                                                                         <td>{{$pronostic->Inscription->trigramme}}</td>
                                                                         <td>{{$pronostic->prono1}}-{{$pronostic->prono2}}</td>
                                                                         <td>{{$pronostic->totalpoint()}}</td>
@@ -279,7 +277,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Recompense</h5>
                             <nav>
-                                <p class="breadcrumb-item">Montant de la cagnote <span class="card-title">{{$tournoi->montantCagnote()}}Ar</span></p>
+                                <p class="breadcrumb-item">Montant de la cagnotte <span class="card-title">{{$tournoi->montantCagnote()}}Ar</span></p>
                             </nav>
                             <table class="table">
                                 <thead>

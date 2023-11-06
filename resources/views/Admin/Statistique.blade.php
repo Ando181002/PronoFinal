@@ -4,7 +4,7 @@
 <div class="col-lg-6">
     <div class="card">
       <div class="card-body">
-        <h5 class="card-title">Nombre de participant par type de tournoi</h5>
+        <h5 class="card-title">Participation par type de tournoi</h5>
         <div class="card-body">
             <p> </p>
         </div>

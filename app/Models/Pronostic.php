@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,6 +15,7 @@ class Pronostic extends Model
     protected $table = 'pronostic';
     protected $primaryKey='idpronostic';
     protected $fillable = ['idmatch','datepronostic','prono1','prono2','idinscription'];
+
 
     public function Inscription()
     {

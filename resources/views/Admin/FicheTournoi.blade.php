@@ -99,7 +99,7 @@
             <div class="col-12">
                 <div class="card">
                   <div class="card-body">
-                    <h5 class="card-title">Evolution de la cagnote</h5>
+                    <h5 class="card-title">Evolution de la cagnotte</h5>
   
                     <!-- Line Chart -->
                     <div id="reportsChart"></div>
@@ -383,7 +383,7 @@
                                                                             @foreach($matchs->pronostics as $pronostic)
                                                                             <tr>
                                                                                 <td>{{$pronostic->Inscription->trigramme}}</td>
-                                                                                <td>{{$pronostic->datepronostic}}</td>
+                                                                                <td>{{ Carbon\Carbon::parse($pronostic->datepronostic)->format('d-m-y H:i')}}</td>
                                                                                 <td>{{$pronostic->prono1}}</td>
                                                                                 <td>{{$pronostic->prono2}}</td>
                                                                                 <td>{{$pronostic->points()[0]}}</td>
