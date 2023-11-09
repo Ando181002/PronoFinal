@@ -27,7 +27,7 @@ class PeriodePronosticController extends Controller
         }
         $validation=PeriodePronostic::reglesValidation('modification');
         $req->validate($validation['regles'],$validation['messages']);
-        $typetournoi->modifierPeriode($req->input('numjour'),$req->input('nomjour'),$req->input('limite'));
+        $periodepronostic->modifierPeriode($req->input('numjour'),$req->input('nomjour'),$req->input('limite'));
         $url = url('PeriodePronostic');
         return redirect($url);    
     }

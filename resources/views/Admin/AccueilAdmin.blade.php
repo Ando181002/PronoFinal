@@ -71,7 +71,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="logoutAdmin">
+              <a class="dropdown-item d-flex align-items-center" href="deconnexion">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Deconnexion</span>
               </a>
@@ -130,30 +130,6 @@
         <a class="nav-link collapsed{{ Request::is('AdminStatistique')}} ? 'active' : 'collapsed' }}" href="{{url('AdminStatistique');}}">
           <i class="bi bi-grid"></i>
           <span>Statistique</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-      <li class="nav-item ">
-        <a class="nav-link collapsed{{ Request::is('TypeActivite')}} ? 'active' : 'collapsed' }}" href="{{url('TypeActivite');}}">
-          <i class="bi bi-grid"></i>
-          <span>Type d'activité</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-      <li class="nav-item ">
-        <a class="nav-link collapsed{{ Request::is('Activite')}} ? 'active' : 'collapsed' }}" href="{{url('Activite');}}">
-          <i class="bi bi-grid"></i>
-          <span>Activité</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-      <li class="nav-item ">
-        <a class="nav-link collapsed{{ Request::is('Lieu')}} ? 'active' : 'collapsed' }}" href="{{url('Lieu');}}">
-          <i class="bi bi-grid"></i>
-          <span>Lieu</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-      <li class="nav-item ">
-        <a class="nav-link collapsed{{ Request::is('Evenement')}} ? 'active' : 'collapsed' }}" href="{{url('Evenement');}}">
-          <i class="bi bi-grid"></i>
-          <span>Evenement</span>
         </a>
       </li><!-- End Dashboard Nav -->
     </ul>

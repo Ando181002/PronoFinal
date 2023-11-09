@@ -26,18 +26,16 @@ use App\Http\Controllers\PeriodePronosticController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', function () {
-    return view('Accueil.Accueil');
-});
-Route::GET('Pronostics', [PersonnelController::class, 'Accueil']);
+Route::GET('/', [PersonnelController::class, 'Accueil']);
 Route::GET('login', [AuthentificationController::class, 'Login']);
+Route::GET('deconnexion', [AuthentificationController::class, 'logout']);
 Route::POST('traitementLogin', [AuthentificationController::class, 'TraitementLogin']);
+
 //Personnel
 Route::GET('creerCompte', [CompteController::class, 'CreerCompte']);
 Route::POST('traitementInscription', [CompteController::class, 'TraitementInscription']);
 Route::GET('reinitialisationMdp/{trigramme}', [CompteController::class, 'Reinitialisation']);
 Route::POST('reinitialisationMdp/reinitialiser', [CompteController::class, 'Reinitialiser']);
-Route::GET('deconnexion', [PersonnelController::class, 'Deconnexion']);
 Route::GET('liste', [PersonnelController::class, 'Liste']);
 Route::GET('detailTournoi', [PersonnelController::class, 'DetailTournoi']);
 Route::GET('participerPronostic/{idtournoi}/{erreur}', [PersonnelController::class, 'formulaireParticipation']);
@@ -47,7 +45,6 @@ Route::POST('/{idinscription}/{idtournoi}/addUPronostic', [PersonnelController::
 Route::GET('statistique', [PersonnelController::class, 'Statistique']);
 
 //Admin
-Route::GET('logoutAdmin', [AdminController::class, 'logoutAdmin']);
 Route::GET('AdminStatistique', [AdminController::class, 'Statistique']);
 Route::GET('pdf', [AdminController::class, 'genererPdf']);
 Route::GET('exportCsv', [AdminController::class, 'exportCsv']);
