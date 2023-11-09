@@ -80,9 +80,8 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="row g-3" method="POST" action="updatePhaseJeu">
+                                        <form class="row g-3" method="POST" action="updatePhaseJeu/{{$type->idphase}}">
                                           @csrf  
-                                            <input type="hidden" name="idphase" value="{{$type->idphase}}">
                                             <div class="col-12">
                                               <label for="inputNanme4" class="form-label">Phase</label>
                                               <input type="text" class="form-control" id="inputNanme4" name="nomphase" value="{{ $type->nomphase}}">
@@ -103,10 +102,9 @@
               <div class="modal fade" id="verticalycentered{{$type->idphase}}" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
-                    <form method="POST" action="deletePhaseJeu" >
+                    <form method="POST" action="deletePhaseJeu/{{$type->idphase}}" >
                       @csrf
                     <div class="modal-body">
-                      <input type="hidden" name="idphase" value="{{$type->idphase}}">
                       Etes-vous sûre de vouloir supprimer cette ligne?
                     </div>
                     <div class="modal-footer">

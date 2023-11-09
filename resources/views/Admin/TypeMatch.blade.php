@@ -91,6 +91,7 @@
                                             <div class="col-12">
                                               <label for="inputNanme4" class="form-label">Phase de jeu</label>
                                               <select name="idphase" class="form-control" >
+                                                <option value="" selected>Phase</option>
                                                 @foreach ($phase as $type)
                                                   <option value="{{$type->idphase}}">{{$type->nomphase}}</option>
                                                   @endforeach
@@ -151,6 +152,7 @@
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">Phase de jeu</label>
                   <select name="idphase" class="form-control" >
+                    <option value="" selected>Phase</option>
                     @foreach ($phase as $type)
                       <option value="{{$type->idphase}}">{{$type->nomphase}}</option>
                       @endforeach

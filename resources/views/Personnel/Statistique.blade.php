@@ -29,16 +29,14 @@
 @extends('Personnel.Entete')
 @section('content')
 
+<div style="height: 70px"></div>
 
-<div class="pagetitle">
-    <h1>ApexCharts</h1>
-</div><!-- End Page Title -->
 <section class="section">
     <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-6" >
         <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Bar Chart</h5>
+            <h5 class="card-title">Statistiques financières</h5>
 
             <!-- Bar Chart -->
             <div id="barChart"></div>
@@ -82,7 +80,7 @@
     <div class="col-lg-6">
         <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Pie Chart</h5>
+            <h5 class="card-title">Nombre de tournois remportés</h5>
 
             <!-- Pie Chart -->
             <div id="pieChart"></div>

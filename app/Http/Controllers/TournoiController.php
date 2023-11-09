@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use PDF;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\DB;
@@ -98,14 +99,47 @@ class TournoiController extends Controller
     }
 
     public function ajouterMatch(Request $req,$idtournoi){
+        $tournoi=Tournoi::find($idtournoi);
+        if($req->input('datematch')<$tournoi->debuttournoi || $req->input('datematch')>$tournoi->fintournoi){
+            return redirect()->back()->withErrors('La date du match est hors tournoi.');
+        }
         $validation=Matchs::reglesValidation('creation');
         $req->validate($validation['regles'],$validation['messages']);
         Matchs::ajouterMatch($idtournoi,$req->input('idtypematch'),$req->input('datematch'),$req->input('finmatch'),$req->input('idequipe1'),$req->input('idequipe2'),$req->input('stade'),$req->input('ptresultat'),$req->input('ptscore'),0);
         $url = url('FicheTournoi', ['idtournoi' => $idtournoi]);
-        return redirect($url);       
+        return redirect($url);   
     }
 
     public function ajouterMatchCsv(Request $req,$idtournoi){
+        if ($req->hasFile('csv')) {
+            $file=$req->file('csv');
+            $handle=fopen($file->getPathname(), 'r');
+            while(($data=fgetcsv($handle, 0, ';')) !==false) {
+                $values=$data;
+                $typematch=TypeMatch::Where('nomtypematch',$values[0])->first();
+                $equipe1=Equipe::Where('nomequipe',$values[3])->first(); 
+                $equipe2=Equipe::Where('nomequipe',$values[4])->first(); 
+                $tournoi=Tournoi::find($idtournoi);
+                $datematch= \Carbon\Carbon::createFromFormat('d/m/Y H:i',$values[1]);
+                $ptresultat=$values[5];
+                $ptscore=$values[6];
+                if($datematch<$tournoi->debuttournoi || $datematch>$tournoi->fintournoi){
+                    $message="La date du match est hors tournoi. Debut: ".$tournoi->debuttournoi." Datematch:".$datematch." Fin:".$tournoi->fintournoi;
+                    return redirect()->back()->withErrors($message);
+                }
+                //$validation=Matchs::reglesValidation('creation');
+                //$req->validate($validation['regles'],$validation['messages']);
+                dd(Matchs::ajouterMatch($idtournoi,$typematch->idtypematch,$datematch,$req->input('finmatch'),$equipe1->idequipe,$equipe2->idequipe,$values[2],$ptresultat,$ptscore,0));      
+            }
+            fclose($handle);
+            return redirect()->back()->with('succes','Enregistrer');
+        }
+        else{
+            return redirect()->back()->withErrors('Erreur d enregistrement');  
+        }
+    }
+
+    /*public function ajouterMatchCsv(Request $req,$idtournoi){
         if ($req->hasFile('csv')) {
             $file=$req->file('csv');
             $handle=fopen($file->getPathname(), 'r');
@@ -113,7 +147,11 @@ class TournoiController extends Controller
             while(($data=fgetcsv($handle, 0, ';')) !==false) {
                 $values=$data;
                 $typematch=TypeMatch::Where('nomtypematch',$values[0])->first();
-                $datematch=Carbon::createFromFormat('d/m/Y H:i',$values[1])->format('Y-m-d H:i'); 
+                $datematch=isset($values[1]) ? $values[1] : null; 
+                $tournoi=Tournoi::find($idtournoi);
+                if($datematch<$tournoi->debuttournoi || $datematch>$tournoi->fintournoi){
+                    return redirect()->back()->withErrors('La date du match est hors tournoi.');
+                }
                 $duree=DB::select('Select dureeminute from tournoi t join typetournoi tt on t.idtypetournoi=tt.idtypetournoi where idtournoi=?',[$idtournoi]);
                 $dureematch=$duree[0]->dureeminute;
                 $datee = Carbon::parse($datematch);
@@ -138,8 +176,10 @@ class TournoiController extends Controller
             DB::table('matchs')->insert($table_data);
             return redirect()->back()->with('succes','Enregistrer');
         }
-        else return redirect()->back()->with('succes','Erreur d enregistrement');      
-    }
+        else{ 
+            return redirect()->back()->withErrors('Erreur d enregistrement');  
+        }   
+    }*/
 
     public function modifierMatch(Request $req,$idtournoi,$idmatch)
     {
