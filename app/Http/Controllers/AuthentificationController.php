@@ -27,8 +27,8 @@ class AuthentificationController extends Controller
             return redirect()->back()->withErrors('Identifiant ou mot de passe erroné.');
         }
     }
-    public function logoutAdmin(){
+    public function logout(){
         session()->flush();
-        return redirect('/LoginAdmin');
+        return redirect('/');
     }
 }

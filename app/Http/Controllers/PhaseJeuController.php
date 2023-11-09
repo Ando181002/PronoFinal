@@ -23,7 +23,7 @@ class PhaseJeuController extends Controller
         if(!$phaseJeu){
             return redirect()->route('PhaseJeu')->with('error','Phase de jeu non trouvée.');
         }
-        $validation=TypeTournoi::reglesValidation('modification');
+        $validation=PhaseJeu::reglesValidation('modification');
         $req->validate($validation['regles'],$validation['messages']);
         $phaseJeu->modifierPhaseJeu($req->input('nomphase'));
         return redirect('PhaseJeu');

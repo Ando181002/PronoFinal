@@ -60,6 +60,7 @@
                   <tr>
                     <th scope="col">Type</th>
                     <th scope="col">Duree(mn)</th>
+                    <th scope="col">Prolongation(mn)</th>
                     <th></th>
                     <th></th>
                   </tr>
@@ -69,6 +70,7 @@
                   <tr>
                     <td>{{ $type->nomtypetournoi}}</td>
                     <td>{{ $type->dureeminute}}</td>
+                    <td>{{ $type->dureeprolongation}}</td>
                     <td>              
                         <!-- Basic Modal -->
                         <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#basicModal{{$type->idtypetournoi}}">
@@ -90,7 +92,11 @@
                                             </div>
                                             <div class="col-12">
                                               <label for="inputNanme4" class="form-label">Duree(mn)</label>
-                                              <input type="text" class="form-control" id="inputNanme4" name="duree" value="{{$type->dureeminute}}">
+                                              <input type="text" class="form-control" id="inputNanme4" name="dureeminute" value="{{$type->dureeminute}}">
+                                            </div>
+                                            <div class="col-12">
+                                              <label for="inputNanme4" class="form-label">Prolongation(mn)</label>
+                                              <input type="text" class="form-control" id="inputNanme4" name="dureeprolongation" value="{{ $type->dureeprolongation}}">
                                             </div>
                                             <div class="text-center">
                                               <button type="submit" class="btn btn-primary">Modifier</button>
@@ -140,15 +146,23 @@
                     </div>
                     <div class="modal-body">
                <!-- General Form Elements -->
-               <form class="row g-3" method="post" action="/addTypeTournoi">
+               <form class="row g-3" method="post" action="/addTypeTournoi" enctype="multipart/form-data">
                 @csrf
+                <div class="col-12">
+                  <label for="inputNanme4" class="form-label">Image</label>
+                  <input type="file" class="form-control" id="subject" name="image" placeholder="image" >
+                </div>
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">Type</label>
                   <input type="text" class="form-control" id="inputNanme4" name="nomtypetournoi">
                 </div>
                 <div class="col-12">
                   <label for="inputNanme4" class="form-label">Duree(mn)</label>
-                  <input type="text" class="form-control" id="inputNanme4" name="duree">
+                  <input type="text" class="form-control" id="inputNanme4" name="dureeminute">
+                </div>
+                <div class="col-12">
+                  <label for="inputNanme4" class="form-label">Prolongation(mn)</label>
+                  <input type="text" class="form-control" id="inputNanme4" name="dureeprolongation">
                 </div>
                 <div class="text-center">
                   <button type="submit" class="btn btn-primary">Ajouter</button>

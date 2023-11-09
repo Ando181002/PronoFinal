@@ -14,19 +14,22 @@ class TypeTournoi extends Model
     public $timestamps=false;
     protected $table = 'typetournoi';
     protected $primaryKey='idtypetournoi';
-    protected $fillable = ['nomtypetournoi','dureeminute'];
+    protected $fillable = ['nomtypetournoi','dureeminute','dureeprolongation','imagetypetournoi'];
 
     //On gère les règles de validation  des attributs
     public static function reglesValidation($contexte){
         $regles = [
             'nomtypetournoi' => 'required|string',
             'dureeminute' => 'required|int',
+            'dureeprolongation' => 'required|int',
         ];
         $messages = [
             'nomtypetournoi.required' => 'Le nom de type de tournoi est requis.',
             'nomtypetournoi.string' => 'Le nom de type de tournoi doit être une chaîne de caractères.',
             'dureeminute.required' => 'Le durée du tournoi est requise.',
-            'dureeminute.int' => 'Le duree du tournoi doit être un nombre.',
+            'dureeminute.int' => 'Le durée du tournoi doit être un nombre.',
+            'dureeprolongation.required' => 'Le durée de prolongation du tournoi est requise.',
+            'dureeprolongation.int' => 'Le durée de prolongation du tournoi doit être un nombre.',
         ];
         if($contexte === 'creation'){
             $regles['nomtypetournoi'] .= '|unique:typetournoi,nomtypetournoi';
@@ -48,15 +51,20 @@ class TypeTournoi extends Model
     }
 
     //Pour créer un nouveau type de tournoi
-    public static function ajouterTypeTournoi($nomtypetournoi){
+    public static function ajouterTypeTournoi($nomtypetournoi,$dureeminute,$dureeprolongation,$imagetypetournoi){
         return self::create([
             'nomtypetournoi' => $nomtypetournoi,
+            'dureeminute' => $dureeminute,
+            'dureeprolongation' => $dureeprolongation,
+            'imagetypetournoi' => $imagetypetournoi,
         ]);
     }
 
     //Pour modifier un type de tournoi
-    public function modifierTypeTournoi($nomtypetournoi){
+    public function modifierTypeTournoi($nomtypetournoi,$dureeminute,$dureeprolongation){
         $this->nomtypetournoi = $nomtypetournoi;
+        $this->dureeminute = $dureeminute;
+        $this->dureeprolongation = $dureeprolongation;
         $this->save();
     }
 

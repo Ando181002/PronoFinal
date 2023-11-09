@@ -28,9 +28,9 @@ class TypeMatch extends Model
         $messages = [
             'nomtypematch.required' => 'Le nom de type de match est requis.',
             'nomtypematch.string' => 'Le nom de type de match doit être une chaîne de caractères.',
-            'idphase.required' => 'L\'identifiant est requis.',
+            'idphase.required' => 'La phase de jeu est requise.',
         ];
-        if($contexte === 'creation' || $contexte === 'modification'){
+        if($contexte === 'creation'){
             $regles['nomtypematch'] .= '|unique:typematch,nomtypematch';
             $messages['nomtypematch'] = 'Le nom de type de match existe déjà.';
         }
